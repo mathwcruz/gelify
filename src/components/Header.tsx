@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
-import { MenuIcon, XIcon, TemplateIcon } from '@heroicons/react/outline'
+import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 
 import { solutions } from '../utils/solutions'
@@ -18,7 +18,11 @@ export function Header() {
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <a href="/">
               <span className="sr-only">Oficina Mecânica</span>
-              <TemplateIcon className="h-8 flex-shrink-0 text-green-400 sm:h-10" />
+              <img
+                src="/favicon.png"
+                className="h-8 sm:h-10"
+                alt="Oficina mecânica"
+              />
             </a>
           </div>
           <div className="-my-2 -mr-2 md:hidden">
@@ -167,7 +171,11 @@ export function Header() {
             <div className="px-5 pt-5 pb-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <TemplateIcon className="h-8 w-auto text-green-400" />
+                  <img
+                    src="/favicon.png"
+                    className="h-8 w-auto"
+                    alt="Oficina mecânica"
+                  />
                 </div>
                 <div className="-mr-2">
                   <Popover.Button className="focus:ring-text-green-400 inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset">
