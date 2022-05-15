@@ -98,7 +98,7 @@ const Cities = ({ cities }: CitiesProps) => {
               setSearch={setSearch}
               placeholder="Pesquisa por cidades"
             />
-            <ul className="flex w-80 flex-col justify-center gap-5">
+            <ul className="flex w-72 md:w-96 flex-col justify-center gap-5">
               {citiesList
                 ?.filter((city) => {
                   if (!search) {
