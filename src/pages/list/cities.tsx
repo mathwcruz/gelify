@@ -8,6 +8,7 @@ import { toast } from 'react-toastify'
 
 import { useCity } from '../../contexts/CityContext'
 import { Loading } from '../../components/Loading'
+import { Search } from '../../components/Search'
 import { CityItem } from '../../components/Cities/CityItem'
 
 import { supabase } from '../../services/supabase'
@@ -27,6 +28,7 @@ const Cities = ({ cities }: CitiesProps) => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [citiesList, setCitiesList] = useState<City[]>(cities || [])
+  const [search, setSearch] = useState<string>('')
 
   const handleRemoveCity = useCallback(async (id) => {
     try {
@@ -90,15 +92,37 @@ const Cities = ({ cities }: CitiesProps) => {
         {isLoading ? (
           <Loading />
         ) : citiesList?.length > 0 ? (
-          <ul className="flex w-80 flex-col justify-center gap-5">
-            {citiesList?.map((city) => (
-              <CityItem
-                key={city?.id}
-                city={city}
-                onRemoveCity={handleRemoveCity}
-              />
-            ))}
-          </ul>
+          <div className="flex flex-col justify-center gap-4">
+            <Search
+              search={search}
+              setSearch={setSearch}
+              placeholder="Pesquisa por cidades"
+            />
+            <ul className="flex w-80 flex-col justify-center gap-5">
+              {citiesList
+                ?.filter((city) => {
+                  if (!search) {
+                    return city
+                  }
+
+                  if (
+                    !!search &&
+                    city?.description
+                      .toLowerCase()
+                      .includes(search.toLowerCase())
+                  ) {
+                    return city
+                  }
+                })
+                ?.map((city) => (
+                  <CityItem
+                    key={city?.id}
+                    city={city}
+                    onRemoveCity={handleRemoveCity}
+                  />
+                ))}
+            </ul>
+          </div>
         ) : (
           <div className="flex flex-col gap-4">
             <h1 className="text-center text-lg font-medium text-black">
