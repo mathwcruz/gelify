@@ -35,7 +35,7 @@ export const CityItem = ({ city, onRemoveCity }: CityItemsProps) => {
       </div>
       <span className="self-end text-sm">
         Criado em{' '}
-        <span className="font-semibold text-green-500">{city?.createdAt}</span>
+        <span className="font-semibold text-green-500">{city?.created_at}</span>
       </span>
     </li>
   )

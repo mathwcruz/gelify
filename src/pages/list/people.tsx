@@ -19,8 +19,8 @@ export type Person = {
   cpf: string
   birthdate: string
   cellphone: string
-  cityId?: string
-  createdAt: string
+  city_id?: string
+  created_at: string
 }
 
 interface PeopleProps {
@@ -63,7 +63,7 @@ const People = ({ people }: PeopleProps) => {
         const people = data?.map((person) => {
           return {
             ...person,
-            createdAt: format(new Date(person?.created_at), 'dd/MM/yyyy', {
+            created_at: format(new Date(person?.created_at), 'dd/MM/yyyy', {
               locale: ptBR,
             }),
           }
@@ -153,8 +153,8 @@ export const getStaticProps: GetStaticProps = async () => {
   const people = data?.map((person) => {
     return {
       ...person,
-      cityId: person?.city_id,
-      createdAt: format(new Date(person?.created_at), 'dd/MM/yyyy', {
+      city_id: person?.city_id,
+      created_at: format(new Date(person?.created_at), 'dd/MM/yyyy', {
         locale: ptBR,
       }),
     }

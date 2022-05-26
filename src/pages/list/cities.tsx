@@ -16,7 +16,7 @@ import { supabase } from '../../services/supabase'
 export type City = {
   id: string
   description: string
-  createdAt: string
+  created_at: string
 }
 
 interface CitiesProps {
@@ -59,7 +59,7 @@ const Cities = ({ cities }: CitiesProps) => {
         const cities = data?.map((city) => {
           return {
             ...city,
-            createdAt: format(new Date(city?.created_at), 'dd/MM/yyyy', {
+            created_at: format(new Date(city?.created_at), 'dd/MM/yyyy', {
               locale: ptBR,
             }),
           }
@@ -151,7 +151,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const cities = data?.map((city) => {
     return {
       ...city,
-      createdAt: format(new Date(city?.created_at), 'dd/MM/yyyy', {
+      created_at: format(new Date(city?.created_at), 'dd/MM/yyyy', {
         locale: ptBR,
       }),
     }

@@ -40,12 +40,20 @@ export function validateDate(date: string = '') {
 
   let currentDateFormatted
   const dateParts = date.split('/')
+
+  if (dateParts?.length === 3) {
+    if (+dateParts[2] < 1900) return false
+    if (+dateParts[1] >= 13) return false
+    if (+dateParts[0] >= 32) return false
+  }
+
   // return a Date Object base on "DD/MM/YYYY" date format
   currentDateFormatted = new Date(
     +dateParts[2],
     +dateParts[1] - 1,
     +dateParts[0]
   )
+
   const endDate = endOfToday()
 
   return (

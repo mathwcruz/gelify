@@ -33,7 +33,7 @@ export const PersonItem = ({ person, onRemovePerson }: PersonItemsProps) => {
       <span className="self-end text-sm">
         Criado em{' '}
         <span className="font-semibold text-green-500">
-          {person?.createdAt}
+          {person?.created_at}
         </span>
       </span>
     </li>
