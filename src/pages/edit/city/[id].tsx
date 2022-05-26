@@ -5,8 +5,8 @@ import { toast } from 'react-toastify'
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
 
-import { supabase } from '../../services/supabase'
-import { Loading } from '../../components/Loading'
+import { supabase } from '../../../services/supabase'
+import { Loading } from '../../../components/Loading'
 
 interface CityProps {
   city: {
@@ -128,8 +128,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({
   params,
 }: GetStaticPropsContext) => {
-  const { city } = params || {}
-  const { data } = await supabase.from('cities').select('*').match({ id: city })
+  const { id } = params || {}
+  const { data } = await supabase.from('cities').select('*').match({ id })
 
   return {
     props: {

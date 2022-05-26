@@ -6,46 +6,50 @@ import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
 import { toast } from 'react-toastify'
 
-import { useCity } from '../../contexts/CityContext'
 import { Loading } from '../../components/Loading'
 import { Search } from '../../components/Search'
-import { CityItem } from '../../components/Cities/CityItem'
+import { PersonItem } from '../../components/People/PersonItem'
+import { usePerson } from '../../contexts/PersonContext'
 
 import { supabase } from '../../services/supabase'
 
-export type City = {
+export type Person = {
   id: string
-  description: string
+  name: string
+  cpf: string
+  birthdate: string
+  cellphone: string
+  cityId?: string
   createdAt: string
 }
 
-interface CitiesProps {
-  cities: City[]
+interface PeopleProps {
+  people: Person[]
 }
 
-const Cities = ({ cities }: CitiesProps) => {
-  const { getCities } = useCity()
+const People = ({ people }: PeopleProps) => {
+  const { getPeople } = usePerson()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [citiesList, setCitiesList] = useState<City[]>(cities || [])
+  const [peopleList, setPeopleList] = useState<Person[]>(people || [])
   const [search, setSearch] = useState<string>('')
 
-  const handleRemoveCity = useCallback(async (id) => {
+  const handleRemovePerson = useCallback(async (id) => {
     try {
       setIsLoading(true)
 
-      const { error } = await supabase.from('cities').delete().match({ id })
+      const { error } = await supabase.from('people').delete().match({ id })
 
       if (!!error) {
         setIsLoading(false)
-        return toast.error('Ocorreu um erro ao remover esta cidade', {
+        return toast.error('Ocorreu um erro ao remover esta pessoa', {
           position: 'top-center',
           autoClose: 500,
           hideProgressBar: true,
         })
       }
 
-      toast.success('Cidade removida com sucesso!', {
+      toast.success('Pessoa removida com sucesso!', {
         position: 'top-center',
         autoClose: 1500,
         hideProgressBar: false,
@@ -53,19 +57,19 @@ const Cities = ({ cities }: CitiesProps) => {
         progress: undefined,
       })
 
-      const data = await getCities()
+      const data = await getPeople()
 
       if (data?.length > 0) {
-        const cities = data?.map((city) => {
+        const people = data?.map((person) => {
           return {
-            ...city,
-            createdAt: format(new Date(city?.created_at), 'dd/MM/yyyy', {
+            ...person,
+            createdAt: format(new Date(person?.created_at), 'dd/MM/yyyy', {
               locale: ptBR,
             }),
           }
         })
 
-        setCitiesList(cities)
+        setPeopleList(people)
       }
     } catch (error) {
       console.log({ error })
@@ -77,48 +81,46 @@ const Cities = ({ cities }: CitiesProps) => {
   return (
     <>
       <Head>
-        <title>Lista de Cidades</title>
+        <title>Lista de Pessoas</title>
       </Head>
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-20 px-4 py-12 sm:px-6">
         <div className="flex max-w-3xl flex-col items-center justify-center gap-2">
           <h1 className="text-center text-3xl font-bold text-black">
-            Cidades cadastradas
+            Pessoas cadastradas
           </h1>
           <p className="text-base font-medium text-gray-600">
-            Confira as cidades disponíveis no sistema
+            Confira as pessoas que já foram cadastradas no sistema
           </p>
         </div>
 
         {isLoading ? (
           <Loading />
-        ) : citiesList?.length > 0 ? (
+        ) : peopleList?.length > 0 ? (
           <div className="flex flex-col justify-center gap-4">
             <Search
               search={search}
               setSearch={setSearch}
-              placeholder="Pesquisa por cidades"
+              placeholder="Pesquisa por pessoas"
             />
             <ul className="flex w-72 flex-col justify-center gap-5 md:w-96">
-              {citiesList
-                ?.filter((city) => {
+              {peopleList
+                ?.filter((person) => {
                   if (!search) {
-                    return city
+                    return person
                   }
 
                   if (
                     !!search &&
-                    city?.description
-                      .toLowerCase()
-                      .includes(search.toLowerCase())
+                    person?.name.toLowerCase().includes(search.toLowerCase())
                   ) {
-                    return city
+                    return person
                   }
                 })
-                ?.map((city) => (
-                  <CityItem
-                    key={city?.id}
-                    city={city}
-                    onRemoveCity={handleRemoveCity}
+                ?.map((person) => (
+                  <PersonItem
+                    key={person?.id}
+                    person={person}
+                    onRemovePerson={handleRemovePerson}
                   />
                 ))}
             </ul>
@@ -126,11 +128,11 @@ const Cities = ({ cities }: CitiesProps) => {
         ) : (
           <div className="flex flex-col gap-4">
             <h1 className="text-center text-lg font-medium text-black">
-              Não há cidades cadastradas
+              Não há pessoas cadastradas
             </h1>
-            <Link href="/register/city">
+            <Link href="/register/person">
               <a className="flex items-center justify-center rounded-lg border border-white bg-green-500 p-2 text-base font-semibold text-white transition-colors duration-300 hover:bg-green-600">
-                Cadastrar cidade
+                Cadastrar pessoa
               </a>
             </Link>
           </div>
@@ -140,18 +142,19 @@ const Cities = ({ cities }: CitiesProps) => {
   )
 }
 
-export default Cities
+export default People
 
 export const getStaticProps: GetStaticProps = async () => {
   const { data } = await supabase
-    .from('cities')
+    .from('people')
     .select('*')
     .order('id', { ascending: true })
 
-  const cities = data?.map((city) => {
+  const people = data?.map((person) => {
     return {
-      ...city,
-      createdAt: format(new Date(city?.created_at), 'dd/MM/yyyy', {
+      ...person,
+      cityId: person?.city_id,
+      createdAt: format(new Date(person?.created_at), 'dd/MM/yyyy', {
         locale: ptBR,
       }),
     }
@@ -159,7 +162,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: {
-      cities,
+      people,
     },
     revalidate: 60 * 30, // = 30 minutos
   }

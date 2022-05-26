@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext } from 'react'
-import { Id, toast } from 'react-toastify'
+import { toast } from 'react-toastify'
 
 import { supabase } from '../services/supabase'
 
