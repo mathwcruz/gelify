@@ -11,6 +11,7 @@ type CityData = {
 
 interface CityContextData {
   getCities: () => Promise<CityData[]>
+  getCityById: (cityId: string) => Promise<CityData>
 }
 
 interface CityProviderProps {
@@ -36,8 +37,27 @@ export function CityProvider({ children }: CityProviderProps) {
     }
   }
 
+  const getCityById = async (cityId: string) => {
+    try {
+      const response = await supabase
+        .from('cities')
+        .select('*')
+        .match({ id: cityId })
+      const city = response?.data?.[0] as CityData
+      return city as CityData
+    } catch (error) {
+      console.log(error)
+      toast.error('Ocorreu um erro ao buscar as cidades', {
+        position: 'top-center',
+        autoClose: 500,
+        hideProgressBar: true,
+      })
+      return {} as CityData
+    }
+  }
+
   return (
-    <CityContext.Provider value={{ getCities }}>
+    <CityContext.Provider value={{ getCities, getCityById }}>
       {children}
     </CityContext.Provider>
   )

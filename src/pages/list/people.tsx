@@ -34,49 +34,52 @@ const People = ({ people }: PeopleProps) => {
   const [peopleList, setPeopleList] = useState<Person[]>(people || [])
   const [search, setSearch] = useState<string>('')
 
-  const handleRemovePerson = useCallback(async (id) => {
-    try {
-      setIsLoading(true)
+  const handleRemovePerson = useCallback(
+    async (id) => {
+      try {
+        setIsLoading(true)
 
-      const { error } = await supabase.from('people').delete().match({ id })
+        const { error } = await supabase.from('people').delete().match({ id })
 
-      if (!!error) {
-        setIsLoading(false)
-        return toast.error('Ocorreu um erro ao remover esta pessoa', {
+        if (!!error) {
+          setIsLoading(false)
+          return toast.error('Ocorreu um erro ao remover esta pessoa', {
+            position: 'top-center',
+            autoClose: 500,
+            hideProgressBar: true,
+          })
+        }
+
+        toast.success('Pessoa removida com sucesso!', {
           position: 'top-center',
-          autoClose: 500,
-          hideProgressBar: true,
-        })
-      }
-
-      toast.success('Pessoa removida com sucesso!', {
-        position: 'top-center',
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        progress: undefined,
-      })
-
-      const data = await getPeople()
-
-      if (data?.length > 0) {
-        const people = data?.map((person) => {
-          return {
-            ...person,
-            created_at: format(new Date(person?.created_at), 'dd/MM/yyyy', {
-              locale: ptBR,
-            }),
-          }
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          progress: undefined,
         })
 
-        setPeopleList(people)
+        const data = await getPeople()
+
+        if (data?.length > 0) {
+          const people = data?.map((person) => {
+            return {
+              ...person,
+              created_at: format(new Date(person?.created_at), 'dd/MM/yyyy', {
+                locale: ptBR,
+              }),
+            }
+          })
+
+          setPeopleList(people)
+        }
+      } catch (error) {
+        console.log({ error })
+      } finally {
+        setIsLoading(false)
       }
-    } catch (error) {
-      console.log({ error })
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
+    },
+    [getPeople]
+  )
 
   return (
     <>
@@ -153,7 +156,6 @@ export const getStaticProps: GetStaticProps = async () => {
   const people = data?.map((person) => {
     return {
       ...person,
-      city_id: person?.city_id,
       created_at: format(new Date(person?.created_at), 'dd/MM/yyyy', {
         locale: ptBR,
       }),

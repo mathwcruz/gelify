@@ -30,49 +30,52 @@ const Cities = ({ cities }: CitiesProps) => {
   const [citiesList, setCitiesList] = useState<City[]>(cities || [])
   const [search, setSearch] = useState<string>('')
 
-  const handleRemoveCity = useCallback(async (id) => {
-    try {
-      setIsLoading(true)
+  const handleRemoveCity = useCallback(
+    async (id) => {
+      try {
+        setIsLoading(true)
 
-      const { error } = await supabase.from('cities').delete().match({ id })
+        const { error } = await supabase.from('cities').delete().match({ id })
 
-      if (!!error) {
-        setIsLoading(false)
-        return toast.error('Ocorreu um erro ao remover esta cidade', {
+        if (!!error) {
+          setIsLoading(false)
+          return toast.error('Ocorreu um erro ao remover esta cidade', {
+            position: 'top-center',
+            autoClose: 500,
+            hideProgressBar: true,
+          })
+        }
+
+        toast.success('Cidade removida com sucesso!', {
           position: 'top-center',
-          autoClose: 500,
-          hideProgressBar: true,
-        })
-      }
-
-      toast.success('Cidade removida com sucesso!', {
-        position: 'top-center',
-        autoClose: 1500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        progress: undefined,
-      })
-
-      const data = await getCities()
-
-      if (data?.length > 0) {
-        const cities = data?.map((city) => {
-          return {
-            ...city,
-            created_at: format(new Date(city?.created_at), 'dd/MM/yyyy', {
-              locale: ptBR,
-            }),
-          }
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          progress: undefined,
         })
 
-        setCitiesList(cities)
+        const data = await getCities()
+
+        if (data?.length > 0) {
+          const cities = data?.map((city) => {
+            return {
+              ...city,
+              created_at: format(new Date(city?.created_at), 'dd/MM/yyyy', {
+                locale: ptBR,
+              }),
+            }
+          })
+
+          setCitiesList(cities)
+        }
+      } catch (error) {
+        console.log({ error })
+      } finally {
+        setIsLoading(false)
       }
-    } catch (error) {
-      console.log({ error })
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
+    },
+    [getCities]
+  )
 
   return (
     <>

@@ -1,6 +1,6 @@
 import { GetStaticProps, GetStaticPropsContext, GetStaticPaths } from 'next'
 import Head from 'next/head'
-import { FormEvent, useCallback, useState } from 'react'
+import { FormEvent, useCallback, useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
@@ -19,6 +19,12 @@ interface CityProps {
 const City = ({ city }: CityProps) => {
   const [description, setDescription] = useState<string>(city.description)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isAllFieldsValuesTheSame, setIsAllFieldsValuesTheSame] =
+    useState<boolean>(false)
+
+  useEffect(() => {
+    setIsAllFieldsValuesTheSame(description === city?.description)
+  }, [city, description])
 
   const handleUpdateCity = useCallback(
     async (e: FormEvent) => {
@@ -103,7 +109,15 @@ const City = ({ city }: CityProps) => {
               <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
                 <button
                   type="submit"
-                  className="inline-flex justify-center rounded-md border border-transparent bg-green-500 py-2 px-4 text-sm font-medium text-white shadow-sm transition-colors duration-300 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
+                  disabled={description === city?.description || !description}
+                  title={
+                    !description
+                      ? 'Preencha a descrição da ciadade'
+                      : description === city?.description
+                      ? 'A descrição permanece a mesma'
+                      : ''
+                  }
+                  className="inline-flex justify-center rounded-md border border-transparent bg-green-500 py-2 px-4 text-sm font-medium text-white shadow-sm transition-colors duration-300 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-green-500"
                 >
                   Salvar
                 </button>
