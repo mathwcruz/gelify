@@ -5,19 +5,22 @@ import 'react-toastify/dist/ReactToastify.css'
 import '../styles/globals.css'
 
 import { CityProvider } from '../contexts/CityContext'
-import { PersonProvider } from '../contexts/PersonContext'
+import { ClientProvider } from '../contexts/ClientContext'
+import { SupplierProvider } from '../contexts/SupplierContext'
 import { Header } from '../components/Header'
 
 function App({ Component, pageProps }: AppProps) {
   return (
     <CityProvider>
-      <PersonProvider>
-        <ToastContainer />
-        <div>
-          <Header />
-          <Component {...pageProps} />
-        </div>
-      </PersonProvider>
+      <ClientProvider>
+        <SupplierProvider>
+          <ToastContainer />
+          <div>
+            <Header />
+            <Component {...pageProps} />
+          </div>
+        </SupplierProvider>
+      </ClientProvider>
     </CityProvider>
   )
 }

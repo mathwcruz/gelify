@@ -93,7 +93,7 @@ const Cities = ({ cities }: CitiesProps) => {
             <Search
               search={search}
               setSearch={setSearch}
-              placeholder="Pesquisa por cidades"
+              placeholder="Pesquisar por cidades"
             />
             <ul className="flex w-72 flex-col justify-center gap-5 md:w-96">
               {citiesList

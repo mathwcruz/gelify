@@ -8,39 +8,41 @@ import { toast } from 'react-toastify'
 
 import { Loading } from '../../components/Loading'
 import { Search } from '../../components/Search'
-import { ClientItem } from '../../components/Client/ClientItem'
-import { useClient, ClientData } from '../../contexts/ClientContext'
+import { SupplierItem } from '../../components/Supplier/SupplierItem'
+import { useSupplier, SupplierData } from '../../contexts/SupplierContext'
 
 import { supabase } from '../../services/supabase'
 
-interface ClientsProps {
-  clients: ClientData[]
+interface SuppliersProps {
+  suppliers: SupplierData[]
 }
 
-const Clients = ({ clients }: ClientsProps) => {
-  const { getClients } = useClient()
+const Suppliers = ({ suppliers }: SuppliersProps) => {
+  const { getSuppliers } = useSupplier()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [clientsList, setClientsList] = useState<ClientData[]>(clients || [])
+  const [suppliersList, setSuppliersList] = useState<SupplierData[]>(
+    suppliers || []
+  )
   const [search, setSearch] = useState<string>('')
 
-  const handleRemoveClient = useCallback(
+  const handleRemoveSupplier = useCallback(
     async (id) => {
       try {
         setIsLoading(true)
 
-        const { error } = await supabase.from('client').delete().match({ id })
+        const { error } = await supabase.from('supplier').delete().match({ id })
 
         if (!!error) {
           setIsLoading(false)
-          return toast.error('Ocorreu um erro ao remover este cliente', {
+          return toast.error('Ocorreu um erro ao remover este fornecedor', {
             position: 'top-center',
             autoClose: 500,
             hideProgressBar: true,
           })
         }
 
-        toast.success('Cliente removido com sucesso!', {
+        toast.success('Fornecedor removido com sucesso!', {
           position: 'top-center',
           autoClose: 1500,
           hideProgressBar: false,
@@ -48,19 +50,19 @@ const Clients = ({ clients }: ClientsProps) => {
           progress: undefined,
         })
 
-        const data = await getClients()
+        const data = await getSuppliers()
 
         if (data?.length > 0) {
-          const clients = data?.map((client) => {
+          const suppliers = data?.map((supplier) => {
             return {
-              ...client,
-              created_at: format(new Date(client?.created_at), 'dd/MM/yyyy', {
+              ...supplier,
+              created_at: format(new Date(supplier?.created_at), 'dd/MM/yyyy', {
                 locale: ptBR,
               }),
             }
           })
 
-          setClientsList(clients)
+          setSuppliersList(suppliers)
         }
       } catch (error) {
         console.log({ error })
@@ -68,52 +70,52 @@ const Clients = ({ clients }: ClientsProps) => {
         setIsLoading(false)
       }
     },
-    [getClients]
+    [getSuppliers]
   )
 
   return (
     <>
       <Head>
-        <title>Clientes</title>
+        <title>Fornecedores</title>
       </Head>
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-20 px-4 py-12 sm:px-6">
         <div className="flex max-w-3xl flex-col items-center justify-center gap-2">
           <h1 className="text-center text-3xl font-bold text-black">
-            Clientes cadastrados
+            Fornecedores cadastrados
           </h1>
           <p className="text-base font-medium text-gray-600">
-            Confira os clientes que já foram cadastrados no sistema
+            Confira os fornecedores que já foram cadastrados no sistema
           </p>
         </div>
 
         {isLoading ? (
           <Loading />
-        ) : clientsList?.length > 0 ? (
+        ) : suppliersList?.length > 0 ? (
           <div className="flex flex-col justify-center gap-4">
             <Search
               search={search}
               setSearch={setSearch}
-              placeholder="Pesquisar por clientes"
+              placeholder="Pesquisar por fornecedores"
             />
             <ul className="flex w-72 flex-col justify-center gap-5 md:w-96">
-              {clientsList
-                ?.filter((client) => {
+              {suppliersList
+                ?.filter((supplier) => {
                   if (!search) {
-                    return client
+                    return supplier
                   }
 
                   if (
                     !!search &&
-                    client?.name.toLowerCase().includes(search.toLowerCase())
+                    supplier?.name.toLowerCase().includes(search.toLowerCase())
                   ) {
-                    return client
+                    return supplier
                   }
                 })
-                ?.map((person) => (
-                  <ClientItem
-                    key={person?.id}
-                    client={person}
-                    onRemoveClient={handleRemoveClient}
+                ?.map((supplier) => (
+                  <SupplierItem
+                    key={supplier?.id}
+                    supplier={supplier}
+                    onRemoveSupplier={handleRemoveSupplier}
                   />
                 ))}
             </ul>
@@ -121,11 +123,11 @@ const Clients = ({ clients }: ClientsProps) => {
         ) : (
           <div className="flex flex-col gap-4">
             <h1 className="text-center text-lg font-medium text-black">
-              Não há clientes cadastrados
+              Não há fornecedores cadastrados
             </h1>
-            <Link href="/register/client">
+            <Link href="/register/supplier">
               <a className="flex items-center justify-center rounded-lg border border-white bg-green-500 p-2 text-base font-semibold text-white transition-colors duration-300 hover:bg-green-600">
-                Cadastrar cliente
+                Cadastrar fornecedor
               </a>
             </Link>
           </div>
@@ -135,18 +137,18 @@ const Clients = ({ clients }: ClientsProps) => {
   )
 }
 
-export default Clients
+export default Suppliers
 
 export const getStaticProps: GetStaticProps = async () => {
   const { data } = await supabase
-    .from('client')
+    .from('supplier')
     .select('*')
     .order('id', { ascending: true })
 
-  const clients = data?.map((client) => {
+  const suppliers = data?.map((supplier) => {
     return {
-      ...client,
-      created_at: format(new Date(client?.created_at), 'dd/MM/yyyy', {
+      ...supplier,
+      created_at: format(new Date(supplier?.created_at), 'dd/MM/yyyy', {
         locale: ptBR,
       }),
     }
@@ -154,7 +156,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: {
-      clients,
+      suppliers,
     },
     revalidate: 60 * 30, // = 30 minutos
   }
