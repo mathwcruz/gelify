@@ -2,6 +2,7 @@ import {
   OfficeBuildingIcon,
   UserIcon,
   IdentificationIcon,
+  ShoppingBagIcon,
 } from '@heroicons/react/outline'
 
 export const solutions = {
@@ -24,6 +25,12 @@ export const solutions = {
       href: '/list/suppliers',
       icon: IdentificationIcon,
     },
+    {
+      name: 'Produtos',
+      description: 'Confira os seus produtos',
+      href: '/list/products',
+      icon: ShoppingBagIcon,
+    },
   ],
   REGISTER: [
     {
@@ -43,6 +50,12 @@ export const solutions = {
       description: 'Cadastre um  novo fornecedor',
       href: '/register/supplier',
       icon: IdentificationIcon,
+    },
+    {
+      name: 'Produto',
+      description: 'Cadastre um  novo produto',
+      href: '/register/product',
+      icon: ShoppingBagIcon,
     },
   ],
 }

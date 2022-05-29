@@ -3,12 +3,12 @@ import Link from 'next/link'
 
 import { CityData } from '../../contexts/CityContext'
 
-interface CityItemsProps {
+interface CityItemProps {
   city: CityData
   onRemoveCity: (id: string) => void
 }
 
-export const CityItem = ({ city, onRemoveCity }: CityItemsProps) => {
+export const CityItem = ({ city, onRemoveCity }: CityItemProps) => {
   return (
     <li
       className="flex flex-col gap-1 rounded-md border border-gray-400 px-3 py-2"
@@ -16,7 +16,9 @@ export const CityItem = ({ city, onRemoveCity }: CityItemsProps) => {
     >
       <div className="mb-2 flex justify-between">
         <div className="flex flex-col justify-center">
-          <h3 className="font-semi text-left text-lg">{city?.description}</h3>
+          <h3 className="text-left text-lg font-semibold">
+            {city?.description}
+          </h3>
           <span className="text-left text-sm font-medium text-gray-500">
             {city?.cep}
           </span>

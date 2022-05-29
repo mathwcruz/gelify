@@ -10,12 +10,12 @@ import { useCity } from '../../contexts/CityContext'
 import { ClientData } from '../../contexts/ClientContext'
 import { Loading } from '../Loading'
 
-interface ClientItemsProps {
+interface ClientItemProps {
   client: ClientData
   onRemoveClient: (id: string) => void
 }
 
-export const ClientItem = ({ client, onRemoveClient }: ClientItemsProps) => {
+export const ClientItem = ({ client, onRemoveClient }: ClientItemProps) => {
   const { getCityById } = useCity()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)

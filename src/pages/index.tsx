@@ -8,7 +8,7 @@ const Home: NextPage = () => {
         <title>Gelify</title>
       </Head>
       <div className="my-44 flex h-full w-screen flex-col items-center justify-center gap-10">
-        <div className="flex flex-col items-center justify-center gap-2">
+        <div className="flex flex-col items-center justify-center gap-4">
           <h1 className="text-center text-xl font-semibold text-black lg:text-5xl">
             Gelify
           </h1>
