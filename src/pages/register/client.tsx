@@ -7,32 +7,32 @@ import { isEmpty } from 'lodash'
 
 import { supabase } from '../../services/supabase'
 import { Loading } from '../../components/Loading'
-import { City } from '../list/cities'
-import { Person } from '../edit/person/[id]'
+import { CityData } from '../../contexts/CityContext'
+import { ClientData } from '../../contexts/ClientContext'
 import { Mask, Regex } from '../../utils/formatters'
 import { validateCPF, validateDate } from '../../utils/validations'
 
-interface PersonRegisterProps {
-  cities: Omit<City, 'created_at'>[]
+interface ClientRegisterProps {
+  cities: Omit<CityData, 'created_at'>[]
 }
 
-const PersonRegister = ({ cities }: PersonRegisterProps) => {
-  const [personData, setPersonData] = useState<Person>({} as Person)
+const ClientRegister = ({ cities }: ClientRegisterProps) => {
+  const [clientData, setClientData] = useState<ClientData>({} as ClientData)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState<boolean>(false)
 
   useEffect(() => {
     setIsAllFieldsFilled(
-      Object.values(personData).filter((value) => !!value)?.length === 5
+      Object.values(clientData).filter((value) => !!value)?.length === 6
     )
-  }, [personData])
+  }, [clientData])
 
-  const handleCreatePerson = useCallback(
+  const handleCreateClient = useCallback(
     async (e: FormEvent) => {
       e.preventDefault()
       setIsLoading(true)
 
-      if (isEmpty(personData)) {
+      if (isEmpty(clientData)) {
         setIsLoading(false)
 
         return toast.error('Preencha todos os campos, por favor', {
@@ -43,7 +43,7 @@ const PersonRegister = ({ cities }: PersonRegisterProps) => {
       }
 
       if (
-        !validateCPF(personData?.cpf?.replaceAll('.', '')?.replaceAll('-', ''))
+        !validateCPF(clientData?.cpf?.replaceAll('.', '')?.replaceAll('-', ''))
       ) {
         setIsLoading(false)
 
@@ -54,7 +54,7 @@ const PersonRegister = ({ cities }: PersonRegisterProps) => {
         })
       }
 
-      if (!validateDate(personData?.birthdate)) {
+      if (!validateDate(clientData?.birthdate)) {
         setIsLoading(false)
 
         toast.error('Data inválida, informe uma correta', {
@@ -64,10 +64,20 @@ const PersonRegister = ({ cities }: PersonRegisterProps) => {
         })
       }
 
-      if (!Regex.phone.test(personData?.cellphone)) {
+      if (!Regex.email.test(clientData?.email)) {
         setIsLoading(false)
 
-        toast.error('Número inválido, informe um corret', {
+        toast.error('Email inválido, informe um correto', {
+          position: 'top-center',
+          autoClose: 1000,
+          hideProgressBar: true,
+        })
+      }
+
+      if (!Regex.phone.test(clientData?.cellphone)) {
+        setIsLoading(false)
+
+        toast.error('Número inválido, informe um correto', {
           position: 'top-center',
           autoClose: 1000,
           hideProgressBar: true,
@@ -76,21 +86,22 @@ const PersonRegister = ({ cities }: PersonRegisterProps) => {
 
       if (
         !validateCPF(
-          personData?.cpf?.replaceAll('.', '')?.replaceAll('-', '')
+          clientData?.cpf?.replaceAll('.', '')?.replaceAll('-', '')
         ) ||
-        !validateDate(personData?.birthdate) ||
-        !Regex.phone.test(personData?.cellphone)
+        !validateDate(clientData?.birthdate) ||
+        !Regex.phone.test(clientData?.cellphone) ||
+        !Regex.email.test(clientData?.email)
       ) {
         return
       }
 
       try {
         const { data } = await supabase
-          .from('people')
-          .insert({ ...personData, id: uuid() })
+          .from('client')
+          .insert({ ...clientData, id: uuid() })
 
         if (!!data?.length) {
-          setPersonData({} as Person)
+          setClientData({} as ClientData)
           toast.success(`${data?.[0]?.name} foi cadastrado(a) com sucesso!`, {
             position: 'top-center',
             autoClose: 2000,
@@ -100,7 +111,7 @@ const PersonRegister = ({ cities }: PersonRegisterProps) => {
           })
 
           setIsLoading(false)
-          setPersonData({} as Person)
+          setClientData({} as ClientData)
         } else {
           setIsLoading(false)
         }
@@ -109,24 +120,24 @@ const PersonRegister = ({ cities }: PersonRegisterProps) => {
         setIsLoading(false)
       }
     },
-    [personData]
+    [clientData]
   )
 
   return (
     <>
       <Head>
-        <title>Registrar nova pessoa</title>
+        <title>Cadastrar novo cliente</title>
       </Head>
 
       <div className="mx-auto mt-28 max-w-7xl px-4 sm:px-6 md:col-span-2">
         {isLoading ? (
           <Loading />
         ) : (
-          <form onSubmit={handleCreatePerson}>
+          <form onSubmit={handleCreateClient}>
             <div className="overflow-hidden shadow sm:rounded-md">
               <div className="flex flex-col justify-center gap-3 bg-white px-4 py-5 sm:p-6">
-                <div className="grid grid-cols-12 gap-6">
-                  <div className="col-span-2 sm:col-span-3">
+                <div className="grid grid-cols-12 gap-3">
+                  <div className="col-span-3">
                     <label
                       htmlFor="name"
                       className="block text-sm font-medium text-gray-700"
@@ -137,10 +148,10 @@ const PersonRegister = ({ cities }: PersonRegisterProps) => {
                       type="text"
                       name="name"
                       id="name"
-                      value={personData?.name}
+                      value={clientData?.name}
                       autoComplete="off"
                       onChange={(e) =>
-                        setPersonData((old) => ({
+                        setClientData((old) => ({
                           ...old,
                           name: e.target.value,
                         }))
@@ -148,7 +159,7 @@ const PersonRegister = ({ cities }: PersonRegisterProps) => {
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
                     />
                   </div>
-                  <div className="col-span-1 sm:col-span-2">
+                  <div className="col-span-2">
                     <label
                       htmlFor="cpf"
                       className="block text-sm font-medium text-gray-700"
@@ -160,11 +171,11 @@ const PersonRegister = ({ cities }: PersonRegisterProps) => {
                       name="cpf"
                       id="cpf"
                       autoComplete="off"
-                      value={personData?.cpf}
+                      value={clientData?.cpf}
                       onChange={(e) => {
                         if (e.target.value?.length > 14) return
 
-                        setPersonData((old) => ({
+                        setClientData((old) => ({
                           ...old,
                           cpf: Mask.cpf(e.target.value),
                         }))
@@ -172,7 +183,7 @@ const PersonRegister = ({ cities }: PersonRegisterProps) => {
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
                     />
                   </div>
-                  <div className="col-span-1 sm:col-span-2">
+                  <div className="col-span-2">
                     <label
                       htmlFor="birthdate"
                       className="block text-sm font-medium text-gray-700"
@@ -184,11 +195,11 @@ const PersonRegister = ({ cities }: PersonRegisterProps) => {
                       name="birthdate"
                       id="birthdate"
                       autoComplete="off"
-                      value={personData?.birthdate}
+                      value={clientData?.birthdate}
                       onChange={(e) => {
                         if (e.target.value?.length > 10) return
 
-                        setPersonData((old) => ({
+                        setClientData((old) => ({
                           ...old,
                           birthdate: Mask.birthdate(e.target.value),
                         }))
@@ -196,7 +207,29 @@ const PersonRegister = ({ cities }: PersonRegisterProps) => {
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
                     />
                   </div>
-                  <div className="col-span-1 sm:col-span-2">
+                  <div className="col-span-3">
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Email
+                    </label>
+                    <input
+                      type="text"
+                      name="email"
+                      id="email"
+                      autoComplete="off"
+                      value={clientData?.email}
+                      onChange={(e) => {
+                        setClientData((old) => ({
+                          ...old,
+                          email: e.target.value,
+                        }))
+                      }}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                    />
+                  </div>
+                  <div className="col-span-2">
                     <label
                       htmlFor="cellphone"
                       className="block text-sm font-medium text-gray-700"
@@ -208,11 +241,11 @@ const PersonRegister = ({ cities }: PersonRegisterProps) => {
                       name="cellphone"
                       id="cellphone"
                       autoComplete="off"
-                      value={personData?.cellphone}
+                      value={clientData?.cellphone}
                       onChange={(e) => {
                         if (e.target.value?.length > 15) return
 
-                        setPersonData((old) => ({
+                        setClientData((old) => ({
                           ...old,
                           cellphone: Mask.phone(e.target.value),
                         }))
@@ -220,7 +253,7 @@ const PersonRegister = ({ cities }: PersonRegisterProps) => {
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
                     />
                   </div>
-                  <div className="col-span-2 sm:col-span-3">
+                  <div className="col-span-3">
                     <label
                       htmlFor="city"
                       className="block text-sm font-medium text-gray-700"
@@ -232,7 +265,7 @@ const PersonRegister = ({ cities }: PersonRegisterProps) => {
                       name="country"
                       defaultValue=""
                       onChange={(e) =>
-                        setPersonData((old) => ({
+                        setClientData((old) => ({
                           ...old,
                           city_id: e.target.value,
                         }))
@@ -260,7 +293,7 @@ const PersonRegister = ({ cities }: PersonRegisterProps) => {
                   title={!isAllFieldsFilled ? 'Preencha todos os campos' : ''}
                   className="inline-flex justify-center rounded-md border border-transparent bg-green-500 py-2 px-4 text-sm font-medium text-white shadow-sm transition-colors duration-300 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-green-500 disabled:hover:opacity-60"
                 >
-                  Cadastrar pessoa
+                  Cadastrar cliente
                 </button>
               </div>
             </div>
@@ -271,11 +304,11 @@ const PersonRegister = ({ cities }: PersonRegisterProps) => {
   )
 }
 
-export default PersonRegister
+export default ClientRegister
 
 export const getStaticProps: GetStaticProps = async () => {
   const { data } = await supabase
-    .from('cities')
+    .from('city')
     .select('*')
     .order('id', { ascending: true })
 

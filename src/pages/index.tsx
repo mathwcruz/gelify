@@ -5,16 +5,16 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Oficina Mecânica</title>
+        <title>Gelify</title>
       </Head>
       <div className="my-44 flex h-full w-screen flex-col items-center justify-center gap-10">
         <div className="flex flex-col items-center justify-center gap-2">
           <h1 className="text-center text-xl font-semibold text-black lg:text-5xl">
-            Oficina Mecânica
+            Gelify
           </h1>
-          <p className="md: max-w-smmax-w-sm text-center text-sm font-normal text-gray-400 md:text-base">
-            Faça toda a inclusão dos seus clientes, serviços e transações em um
-            só lugar
+          <p className="md: max-w-sm text-center text-sm font-normal text-gray-400 md:text-base">
+            Faça toda a inclusão dos seus clientes, fornecedores, produtos e
+            transações de compra e venda dos mesmos
           </p>
         </div>
         <img

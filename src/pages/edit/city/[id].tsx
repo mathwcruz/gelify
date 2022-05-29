@@ -6,43 +6,57 @@ import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
 
 import { supabase } from '../../../services/supabase'
+import { CityData } from '../../../contexts/CityContext'
 import { Loading } from '../../../components/Loading'
+import { Mask, Regex } from '../../../utils/formatters'
 
 interface CityProps {
-  city: {
-    id: string
-    description: string
-    created_at: string
-  }
+  city: CityData
 }
 
 const City = ({ city }: CityProps) => {
-  const [description, setDescription] = useState<string>(city.description)
+  const [cityData, setCityData] = useState<CityData>(city)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isAllFieldsFilled, setIsAllFieldsFilled] = useState<boolean>(false)
   const [isAllFieldsValuesTheSame, setIsAllFieldsValuesTheSame] =
     useState<boolean>(false)
 
   useEffect(() => {
-    setIsAllFieldsValuesTheSame(description === city?.description)
-  }, [city, description])
+    const initialCityValues = Object.values(city)
+    const cityDataValues = Object.values(cityData)
+    let bothDataHasTheSameValue = false
+
+    bothDataHasTheSameValue = initialCityValues?.every(
+      (value, index) => value === cityDataValues[index]
+    )
+
+    setIsAllFieldsValuesTheSame(bothDataHasTheSameValue)
+
+    setIsAllFieldsFilled(
+      Object.values(cityData).filter((value) => !!value)?.length === 4
+    )
+  }, [city, cityData])
 
   const handleUpdateCity = useCallback(
     async (e: FormEvent) => {
       e.preventDefault()
 
-      if (!description?.trim()) {
-        return toast.error('O campo descrição deve estar preenchido', {
+      if (!Regex.cep.test(cityData?.cep)) {
+        setIsLoading(false)
+
+        toast.error('CEP inválido, informe um correto', {
           position: 'top-center',
-          autoClose: 500,
+          autoClose: 1000,
           hideProgressBar: true,
         })
+        return
       }
 
       try {
         setIsLoading(true)
         const { error } = await supabase
-          .from('cities')
-          .update({ description })
+          .from('city')
+          .update({ ...cityData })
           .match({ id: city?.id })
 
         if (!error) {
@@ -66,7 +80,7 @@ const City = ({ city }: CityProps) => {
         console.log({ error })
       }
     },
-    [description]
+    [cityData]
   )
 
   return (
@@ -93,13 +107,41 @@ const City = ({ city }: CityProps) => {
                       type="text"
                       name="description"
                       id="description"
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
+                      value={cityData?.description}
+                      onChange={(e) =>
+                        setCityData((old) => ({
+                          ...old,
+                          description: e.target.value,
+                        }))
+                      }
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                    />
+                  </div>
+                  <div className="col-span-4 sm:col-span-2">
+                    <label
+                      htmlFor="cep"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      CEP
+                    </label>
+                    <input
+                      type="text"
+                      name="cep"
+                      id="cep"
+                      value={cityData?.cep}
+                      onChange={(e) => {
+                        if (e.target.value?.length > 9) return
+
+                        setCityData((old) => ({
+                          ...old,
+                          cep: Mask.cep(e.target.value),
+                        }))
+                      }}
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
                     />
                   </div>
                 </div>
-                <p className="w-full text-right text-sm font-medium text-black">
+                <p className="mt-3 w-full text-right text-sm font-medium text-black">
                   Criado em{' '}
                   {format(new Date(city.created_at), 'dd/MM/yyyy', {
                     locale: ptBR,
@@ -109,12 +151,12 @@ const City = ({ city }: CityProps) => {
               <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
                 <button
                   type="submit"
-                  disabled={description === city?.description || !description}
+                  disabled={!isAllFieldsFilled || isAllFieldsValuesTheSame}
                   title={
-                    !description
-                      ? 'Preencha a descrição da ciadade'
-                      : description === city?.description
-                      ? 'A descrição permanece a mesma'
+                    !isAllFieldsFilled
+                      ? 'Preencha todos os campos'
+                      : isAllFieldsValuesTheSame
+                      ? 'Os valores dos campos não alteraram'
                       : ''
                   }
                   className="inline-flex justify-center rounded-md border border-transparent bg-green-500 py-2 px-4 text-sm font-medium text-white shadow-sm transition-colors duration-300 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-green-500"
@@ -143,7 +185,7 @@ export const getStaticProps: GetStaticProps = async ({
   params,
 }: GetStaticPropsContext) => {
   const { id } = params || {}
-  const { data } = await supabase.from('cities').select('*').match({ id })
+  const { data } = await supabase.from('city').select('*').match({ id })
 
   return {
     props: {

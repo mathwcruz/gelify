@@ -3,9 +3,10 @@ import { toast } from 'react-toastify'
 
 import { supabase } from '../services/supabase'
 
-type CityData = {
+export type CityData = {
   id: string
   description: string
+  cep: string
   created_at: string
 }
 
@@ -23,7 +24,7 @@ export const CityContext = createContext({} as CityContextData)
 export function CityProvider({ children }: CityProviderProps) {
   const getCities = async () => {
     try {
-      const response = await supabase.from('cities').select('*')
+      const response = await supabase.from('city').select('*')
       const cities = response?.data as CityData[]
       return cities as CityData[]
     } catch (error) {
@@ -40,7 +41,7 @@ export function CityProvider({ children }: CityProviderProps) {
   const getCityById = async (cityId: string) => {
     try {
       const response = await supabase
-        .from('cities')
+        .from('city')
         .select('*')
         .match({ id: cityId })
       const city = response?.data?.[0] as CityData

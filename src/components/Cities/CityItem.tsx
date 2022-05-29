@@ -1,10 +1,10 @@
 import { PencilIcon, TrashIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
 
-import { City } from '../../pages/list/cities'
+import { CityData } from '../../contexts/CityContext'
 
 interface CityItemsProps {
-  city: City
+  city: CityData
   onRemoveCity: (id: string) => void
 }
 
@@ -15,7 +15,12 @@ export const CityItem = ({ city, onRemoveCity }: CityItemsProps) => {
       key={city?.id}
     >
       <div className="mb-2 flex justify-between">
-        <h3 className="text-left text-lg font-medium">{city?.description}</h3>
+        <div className="flex flex-col justify-center">
+          <h3 className="font-semi text-left text-lg">{city?.description}</h3>
+          <span className="text-left text-sm font-medium text-gray-500">
+            {city?.cep}
+          </span>
+        </div>
         <div className="flex gap-1">
           <Link href={`/edit/city/${city?.id}`}>
             <a

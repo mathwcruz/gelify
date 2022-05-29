@@ -5,54 +5,45 @@ import { toast } from 'react-toastify'
 import { isEmpty } from 'lodash'
 
 import { supabase } from '../../../services/supabase'
-import { City } from '../../list/cities'
+import { CityData } from '../../../contexts/CityContext'
+import { ClientData } from '../../../contexts/ClientContext'
 import { Loading } from '../../../components/Loading'
 import { Mask, Regex } from '../../../utils/formatters'
 import { validateCPF, validateDate } from '../../../utils/validations'
 
-export type Person = {
-  id: string
-  name: string
-  cpf: string
-  birthdate: string
-  cellphone: string
-  city_id: string
-  created_at: string
-}
-
 interface PersonProps {
-  person: Person
-  cities: City[]
+  client: ClientData
+  cities: CityData[]
 }
 
-const Person = ({ person, cities }: PersonProps) => {
-  const [personData, setPersonData] = useState<Person>(person)
+const Client = ({ client, cities }: PersonProps) => {
+  const [clientData, setClientData] = useState<ClientData>(client)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState<boolean>(false)
   const [isAllFieldsValuesTheSame, setIsAllFieldsValuesTheSame] =
     useState<boolean>(false)
 
   useEffect(() => {
-    const initialPersonValues = Object.values(person)
-    const personDataValues = Object.values(personData)
+    const initialClientValues = Object.values(client)
+    const clientDataValues = Object.values(clientData)
     let bothDataHasTheSameValue = false
 
-    bothDataHasTheSameValue = initialPersonValues?.every(
-      (value, index) => value === personDataValues[index]
+    bothDataHasTheSameValue = initialClientValues?.every(
+      (value, index) => value === clientDataValues[index]
     )
 
     setIsAllFieldsValuesTheSame(bothDataHasTheSameValue)
 
     setIsAllFieldsFilled(
-      Object.values(personData).filter((value) => !!value)?.length === 7
+      Object.values(clientData).filter((value) => !!value)?.length === 8
     )
-  }, [personData, person])
+  }, [clientData, client])
 
-  const handleUpdatePerson = useCallback(
+  const handleUpdateClient = useCallback(
     async (e: FormEvent) => {
       e.preventDefault()
 
-      if (isEmpty(personData)) {
+      if (isEmpty(clientData)) {
         setIsLoading(false)
 
         return toast.error('Preencha todos os campos, por favor', {
@@ -63,7 +54,7 @@ const Person = ({ person, cities }: PersonProps) => {
       }
 
       if (
-        !validateCPF(personData?.cpf?.replaceAll('.', '')?.replaceAll('-', ''))
+        !validateCPF(clientData?.cpf?.replaceAll('.', '')?.replaceAll('-', ''))
       ) {
         setIsLoading(false)
 
@@ -74,7 +65,7 @@ const Person = ({ person, cities }: PersonProps) => {
         })
       }
 
-      if (!validateDate(personData?.birthdate)) {
+      if (!validateDate(clientData?.birthdate)) {
         setIsLoading(false)
 
         toast.error('Data inválida, informe uma correta', {
@@ -84,10 +75,20 @@ const Person = ({ person, cities }: PersonProps) => {
         })
       }
 
-      if (!Regex.phone.test(personData?.cellphone)) {
+      if (!Regex.email.test(clientData?.email)) {
         setIsLoading(false)
 
-        toast.error('Número inválido, informe um corret', {
+        toast.error('Email inválido, informe um correto', {
+          position: 'top-center',
+          autoClose: 1000,
+          hideProgressBar: true,
+        })
+      }
+
+      if (!Regex.phone.test(clientData?.cellphone)) {
+        setIsLoading(false)
+
+        toast.error('Número inválido, informe um correto', {
           position: 'top-center',
           autoClose: 1000,
           hideProgressBar: true,
@@ -96,10 +97,11 @@ const Person = ({ person, cities }: PersonProps) => {
 
       if (
         !validateCPF(
-          personData?.cpf?.replaceAll('.', '')?.replaceAll('-', '')
+          clientData?.cpf?.replaceAll('.', '')?.replaceAll('-', '')
         ) ||
-        !validateDate(personData?.birthdate) ||
-        !Regex.phone.test(personData?.cellphone)
+        !validateDate(clientData?.birthdate) ||
+        !Regex.phone.test(clientData?.cellphone) ||
+        !Regex.email.test(clientData?.email)
       ) {
         return
       }
@@ -107,13 +109,13 @@ const Person = ({ person, cities }: PersonProps) => {
       try {
         setIsLoading(true)
         const { error } = await supabase
-          .from('people')
-          .update({ ...personData })
-          .match({ id: personData?.id })
+          .from('client')
+          .update({ ...clientData })
+          .match({ id: clientData?.id })
 
         if (!error) {
           setIsLoading(false)
-          return toast.success('Pessoa atualizada com sucesso!', {
+          return toast.success('Cliente atualizado com sucesso!', {
             position: 'top-center',
             autoClose: 1500,
             hideProgressBar: false,
@@ -121,7 +123,7 @@ const Person = ({ person, cities }: PersonProps) => {
             progress: undefined,
           })
         } else {
-          return toast.error('Ocorreu um erro ao atualizar a pessoa', {
+          return toast.error('Ocorreu um erro ao atualizar o cliente', {
             position: 'top-center',
             autoClose: 500,
             hideProgressBar: true,
@@ -132,23 +134,23 @@ const Person = ({ person, cities }: PersonProps) => {
         console.log({ error })
       }
     },
-    [personData]
+    [clientData]
   )
 
   return (
     <>
       <Head>
-        <title>{person?.name}</title>
+        <title>Cliente | {client?.name}</title>
       </Head>
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-20 px-4 py-12 sm:px-6">
         {isLoading ? (
           <Loading />
         ) : (
-          <form onSubmit={handleUpdatePerson}>
+          <form onSubmit={handleUpdateClient}>
             <div className="overflow-hidden shadow sm:rounded-md">
               <div className="flex flex-col justify-center gap-3 bg-white px-4 py-5 sm:p-6">
-                <div className="grid grid-cols-12 gap-6">
-                  <div className="col-span-2 sm:col-span-3">
+                <div className="grid grid-cols-12 gap-3">
+                  <div className="col-span-3">
                     <label
                       htmlFor="name"
                       className="block text-sm font-medium text-gray-700"
@@ -159,10 +161,10 @@ const Person = ({ person, cities }: PersonProps) => {
                       type="text"
                       name="name"
                       id="name"
-                      value={personData?.name}
+                      value={clientData?.name}
                       autoComplete="off"
                       onChange={(e) =>
-                        setPersonData((old) => ({
+                        setClientData((old) => ({
                           ...old,
                           name: e.target.value,
                         }))
@@ -170,7 +172,7 @@ const Person = ({ person, cities }: PersonProps) => {
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
                     />
                   </div>
-                  <div className="col-span-1 sm:col-span-2">
+                  <div className="col-span-2">
                     <label
                       htmlFor="cpf"
                       className="block text-sm font-medium text-gray-700"
@@ -182,11 +184,11 @@ const Person = ({ person, cities }: PersonProps) => {
                       name="cpf"
                       id="cpf"
                       autoComplete="off"
-                      value={personData?.cpf}
+                      value={clientData?.cpf}
                       onChange={(e) => {
                         if (e.target.value?.length > 14) return
 
-                        setPersonData((old) => ({
+                        setClientData((old) => ({
                           ...old,
                           cpf: Mask.cpf(e.target.value),
                         }))
@@ -194,7 +196,7 @@ const Person = ({ person, cities }: PersonProps) => {
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
                     />
                   </div>
-                  <div className="col-span-1 sm:col-span-2">
+                  <div className="col-span-2">
                     <label
                       htmlFor="birthdate"
                       className="block text-sm font-medium text-gray-700"
@@ -206,11 +208,11 @@ const Person = ({ person, cities }: PersonProps) => {
                       name="birthdate"
                       id="birthdate"
                       autoComplete="off"
-                      value={personData?.birthdate}
+                      value={clientData?.birthdate}
                       onChange={(e) => {
                         if (e.target.value?.length > 10) return
 
-                        setPersonData((old) => ({
+                        setClientData((old) => ({
                           ...old,
                           birthdate: Mask.birthdate(e.target.value),
                         }))
@@ -218,7 +220,29 @@ const Person = ({ person, cities }: PersonProps) => {
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
                     />
                   </div>
-                  <div className="col-span-1 sm:col-span-2">
+                  <div className="col-span-3">
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Email
+                    </label>
+                    <input
+                      type="text"
+                      name="email"
+                      id="email"
+                      autoComplete="off"
+                      value={clientData?.email}
+                      onChange={(e) => {
+                        setClientData((old) => ({
+                          ...old,
+                          email: e.target.value,
+                        }))
+                      }}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                    />
+                  </div>
+                  <div className="col-span-2">
                     <label
                       htmlFor="cellphone"
                       className="block text-sm font-medium text-gray-700"
@@ -230,11 +254,11 @@ const Person = ({ person, cities }: PersonProps) => {
                       name="cellphone"
                       id="cellphone"
                       autoComplete="off"
-                      value={personData?.cellphone}
+                      value={clientData?.cellphone}
                       onChange={(e) => {
                         if (e.target.value?.length > 15) return
 
-                        setPersonData((old) => ({
+                        setClientData((old) => ({
                           ...old,
                           cellphone: Mask.phone(e.target.value),
                         }))
@@ -242,7 +266,7 @@ const Person = ({ person, cities }: PersonProps) => {
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
                     />
                   </div>
-                  <div className="col-span-2 sm:col-span-3">
+                  <div className="col-span-3">
                     <label
                       htmlFor="city"
                       className="block text-sm font-medium text-gray-700"
@@ -252,9 +276,9 @@ const Person = ({ person, cities }: PersonProps) => {
                     <select
                       id="country"
                       name="country"
-                      defaultValue={personData?.city_id}
+                      defaultValue={clientData?.city_id}
                       onChange={(e) =>
-                        setPersonData((old) => ({
+                        setClientData((old) => ({
                           ...old,
                           city_id: e.target.value,
                         }))
@@ -299,7 +323,7 @@ const Person = ({ person, cities }: PersonProps) => {
   )
 }
 
-export default Person
+export default Client
 
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
@@ -312,12 +336,12 @@ export const getStaticProps: GetStaticProps = async ({
   params,
 }: GetStaticPropsContext) => {
   const { id } = params || {}
-  const { data } = await supabase.from('people').select('*').match({ id })
-  const { data: cities } = await supabase.from('cities').select('*')
+  const { data } = await supabase.from('client').select('*').match({ id })
+  const { data: cities } = await supabase.from('city').select('*')
 
   return {
     props: {
-      person: data?.[0],
+      client: data?.[0],
       cities,
     },
     revalidate: 60 * 30, // = 30 minutos

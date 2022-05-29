@@ -1,4 +1,8 @@
-import { OfficeBuildingIcon, UserIcon } from '@heroicons/react/outline'
+import {
+  OfficeBuildingIcon,
+  UserIcon,
+  IdentificationIcon,
+} from '@heroicons/react/outline'
 
 export const solutions = {
   LIST: [
@@ -9,10 +13,16 @@ export const solutions = {
       icon: OfficeBuildingIcon,
     },
     {
-      name: 'Pessoas',
-      description: 'Confira as pessoas já cadastradas',
-      href: '/list/people',
+      name: 'Clientes',
+      description: 'Confira os seus clientes',
+      href: '/list/clients',
       icon: UserIcon,
+    },
+    {
+      name: 'Fornecedores',
+      description: 'Confira os seus fornecedores',
+      href: '/list/suppliers',
+      icon: IdentificationIcon,
     },
   ],
   REGISTER: [
@@ -23,10 +33,16 @@ export const solutions = {
       icon: OfficeBuildingIcon,
     },
     {
-      name: 'Pessoa',
-      description: 'Cadastre uma nova pessoa',
-      href: '/register/person',
+      name: 'Cliente',
+      description: 'Cadastre um  novo cliente',
+      href: '/register/client',
       icon: UserIcon,
+    },
+    {
+      name: 'Fornecedor',
+      description: 'Cadastre um  novo fornecedor',
+      href: '/register/supplier',
+      icon: IdentificationIcon,
     },
   ],
 }

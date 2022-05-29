@@ -8,49 +8,39 @@ import { toast } from 'react-toastify'
 
 import { Loading } from '../../components/Loading'
 import { Search } from '../../components/Search'
-import { PersonItem } from '../../components/People/PersonItem'
-import { usePerson } from '../../contexts/PersonContext'
+import { ClientItem } from '../../components/Client/ClientItem'
+import { useClient, ClientData } from '../../contexts/ClientContext'
 
 import { supabase } from '../../services/supabase'
 
-export type Person = {
-  id: string
-  name: string
-  cpf: string
-  birthdate: string
-  cellphone: string
-  city_id?: string
-  created_at: string
+interface ClientsProps {
+  clients: ClientData[]
 }
 
-interface PeopleProps {
-  people: Person[]
-}
-
-const People = ({ people }: PeopleProps) => {
-  const { getPeople } = usePerson()
+const Clients = ({ clients }: ClientsProps) => {
+  const { getClients } = useClient()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [peopleList, setPeopleList] = useState<Person[]>(people || [])
+  const [clientsList, setClientsList] = useState<ClientData[]>(clients || [])
   const [search, setSearch] = useState<string>('')
 
-  const handleRemovePerson = useCallback(
+  const handleRemoveClient = useCallback(
     async (id) => {
       try {
         setIsLoading(true)
 
-        const { error } = await supabase.from('people').delete().match({ id })
+        const { error } = await supabase.from('client').delete().match({ id })
 
         if (!!error) {
           setIsLoading(false)
-          return toast.error('Ocorreu um erro ao remover esta pessoa', {
+          return toast.error('Ocorreu um erro ao remover este cliente', {
             position: 'top-center',
             autoClose: 500,
             hideProgressBar: true,
           })
         }
 
-        toast.success('Pessoa removida com sucesso!', {
+        toast.success('Cliente removido com sucesso!', {
           position: 'top-center',
           autoClose: 1500,
           hideProgressBar: false,
@@ -58,19 +48,19 @@ const People = ({ people }: PeopleProps) => {
           progress: undefined,
         })
 
-        const data = await getPeople()
+        const data = await getClients()
 
         if (data?.length > 0) {
-          const people = data?.map((person) => {
+          const clients = data?.map((client) => {
             return {
-              ...person,
-              created_at: format(new Date(person?.created_at), 'dd/MM/yyyy', {
+              ...client,
+              created_at: format(new Date(client?.created_at), 'dd/MM/yyyy', {
                 locale: ptBR,
               }),
             }
           })
 
-          setPeopleList(people)
+          setClientsList(clients)
         }
       } catch (error) {
         console.log({ error })
@@ -78,52 +68,52 @@ const People = ({ people }: PeopleProps) => {
         setIsLoading(false)
       }
     },
-    [getPeople]
+    [getClients]
   )
 
   return (
     <>
       <Head>
-        <title>Lista de Pessoas</title>
+        <title>Clientes</title>
       </Head>
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-20 px-4 py-12 sm:px-6">
         <div className="flex max-w-3xl flex-col items-center justify-center gap-2">
           <h1 className="text-center text-3xl font-bold text-black">
-            Pessoas cadastradas
+            Clientes cadastrados
           </h1>
           <p className="text-base font-medium text-gray-600">
-            Confira as pessoas que já foram cadastradas no sistema
+            Confira os clientes que já foram cadastrados no sistema
           </p>
         </div>
 
         {isLoading ? (
           <Loading />
-        ) : peopleList?.length > 0 ? (
+        ) : clientsList?.length > 0 ? (
           <div className="flex flex-col justify-center gap-4">
             <Search
               search={search}
               setSearch={setSearch}
-              placeholder="Pesquisa por pessoas"
+              placeholder="Pesquisa por clientes"
             />
             <ul className="flex w-72 flex-col justify-center gap-5 md:w-96">
-              {peopleList
-                ?.filter((person) => {
+              {clientsList
+                ?.filter((client) => {
                   if (!search) {
-                    return person
+                    return client
                   }
 
                   if (
                     !!search &&
-                    person?.name.toLowerCase().includes(search.toLowerCase())
+                    client?.name.toLowerCase().includes(search.toLowerCase())
                   ) {
-                    return person
+                    return client
                   }
                 })
                 ?.map((person) => (
-                  <PersonItem
+                  <ClientItem
                     key={person?.id}
-                    person={person}
-                    onRemovePerson={handleRemovePerson}
+                    client={person}
+                    onRemoveClient={handleRemoveClient}
                   />
                 ))}
             </ul>
@@ -131,11 +121,11 @@ const People = ({ people }: PeopleProps) => {
         ) : (
           <div className="flex flex-col gap-4">
             <h1 className="text-center text-lg font-medium text-black">
-              Não há pessoas cadastradas
+              Não há clientes cadastrados
             </h1>
-            <Link href="/register/person">
+            <Link href="/register/client">
               <a className="flex items-center justify-center rounded-lg border border-white bg-green-500 p-2 text-base font-semibold text-white transition-colors duration-300 hover:bg-green-600">
-                Cadastrar pessoa
+                Cadastrar cliente
               </a>
             </Link>
           </div>
@@ -145,18 +135,18 @@ const People = ({ people }: PeopleProps) => {
   )
 }
 
-export default People
+export default Clients
 
 export const getStaticProps: GetStaticProps = async () => {
   const { data } = await supabase
-    .from('people')
+    .from('client')
     .select('*')
     .order('id', { ascending: true })
 
-  const people = data?.map((person) => {
+  const clients = data?.map((client) => {
     return {
-      ...person,
-      created_at: format(new Date(person?.created_at), 'dd/MM/yyyy', {
+      ...client,
+      created_at: format(new Date(client?.created_at), 'dd/MM/yyyy', {
         locale: ptBR,
       }),
     }
@@ -164,7 +154,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: {
-      people,
+      clients,
     },
     revalidate: 60 * 30, // = 30 minutos
   }

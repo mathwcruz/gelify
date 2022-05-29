@@ -17,12 +17,8 @@ export function Header() {
         <div className="flex items-center justify-between border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <a href="/">
-              <span className="sr-only">Oficina Mecânica</span>
-              <img
-                src="/favicon.png"
-                className="h-8 sm:h-10"
-                alt="Oficina mecânica"
-              />
+              <span className="sr-only">Gelify</span>
+              <img src="/favicon.png" className="h-8 sm:h-10" alt="Gelify" />
             </a>
           </div>
           <div className="-my-2 -mr-2 md:hidden">
@@ -171,11 +167,7 @@ export function Header() {
             <div className="px-5 pt-5 pb-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <img
-                    src="/favicon.png"
-                    className="h-8 w-auto"
-                    alt="Oficina mecânica"
-                  />
+                  <img src="/favicon.png" className="h-8 w-auto" alt="Gelify" />
                 </div>
                 <div className="-mr-2">
                   <Popover.Button className="focus:ring-text-green-400 inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset">

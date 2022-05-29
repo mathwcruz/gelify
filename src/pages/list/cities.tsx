@@ -6,28 +6,22 @@ import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
 import { toast } from 'react-toastify'
 
-import { useCity } from '../../contexts/CityContext'
+import { useCity, CityData } from '../../contexts/CityContext'
 import { Loading } from '../../components/Loading'
 import { Search } from '../../components/Search'
 import { CityItem } from '../../components/Cities/CityItem'
 
 import { supabase } from '../../services/supabase'
 
-export type City = {
-  id: string
-  description: string
-  created_at: string
-}
-
 interface CitiesProps {
-  cities: City[]
+  cities: CityData[]
 }
 
 const Cities = ({ cities }: CitiesProps) => {
   const { getCities } = useCity()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [citiesList, setCitiesList] = useState<City[]>(cities || [])
+  const [citiesList, setCitiesList] = useState<CityData[]>(cities || [])
   const [search, setSearch] = useState<string>('')
 
   const handleRemoveCity = useCallback(
@@ -35,7 +29,7 @@ const Cities = ({ cities }: CitiesProps) => {
       try {
         setIsLoading(true)
 
-        const { error } = await supabase.from('cities').delete().match({ id })
+        const { error } = await supabase.from('city').delete().match({ id })
 
         if (!!error) {
           setIsLoading(false)
@@ -80,7 +74,7 @@ const Cities = ({ cities }: CitiesProps) => {
   return (
     <>
       <Head>
-        <title>Lista de Cidades</title>
+        <title>Cidades</title>
       </Head>
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-20 px-4 py-12 sm:px-6">
         <div className="flex max-w-3xl flex-col items-center justify-center gap-2">
@@ -147,7 +141,7 @@ export default Cities
 
 export const getStaticProps: GetStaticProps = async () => {
   const { data } = await supabase
-    .from('cities')
+    .from('city')
     .select('*')
     .order('id', { ascending: true })
 
