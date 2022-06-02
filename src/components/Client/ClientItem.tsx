@@ -1,8 +1,4 @@
-import {
-  PencilIcon,
-  TrashIcon,
-  OfficeBuildingIcon,
-} from '@heroicons/react/outline'
+import { PencilIcon, OfficeBuildingIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -12,10 +8,9 @@ import { Loading } from '../Loading'
 
 interface ClientItemProps {
   client: ClientData
-  onRemoveClient: (id: string) => void
 }
 
-export const ClientItem = ({ client, onRemoveClient }: ClientItemProps) => {
+export const ClientItem = ({ client }: ClientItemProps) => {
   const { getCityById } = useCity()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -115,20 +110,19 @@ export const ClientItem = ({ client, onRemoveClient }: ClientItemProps) => {
                   <PencilIcon className="h-5 w-5 text-green-400 transition-colors duration-300 ease-linear hover:text-green-600" />
                 </a>
               </Link>
-              <button
-                title={`Remover ${client?.name}`}
-                onClick={() => onRemoveClient(client?.id)}
-              >
-                <TrashIcon className="h-5 w-5 text-red-400 transition-colors duration-300 ease-linear hover:text-red-600" />
-              </button>
             </div>
           </div>
-          <span className="self-end text-sm">
-            Criado em{' '}
-            <span className="font-semibold text-green-500">
-              {client?.created_at}
+          <div className="flex gap-2 self-end text-sm">
+            <span className="text-left font-semibold text-black">
+              {client?.active ? 'Ativo' : 'Inativo'}
             </span>
-          </span>
+            <p>
+              Criado em{' '}
+              <span className="font-semibold text-green-500">
+                {client?.created_at}
+              </span>
+            </p>
+          </div>
         </li>
       )}
     </>

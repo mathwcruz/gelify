@@ -19,11 +19,20 @@ interface PersonProps {
 const Client = ({ client, cities }: PersonProps) => {
   const [clientData, setClientData] = useState<ClientData>(client)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isClientActive, setIsClientActive] = useState<boolean>(
+    !!client?.active
+  )
+  const [canUpdateClient, setCanUpdateClient] = useState<boolean>(false)
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState<boolean>(false)
   const [isAllFieldsValuesTheSame, setIsAllFieldsValuesTheSame] =
     useState<boolean>(false)
 
   useEffect(() => {
+    const data: any = { ...clientData }
+    delete data.active
+    const initialClient: any = { ...client }
+    delete initialClient.active
+
     const initialClientValues = Object.values(client)
     const clientDataValues = Object.values(clientData)
     let bothDataHasTheSameValue = false
@@ -38,6 +47,18 @@ const Client = ({ client, cities }: PersonProps) => {
       Object.values(clientData).filter((value) => !!value)?.length === 8
     )
   }, [clientData, client])
+
+  useEffect(() => {
+    if (client?.active !== isClientActive && isAllFieldsFilled) {
+      return setCanUpdateClient(true)
+    }
+
+    if (isAllFieldsFilled && !isAllFieldsValuesTheSame) {
+      return setCanUpdateClient(true)
+    }
+
+    return setCanUpdateClient(false)
+  }, [isAllFieldsFilled, isAllFieldsValuesTheSame, isClientActive])
 
   const handleUpdateClient = useCallback(
     async (e: FormEvent) => {
@@ -110,7 +131,7 @@ const Client = ({ client, cities }: PersonProps) => {
         setIsLoading(true)
         const { error } = await supabase
           .from('client')
-          .update({ ...clientData })
+          .update({ ...clientData, active: isClientActive })
           .match({ id: clientData?.id })
 
         if (!error) {
@@ -134,7 +155,7 @@ const Client = ({ client, cities }: PersonProps) => {
         console.log({ error })
       }
     },
-    [clientData]
+    [clientData, isClientActive]
   )
 
   return (
@@ -276,6 +297,12 @@ const Client = ({ client, cities }: PersonProps) => {
                     <select
                       id="country"
                       name="country"
+                      title={
+                        !cities?.length
+                          ? 'Não há cidades ativas no momento'
+                          : ''
+                      }
+                      disabled={!cities?.length}
                       defaultValue={clientData?.city_id}
                       onChange={(e) =>
                         setClientData((old) => ({
@@ -283,7 +310,7 @@ const Client = ({ client, cities }: PersonProps) => {
                           city_id: e.target.value,
                         }))
                       }
-                      className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                      className="disabled:cursor-pointer-not-allowed mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                     >
                       <>
                         <option value="" disabled>
@@ -299,10 +326,26 @@ const Client = ({ client, cities }: PersonProps) => {
                   </div>
                 </div>
               </div>
-              <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
+              <div className="flex flex-row items-center justify-end gap-4 bg-gray-50 px-4 py-3 text-right sm:px-6">
+                <div className="flex items-center justify-center gap-2">
+                  <input
+                    className="text-green-400 focus:text-green-400 focus:ring-green-400"
+                    type="checkbox"
+                    role="switch"
+                    id="active"
+                    checked={isClientActive}
+                    onChange={() => setIsClientActive((old) => !old)}
+                  />
+                  <label
+                    className="text-sm font-medium text-black"
+                    htmlFor="active"
+                  >
+                    {isClientActive ? 'Ativo' : 'Inativo'}
+                  </label>
+                </div>
                 <button
                   type="submit"
-                  disabled={!isAllFieldsFilled || isAllFieldsValuesTheSame}
+                  disabled={!canUpdateClient}
                   title={
                     !isAllFieldsFilled
                       ? 'Preencha todos os campos'
@@ -312,7 +355,7 @@ const Client = ({ client, cities }: PersonProps) => {
                   }
                   className="inline-flex justify-center rounded-md border border-transparent bg-green-500 py-2 px-4 text-sm font-medium text-white shadow-sm transition-colors duration-300 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-green-500 disabled:hover:opacity-60"
                 >
-                  Atualizar
+                  Salvar
                 </button>
               </div>
             </div>
@@ -337,7 +380,10 @@ export const getStaticProps: GetStaticProps = async ({
 }: GetStaticPropsContext) => {
   const { id } = params || {}
   const { data } = await supabase.from('client').select('*').match({ id })
-  const { data: cities } = await supabase.from('city').select('*')
+  const { data: cities } = await supabase
+    .from('city')
+    .select('*')
+    .match({ active: true })
 
   return {
     props: {

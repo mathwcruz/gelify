@@ -10,6 +10,7 @@ export type ClientData = {
   birthdate: string
   cellphone: string
   email: string
+  active: boolean
   city_id: string
   created_at: string
 }

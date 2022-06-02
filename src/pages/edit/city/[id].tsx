@@ -17,13 +17,20 @@ interface CityProps {
 const City = ({ city }: CityProps) => {
   const [cityData, setCityData] = useState<CityData>(city)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isCityActive, setIsCityActive] = useState<boolean>(!!city?.active)
+  const [canUpdateCity, setCanUpdateCity] = useState<boolean>(false)
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState<boolean>(false)
   const [isAllFieldsValuesTheSame, setIsAllFieldsValuesTheSame] =
     useState<boolean>(false)
 
   useEffect(() => {
-    const initialCityValues = Object.values(city)
-    const cityDataValues = Object.values(cityData)
+    const data: any = { ...cityData }
+    delete data.active
+    const initialCity: any = { ...city }
+    delete initialCity.active
+
+    const initialCityValues = Object.values(initialCity)
+    const cityDataValues = Object.values(data)
     let bothDataHasTheSameValue = false
 
     bothDataHasTheSameValue = initialCityValues?.every(
@@ -33,9 +40,21 @@ const City = ({ city }: CityProps) => {
     setIsAllFieldsValuesTheSame(bothDataHasTheSameValue)
 
     setIsAllFieldsFilled(
-      Object.values(cityData).filter((value) => !!value)?.length === 4
+      Object.values(data)?.filter?.((value) => !!value)?.length === 4
     )
   }, [city, cityData])
+
+  useEffect(() => {
+    if (city?.active !== isCityActive && isAllFieldsFilled) {
+      return setCanUpdateCity(true)
+    }
+
+    if (isAllFieldsFilled && !isAllFieldsValuesTheSame) {
+      return setCanUpdateCity(true)
+    }
+
+    return setCanUpdateCity(false)
+  }, [isAllFieldsFilled, isAllFieldsValuesTheSame, isCityActive])
 
   const handleUpdateCity = useCallback(
     async (e: FormEvent) => {
@@ -53,10 +72,9 @@ const City = ({ city }: CityProps) => {
       }
 
       try {
-        setIsLoading(true)
         const { error } = await supabase
           .from('city')
-          .update({ ...cityData })
+          .update({ ...cityData, active: isCityActive })
           .match({ id: city?.id })
 
         if (!error) {
@@ -80,7 +98,7 @@ const City = ({ city }: CityProps) => {
         console.log({ error })
       }
     },
-    [cityData]
+    [cityData, isCityActive]
   )
 
   return (
@@ -148,10 +166,26 @@ const City = ({ city }: CityProps) => {
                   })}
                 </p>
               </div>
-              <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
+              <div className="flex flex-row items-center justify-end gap-4 bg-gray-50 px-4 py-3 text-right sm:px-6">
+                <div className="flex items-center justify-center gap-2">
+                  <input
+                    className="text-green-400 focus:text-green-400 focus:ring-green-400"
+                    type="checkbox"
+                    role="switch"
+                    id="active"
+                    checked={isCityActive}
+                    onChange={() => setIsCityActive((old) => !old)}
+                  />
+                  <label
+                    className="text-sm font-medium text-black"
+                    htmlFor="active"
+                  >
+                    {isCityActive ? 'Ativa' : 'Inativa'}
+                  </label>
+                </div>
                 <button
                   type="submit"
-                  disabled={!isAllFieldsFilled || isAllFieldsValuesTheSame}
+                  disabled={!canUpdateCity}
                   title={
                     !isAllFieldsFilled
                       ? 'Preencha todos os campos'

@@ -27,7 +27,7 @@ const ProductRegister: NextPage = () => {
       try {
         const { data } = await supabase
           .from('product')
-          .insert({ ...productData, id: uuid() })
+          .insert({ ...productData, id: uuid(), active: true })
 
         if (!!data?.length) {
           setProductData({} as ProductData)

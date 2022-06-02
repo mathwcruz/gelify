@@ -1,14 +1,13 @@
-import { PencilIcon, TrashIcon } from '@heroicons/react/outline'
+import { PencilIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
 
 import { ProductData } from '../../contexts/ProductContext'
 
 interface ProductItemProps {
   product: ProductData
-  onRemoveProduct: (id: string) => void
 }
 
-export const ProductItem = ({ product, onRemoveProduct }: ProductItemProps) => {
+export const ProductItem = ({ product }: ProductItemProps) => {
   return (
     <li
       className="flex flex-col gap-1 rounded-md border border-gray-400 px-3 py-2"
@@ -55,20 +54,19 @@ export const ProductItem = ({ product, onRemoveProduct }: ProductItemProps) => {
               <PencilIcon className="h-5 w-5 text-green-400 transition-colors duration-300 ease-linear hover:text-green-600" />
             </a>
           </Link>
-          <button
-            title={`Remover ${product?.description}`}
-            onClick={() => onRemoveProduct(product?.id)}
-          >
-            <TrashIcon className="h-5 w-5 text-red-400 transition-colors duration-300 ease-linear hover:text-red-600" />
-          </button>
         </div>
       </div>
-      <span className="self-end text-sm">
-        Criado em{' '}
-        <span className="font-semibold text-green-500">
-          {product?.created_at}
+      <div className="flex gap-2 self-end text-sm">
+        <span className="text-left font-semibold text-black">
+          {product?.active ? 'Ativo' : 'Inativo'}
         </span>
-      </span>
+        <p>
+          Criado em{' '}
+          <span className="font-semibold text-green-500">
+            {product?.created_at}
+          </span>
+        </p>
+      </div>
     </li>
   )
 }

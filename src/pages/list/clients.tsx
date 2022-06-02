@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 import { Loading } from '../../components/Loading'
 import { Search } from '../../components/Search'
 import { ClientItem } from '../../components/Client/ClientItem'
-import { useClient, ClientData } from '../../contexts/ClientContext'
+import { ClientData } from '../../contexts/ClientContext'
 
 import { supabase } from '../../services/supabase'
 
@@ -18,58 +18,7 @@ interface ClientsProps {
 }
 
 const Clients = ({ clients }: ClientsProps) => {
-  const { getClients } = useClient()
-
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [clientsList, setClientsList] = useState<ClientData[]>(clients || [])
   const [search, setSearch] = useState<string>('')
-
-  const handleRemoveClient = useCallback(
-    async (id) => {
-      try {
-        setIsLoading(true)
-
-        const { error } = await supabase.from('client').delete().match({ id })
-
-        if (!!error) {
-          setIsLoading(false)
-          return toast.error('Ocorreu um erro ao remover este cliente', {
-            position: 'top-center',
-            autoClose: 500,
-            hideProgressBar: true,
-          })
-        }
-
-        toast.success('Cliente removido com sucesso!', {
-          position: 'top-center',
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          progress: undefined,
-        })
-
-        const data = await getClients()
-
-        if (data?.length > 0) {
-          const clients = data?.map((client) => {
-            return {
-              ...client,
-              created_at: format(new Date(client?.created_at), 'dd/MM/yyyy', {
-                locale: ptBR,
-              }),
-            }
-          })
-
-          setClientsList(clients)
-        }
-      } catch (error) {
-        console.log({ error })
-      } finally {
-        setIsLoading(false)
-      }
-    },
-    [getClients]
-  )
 
   return (
     <>
@@ -86,9 +35,7 @@ const Clients = ({ clients }: ClientsProps) => {
           </p>
         </div>
 
-        {isLoading ? (
-          <Loading />
-        ) : clientsList?.length > 0 ? (
+        {clients?.length > 0 ? (
           <div className="flex flex-col justify-center gap-4">
             <Search
               search={search}
@@ -96,7 +43,7 @@ const Clients = ({ clients }: ClientsProps) => {
               placeholder="Pesquisar por clientes"
             />
             <ul className="flex w-72 flex-col justify-center gap-5 md:w-96">
-              {clientsList
+              {clients
                 ?.filter((client) => {
                   if (!search) {
                     return client
@@ -110,11 +57,7 @@ const Clients = ({ clients }: ClientsProps) => {
                   }
                 })
                 ?.map((person) => (
-                  <ClientItem
-                    key={person?.id}
-                    client={person}
-                    onRemoveClient={handleRemoveClient}
-                  />
+                  <ClientItem key={person?.id} client={person} />
                 ))}
             </ul>
           </div>

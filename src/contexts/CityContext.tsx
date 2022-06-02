@@ -7,6 +7,7 @@ export type CityData = {
   id: string
   description: string
   cep: string
+  active: boolean
   created_at: string
 }
 

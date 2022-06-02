@@ -68,7 +68,7 @@ const SupplierRegister: NextPage = () => {
       try {
         const { data } = await supabase
           .from('supplier')
-          .insert({ ...supplierData, id: uuid() })
+          .insert({ ...supplierData, id: uuid(), active: true })
 
         if (!!data?.length) {
           setSupplierData({} as SupplierData)

@@ -8,6 +8,7 @@ export type ProductData = {
   description: string
   unitary_value: number
   stock_quantity: number
+  active: boolean
   created_at: string
 }
 

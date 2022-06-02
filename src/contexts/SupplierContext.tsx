@@ -9,6 +9,7 @@ export type SupplierData = {
   cnpj: string
   cellphone: string
   email: string
+  active: boolean
   created_at: string
 }
 

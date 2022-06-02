@@ -16,11 +16,20 @@ interface ProductProps {
 const Product = ({ product }: ProductProps) => {
   const [productData, setProductData] = useState<ProductData>(product)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isProductActive, setIsProductActive] = useState<boolean>(
+    !!product?.active
+  )
+  const [canUpdateProduct, setCanUpdateProduct] = useState<boolean>(false)
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState<boolean>(false)
   const [isAllFieldsValuesTheSame, setIsAllFieldsValuesTheSame] =
     useState<boolean>(false)
 
   useEffect(() => {
+    const data: any = { ...productData }
+    delete data.active
+    const initialProduct: any = { ...product }
+    delete initialProduct.active
+
     const initialProductValues = Object.values(product)
     const productDataValues = Object.values(productData)
     let bothDataHasTheSameValue = false
@@ -36,6 +45,18 @@ const Product = ({ product }: ProductProps) => {
     )
   }, [product, productData])
 
+  useEffect(() => {
+    if (product?.active !== isProductActive && isAllFieldsFilled) {
+      return setCanUpdateProduct(true)
+    }
+
+    if (isAllFieldsFilled && !isAllFieldsValuesTheSame) {
+      return setCanUpdateProduct(true)
+    }
+
+    return setCanUpdateProduct(false)
+  }, [isAllFieldsFilled, isAllFieldsValuesTheSame, isProductActive])
+
   const handleUpdateProduct = useCallback(
     async (e: FormEvent) => {
       e.preventDefault()
@@ -44,7 +65,7 @@ const Product = ({ product }: ProductProps) => {
         setIsLoading(true)
         const { error } = await supabase
           .from('product')
-          .update({ ...productData })
+          .update({ ...productData, active: isProductActive })
           .match({ id: product?.id })
 
         if (!error) {
@@ -68,7 +89,7 @@ const Product = ({ product }: ProductProps) => {
         console.log({ error })
       }
     },
-    [productData]
+    [productData, isProductActive]
   )
 
   return (
@@ -157,10 +178,26 @@ const Product = ({ product }: ProductProps) => {
                   })}
                 </p>
               </div>
-              <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
+              <div className="flex flex-row items-center justify-end gap-4 bg-gray-50 px-4 py-3 text-right sm:px-6">
+                <div className="flex items-center justify-center gap-2">
+                  <input
+                    className="text-green-400 focus:text-green-400 focus:ring-green-400"
+                    type="checkbox"
+                    role="switch"
+                    id="active"
+                    checked={isProductActive}
+                    onChange={() => setIsProductActive((old) => !old)}
+                  />
+                  <label
+                    className="text-sm font-medium text-black"
+                    htmlFor="active"
+                  >
+                    {isProductActive ? 'Ativo' : 'Inativo'}
+                  </label>
+                </div>
                 <button
                   type="submit"
-                  disabled={!isAllFieldsFilled || isAllFieldsValuesTheSame}
+                  disabled={!canUpdateProduct}
                   title={
                     !isAllFieldsFilled
                       ? 'Preencha todos os campos'

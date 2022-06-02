@@ -39,7 +39,7 @@ const CityRegister: NextPage = () => {
       try {
         const { data } = await supabase
           .from('city')
-          .insert({ ...cityData, id: uuid() })
+          .insert({ ...cityData, id: uuid(), active: true })
 
         if (!!data?.length) {
           setCityData({} as CityData)

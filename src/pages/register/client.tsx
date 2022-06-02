@@ -98,7 +98,7 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
       try {
         const { data } = await supabase
           .from('client')
-          .insert({ ...clientData, id: uuid() })
+          .insert({ ...clientData, id: uuid(), active: true })
 
         if (!!data?.length) {
           setClientData({} as ClientData)

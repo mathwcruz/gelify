@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 import { Loading } from '../../components/Loading'
 import { Search } from '../../components/Search'
 import { SupplierItem } from '../../components/Supplier/SupplierItem'
-import { useSupplier, SupplierData } from '../../contexts/SupplierContext'
+import { SupplierData } from '../../contexts/SupplierContext'
 
 import { supabase } from '../../services/supabase'
 
@@ -18,60 +18,7 @@ interface SuppliersProps {
 }
 
 const Suppliers = ({ suppliers }: SuppliersProps) => {
-  const { getSuppliers } = useSupplier()
-
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [suppliersList, setSuppliersList] = useState<SupplierData[]>(
-    suppliers || []
-  )
   const [search, setSearch] = useState<string>('')
-
-  const handleRemoveSupplier = useCallback(
-    async (id) => {
-      try {
-        setIsLoading(true)
-
-        const { error } = await supabase.from('supplier').delete().match({ id })
-
-        if (!!error) {
-          setIsLoading(false)
-          return toast.error('Ocorreu um erro ao remover este fornecedor', {
-            position: 'top-center',
-            autoClose: 500,
-            hideProgressBar: true,
-          })
-        }
-
-        toast.success('Fornecedor removido com sucesso!', {
-          position: 'top-center',
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          progress: undefined,
-        })
-
-        const data = await getSuppliers()
-
-        if (data?.length > 0) {
-          const suppliers = data?.map((supplier) => {
-            return {
-              ...supplier,
-              created_at: format(new Date(supplier?.created_at), 'dd/MM/yyyy', {
-                locale: ptBR,
-              }),
-            }
-          })
-
-          setSuppliersList(suppliers)
-        }
-      } catch (error) {
-        console.log({ error })
-      } finally {
-        setIsLoading(false)
-      }
-    },
-    [getSuppliers]
-  )
 
   return (
     <>
@@ -88,9 +35,7 @@ const Suppliers = ({ suppliers }: SuppliersProps) => {
           </p>
         </div>
 
-        {isLoading ? (
-          <Loading />
-        ) : suppliersList?.length > 0 ? (
+        {suppliers?.length > 0 ? (
           <div className="flex flex-col justify-center gap-4">
             <Search
               search={search}
@@ -98,7 +43,7 @@ const Suppliers = ({ suppliers }: SuppliersProps) => {
               placeholder="Pesquisar por fornecedores"
             />
             <ul className="flex w-72 flex-col justify-center gap-5 md:w-96">
-              {suppliersList
+              {suppliers
                 ?.filter((supplier) => {
                   if (!search) {
                     return supplier
@@ -112,11 +57,7 @@ const Suppliers = ({ suppliers }: SuppliersProps) => {
                   }
                 })
                 ?.map((supplier) => (
-                  <SupplierItem
-                    key={supplier?.id}
-                    supplier={supplier}
-                    onRemoveSupplier={handleRemoveSupplier}
-                  />
+                  <SupplierItem key={supplier?.id} supplier={supplier} />
                 ))}
             </ul>
           </div>

@@ -1,17 +1,13 @@
-import { PencilIcon, TrashIcon } from '@heroicons/react/outline'
+import { PencilIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
 
 import { SupplierData } from '../../contexts/SupplierContext'
 
 interface SupplierItemProps {
   supplier: SupplierData
-  onRemoveSupplier: (id: string) => void
 }
 
-export const SupplierItem = ({
-  supplier,
-  onRemoveSupplier,
-}: SupplierItemProps) => {
+export const SupplierItem = ({ supplier }: SupplierItemProps) => {
   return (
     <li
       className="flex flex-col gap-1 rounded-md border border-gray-400 px-3 py-2"
@@ -52,20 +48,19 @@ export const SupplierItem = ({
               <PencilIcon className="h-5 w-5 text-green-400 transition-colors duration-300 ease-linear hover:text-green-600" />
             </a>
           </Link>
-          <button
-            title={`Remover ${supplier?.name}`}
-            onClick={() => onRemoveSupplier(supplier?.id)}
-          >
-            <TrashIcon className="h-5 w-5 text-red-400 transition-colors duration-300 ease-linear hover:text-red-600" />
-          </button>
         </div>
       </div>
-      <span className="self-end text-sm">
-        Criado em{' '}
-        <span className="font-semibold text-green-500">
-          {supplier?.created_at}
+      <div className="flex gap-2 self-end text-sm">
+        <span className="text-left font-semibold text-black">
+          {supplier?.active ? 'Ativo' : 'Inativo'}
         </span>
-      </span>
+        <p>
+          Criado em{' '}
+          <span className="font-semibold text-green-500">
+            {supplier?.created_at}
+          </span>
+        </p>
+      </div>
     </li>
   )
 }

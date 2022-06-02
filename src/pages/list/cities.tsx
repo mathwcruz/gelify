@@ -6,7 +6,7 @@ import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
 import { toast } from 'react-toastify'
 
-import { useCity, CityData } from '../../contexts/CityContext'
+import { CityData } from '../../contexts/CityContext'
 import { Loading } from '../../components/Loading'
 import { Search } from '../../components/Search'
 import { CityItem } from '../../components/City/CityItem'
@@ -18,58 +18,7 @@ interface CitiesProps {
 }
 
 const Cities = ({ cities }: CitiesProps) => {
-  const { getCities } = useCity()
-
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [citiesList, setCitiesList] = useState<CityData[]>(cities || [])
   const [search, setSearch] = useState<string>('')
-
-  const handleRemoveCity = useCallback(
-    async (id) => {
-      try {
-        setIsLoading(true)
-
-        const { error } = await supabase.from('city').delete().match({ id })
-
-        if (!!error) {
-          setIsLoading(false)
-          return toast.error('Ocorreu um erro ao remover esta cidade', {
-            position: 'top-center',
-            autoClose: 500,
-            hideProgressBar: true,
-          })
-        }
-
-        toast.success('Cidade removida com sucesso!', {
-          position: 'top-center',
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          progress: undefined,
-        })
-
-        const data = await getCities()
-
-        if (data?.length > 0) {
-          const cities = data?.map((city) => {
-            return {
-              ...city,
-              created_at: format(new Date(city?.created_at), 'dd/MM/yyyy', {
-                locale: ptBR,
-              }),
-            }
-          })
-
-          setCitiesList(cities)
-        }
-      } catch (error) {
-        console.log({ error })
-      } finally {
-        setIsLoading(false)
-      }
-    },
-    [getCities]
-  )
 
   return (
     <>
@@ -86,9 +35,7 @@ const Cities = ({ cities }: CitiesProps) => {
           </p>
         </div>
 
-        {isLoading ? (
-          <Loading />
-        ) : citiesList?.length > 0 ? (
+        {cities?.length > 0 ? (
           <div className="flex flex-col justify-center gap-4">
             <Search
               search={search}
@@ -96,7 +43,7 @@ const Cities = ({ cities }: CitiesProps) => {
               placeholder="Pesquisar por cidades"
             />
             <ul className="flex w-72 flex-col justify-center gap-5 md:w-96">
-              {citiesList
+              {cities
                 ?.filter((city) => {
                   if (!search) {
                     return city
@@ -112,11 +59,7 @@ const Cities = ({ cities }: CitiesProps) => {
                   }
                 })
                 ?.map((city) => (
-                  <CityItem
-                    key={city?.id}
-                    city={city}
-                    onRemoveCity={handleRemoveCity}
-                  />
+                  <CityItem key={city?.id} city={city} />
                 ))}
             </ul>
           </div>

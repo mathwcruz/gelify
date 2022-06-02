@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 import { Loading } from '../../components/Loading'
 import { Search } from '../../components/Search'
 import { ProductItem } from '../../components/Product/ProductItem'
-import { useProduct, ProductData } from '../../contexts/ProductContext'
+import { ProductData } from '../../contexts/ProductContext'
 
 import { supabase } from '../../services/supabase'
 
@@ -18,60 +18,7 @@ interface ProductsProps {
 }
 
 const Products = ({ products }: ProductsProps) => {
-  const { getProducts } = useProduct()
-
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [productsList, setProductsList] = useState<ProductData[]>(
-    products || []
-  )
   const [search, setSearch] = useState<string>('')
-
-  const handleRemoveProduct = useCallback(
-    async (id) => {
-      try {
-        setIsLoading(true)
-
-        const { error } = await supabase.from('product').delete().match({ id })
-
-        if (!!error) {
-          setIsLoading(false)
-          return toast.error('Ocorreu um erro ao remover este produto', {
-            position: 'top-center',
-            autoClose: 500,
-            hideProgressBar: true,
-          })
-        }
-
-        toast.success('Produto removido com sucesso!', {
-          position: 'top-center',
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          progress: undefined,
-        })
-
-        const data = await getProducts()
-
-        if (data?.length > 0) {
-          const products = data?.map((product) => {
-            return {
-              ...product,
-              created_at: format(new Date(product?.created_at), 'dd/MM/yyyy', {
-                locale: ptBR,
-              }),
-            }
-          })
-
-          setProductsList(products)
-        }
-      } catch (error) {
-        console.log({ error })
-      } finally {
-        setIsLoading(false)
-      }
-    },
-    [getProducts]
-  )
 
   return (
     <>
@@ -88,9 +35,7 @@ const Products = ({ products }: ProductsProps) => {
           </p>
         </div>
 
-        {isLoading ? (
-          <Loading />
-        ) : productsList?.length > 0 ? (
+        {products?.length > 0 ? (
           <div className="flex flex-col justify-center gap-4">
             <Search
               search={search}
@@ -98,7 +43,7 @@ const Products = ({ products }: ProductsProps) => {
               placeholder="Pesquisar por produtos"
             />
             <ul className="flex w-72 flex-col justify-center gap-5 md:w-96">
-              {productsList
+              {products
                 ?.filter((product) => {
                   if (!search) {
                     return product
@@ -114,11 +59,7 @@ const Products = ({ products }: ProductsProps) => {
                   }
                 })
                 ?.map((product) => (
-                  <ProductItem
-                    key={product?.id}
-                    product={product}
-                    onRemoveProduct={handleRemoveProduct}
-                  />
+                  <ProductItem key={product?.id} product={product} />
                 ))}
             </ul>
           </div>

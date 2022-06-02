@@ -17,11 +17,20 @@ interface SupplierProps {
 const Supplier = ({ supplier }: SupplierProps) => {
   const [supplierData, setSupplierData] = useState<SupplierData>(supplier)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isSupplierActive, setIsSupplierActive] = useState<boolean>(
+    !!supplier?.active
+  )
+  const [canUpdateSupplier, setCanUpdateSupplier] = useState<boolean>(false)
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState<boolean>(false)
   const [isAllFieldsValuesTheSame, setIsAllFieldsValuesTheSame] =
     useState<boolean>(false)
 
   useEffect(() => {
+    const data: any = { ...supplierData }
+    delete data.active
+    const initialSupplier: any = { ...supplier }
+    delete initialSupplier.active
+
     const initialSupplierValues = Object.values(supplier)
     const supplierDataValues = Object.values(supplierData)
     let bothDataHasTheSameValue = false
@@ -36,6 +45,18 @@ const Supplier = ({ supplier }: SupplierProps) => {
       Object.values(supplierData).filter((value) => !!value)?.length === 6
     )
   }, [supplier, supplierData])
+
+  useEffect(() => {
+    if (supplier?.active !== isSupplierActive && isAllFieldsFilled) {
+      return setCanUpdateSupplier(true)
+    }
+
+    if (isAllFieldsFilled && !isAllFieldsValuesTheSame) {
+      return setCanUpdateSupplier(true)
+    }
+
+    return setCanUpdateSupplier(false)
+  }, [isAllFieldsFilled, isAllFieldsValuesTheSame, isSupplierActive])
 
   const handleUpdateSupplier = useCallback(
     async (e: FormEvent) => {
@@ -83,7 +104,7 @@ const Supplier = ({ supplier }: SupplierProps) => {
         setIsLoading(true)
         const { error } = await supabase
           .from('supplier')
-          .update({ ...supplierData })
+          .update({ ...supplierData, active: isSupplierActive })
           .match({ id: supplier?.id })
 
         if (!error) {
@@ -107,7 +128,7 @@ const Supplier = ({ supplier }: SupplierProps) => {
         console.log({ error })
       }
     },
-    [supplierData]
+    [supplierData, isSupplierActive]
   )
 
   return (
@@ -222,10 +243,26 @@ const Supplier = ({ supplier }: SupplierProps) => {
                   })}
                 </p>
               </div>
-              <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
+              <div className="flex flex-row items-center justify-end gap-4 bg-gray-50 px-4 py-3 text-right sm:px-6">
+                <div className="flex items-center justify-center gap-2">
+                  <input
+                    className="text-green-400 focus:text-green-400 focus:ring-green-400"
+                    type="checkbox"
+                    role="switch"
+                    id="active"
+                    checked={isSupplierActive}
+                    onChange={() => setIsSupplierActive((old) => !old)}
+                  />
+                  <label
+                    className="text-sm font-medium text-black"
+                    htmlFor="active"
+                  >
+                    {isSupplierActive ? 'Ativo' : 'Inativo'}
+                  </label>
+                </div>
                 <button
                   type="submit"
-                  disabled={!isAllFieldsFilled || isAllFieldsValuesTheSame}
+                  disabled={!canUpdateSupplier}
                   title={
                     !isAllFieldsFilled
                       ? 'Preencha todos os campos'
