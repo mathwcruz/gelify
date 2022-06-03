@@ -1,12 +1,15 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 
+import { Header } from '../components/Header'
+
 const Home: NextPage = () => {
   return (
     <>
       <Head>
         <title>Gelify</title>
       </Head>
+      <Header />
       <div className="my-44 flex h-full w-screen flex-col items-center justify-center gap-10">
         <div className="flex flex-col items-center justify-center gap-4">
           <h1 className="text-center text-xl font-semibold text-black lg:text-5xl">

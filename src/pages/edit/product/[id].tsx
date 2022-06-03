@@ -8,6 +8,7 @@ import ptBR from 'date-fns/locale/pt-BR'
 import { supabase } from '../../../services/supabase'
 import { ProductData } from '../../../contexts/ProductContext'
 import { Loading } from '../../../components/Loading'
+import { Header } from '../../../components/Header'
 
 interface ProductProps {
   product: ProductData
@@ -97,6 +98,9 @@ const Product = ({ product }: ProductProps) => {
       <Head>
         <title>Produto | {product?.description}</title>
       </Head>
+
+      <Header />
+      
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-20 px-4 py-12 sm:px-6">
         {isLoading ? (
           <Loading />

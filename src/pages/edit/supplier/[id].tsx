@@ -8,6 +8,7 @@ import ptBR from 'date-fns/locale/pt-BR'
 import { supabase } from '../../../services/supabase'
 import { SupplierData } from '../../../contexts/SupplierContext'
 import { Loading } from '../../../components/Loading'
+import { Header } from '../../../components/Header'
 import { Mask, Regex } from '../../../utils/formatters'
 
 interface SupplierProps {
@@ -136,6 +137,9 @@ const Supplier = ({ supplier }: SupplierProps) => {
       <Head>
         <title>Fornecedor | {supplier?.name}</title>
       </Head>
+
+      <Header />
+
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-20 px-4 py-12 sm:px-6">
         {isLoading ? (
           <Loading />

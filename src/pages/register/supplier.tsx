@@ -6,6 +6,7 @@ import { v4 as uuid } from 'uuid'
 
 import { supabase } from '../../services/supabase'
 import { Loading } from '../../components/Loading'
+import { Header } from '../../components/Header'
 import { SupplierData } from '../../contexts/SupplierContext'
 import { Mask, Regex } from '../../utils/formatters'
 
@@ -97,6 +98,8 @@ const SupplierRegister: NextPage = () => {
       <Head>
         <title>Cadastrar novo fornecedor</title>
       </Head>
+
+      <Header />
 
       <div className="mx-auto mt-28 max-w-7xl px-4 sm:px-6 md:col-span-2">
         {isLoading ? (

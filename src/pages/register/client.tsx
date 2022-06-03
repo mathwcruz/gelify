@@ -7,6 +7,7 @@ import { isEmpty } from 'lodash'
 
 import { supabase } from '../../services/supabase'
 import { Loading } from '../../components/Loading'
+import { Header } from '../../components/Header'
 import { CityData } from '../../contexts/CityContext'
 import { ClientData } from '../../contexts/ClientContext'
 import { Mask, Regex } from '../../utils/formatters'
@@ -128,6 +129,8 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
       <Head>
         <title>Cadastrar novo cliente</title>
       </Head>
+
+       <Header />
 
       <div className="mx-auto mt-28 max-w-7xl px-4 sm:px-6 md:col-span-2">
         {isLoading ? (

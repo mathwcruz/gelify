@@ -6,6 +6,7 @@ import { v4 as uuid } from 'uuid'
 
 import { supabase } from '../../services/supabase'
 import { Loading } from '../../components/Loading'
+import { Header } from '../../components/Header'
 import { ProductData } from '../../contexts/ProductContext'
 
 const ProductRegister: NextPage = () => {
@@ -56,6 +57,8 @@ const ProductRegister: NextPage = () => {
       <Head>
         <title>Cadastrar novo produto</title>
       </Head>
+
+      <Header />
 
       <div className="mx-auto mt-28 max-w-7xl px-4 sm:px-6 md:col-span-2">
         {isLoading ? (

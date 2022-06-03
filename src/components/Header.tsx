@@ -1,12 +1,16 @@
+import Link from 'next/link'
 import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import { ChevronDownIcon } from '@heroicons/react/solid'
+import { FaPowerOff } from 'react-icons/fa'
 
+import { useUser } from '../contexts/UserContext'
 import { solutions } from '../utils/solutions'
-import Link from 'next/link'
 
 export function Header() {
+  const { handleLogoutUser } = useUser()
+
   const classNames = (...classes: string[]) => {
     return classes.filter(Boolean).join(' ')
   }
@@ -147,6 +151,12 @@ export function Header() {
               )}
             </Popover>
           </Popover.Group>
+          <button
+            onClick={handleLogoutUser}
+            className="flex items-center justify-center"
+          >
+            <FaPowerOff size={18} color="red" />
+          </button>
         </div>
       </div>
 

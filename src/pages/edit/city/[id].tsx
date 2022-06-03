@@ -8,6 +8,7 @@ import ptBR from 'date-fns/locale/pt-BR'
 import { supabase } from '../../../services/supabase'
 import { CityData } from '../../../contexts/CityContext'
 import { Loading } from '../../../components/Loading'
+import { Header } from '../../../components/Header'
 import { Mask, Regex } from '../../../utils/formatters'
 
 interface CityProps {
@@ -106,6 +107,9 @@ const City = ({ city }: CityProps) => {
       <Head>
         <title>Cidade de {city?.description}</title>
       </Head>
+
+      <Header />
+      
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-20 px-4 py-12 sm:px-6">
         {isLoading ? (
           <Loading />
