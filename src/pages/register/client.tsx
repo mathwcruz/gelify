@@ -325,6 +325,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { data } = await supabase
     .from('city')
     .select('*')
+    .match({ active: true })
     .order('id', { ascending: true })
 
   const cities = data?.map((city) => {
