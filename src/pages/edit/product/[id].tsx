@@ -1,9 +1,11 @@
 import { GetStaticProps, GetStaticPropsContext, GetStaticPaths } from 'next'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { FormEvent, useCallback, useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
+import { parseCookies } from 'nookies'
 
 import { supabase } from '../../../services/supabase'
 import { ProductData } from '../../../contexts/ProductContext'
@@ -15,6 +17,8 @@ interface ProductProps {
 }
 
 const Product = ({ product }: ProductProps) => {
+  const { push } = useRouter()
+
   const [productData, setProductData] = useState<ProductData>(product)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isProductActive, setIsProductActive] = useState<boolean>(
@@ -24,6 +28,17 @@ const Product = ({ product }: ProductProps) => {
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState<boolean>(false)
   const [isAllFieldsValuesTheSame, setIsAllFieldsValuesTheSame] =
     useState<boolean>(false)
+
+  useEffect(() => {
+    setIsLoading(true)
+    const isUserAuthenticated = !!parseCookies(undefined)?.['user']
+
+    if (!isUserAuthenticated) {
+      push('/login')
+    } else {
+      setIsLoading(false)
+    }
+  }, [])
 
   useEffect(() => {
     const data: any = { ...productData }
@@ -100,7 +115,7 @@ const Product = ({ product }: ProductProps) => {
       </Head>
 
       <Header />
-      
+
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-20 px-4 py-12 sm:px-6">
         {isLoading ? (
           <Loading />

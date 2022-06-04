@@ -1,10 +1,11 @@
-import { GetStaticProps } from 'next'
+import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useCallback, useState } from 'react'
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
 import { toast } from 'react-toastify'
+import { parseCookies } from 'nookies'
 
 import { CityData } from '../../contexts/CityContext'
 import { Loading } from '../../components/Loading'
@@ -86,7 +87,18 @@ const Cities = ({ cities }: CitiesProps) => {
 
 export default Cities
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies = parseCookies(ctx)
+
+  if (!cookies['user']) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+
   const { data } = await supabase
     .from('city')
     .select('*')
@@ -104,7 +116,6 @@ export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {
       cities,
-    },
-    revalidate: 60 * 30, // = 30 minutos
+    }
   }
 }

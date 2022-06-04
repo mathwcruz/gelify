@@ -153,6 +153,7 @@ export function Header() {
           </Popover.Group>
           <button
             onClick={handleLogoutUser}
+            title="Encerrar sessão"
             className="flex items-center justify-center"
           >
             <FaPowerOff size={18} color="red" />

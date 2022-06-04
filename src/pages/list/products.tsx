@@ -1,9 +1,10 @@
-import { GetStaticProps } from 'next'
+import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useState } from 'react'
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
+import { parseCookies } from 'nookies'
 
 import { Search } from '../../components/Search'
 import { Header } from '../../components/Header'
@@ -84,7 +85,18 @@ const Products = ({ products }: ProductsProps) => {
 
 export default Products
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies = parseCookies(ctx)
+
+  if (!cookies['user']) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+
   const { data } = await supabase
     .from('product')
     .select('*')
@@ -103,6 +115,5 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       products,
     },
-    revalidate: 60 * 30, // = 30 minutos
   }
 }

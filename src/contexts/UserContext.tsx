@@ -48,7 +48,7 @@ export function UserProvider({ children }: UserProviderProps) {
       })
 
       if (!error) {
-        setCookie(null, 'user', simpleCrypto.encrypt(uuid()))
+        setCookie(undefined, 'user', simpleCrypto.encrypt(uuid()))
         toast.success('Usuário cadastrado com sucesso!')
         push('/')
       } else {
@@ -81,7 +81,7 @@ export function UserProvider({ children }: UserProviderProps) {
             )
           }
 
-          setCookie(null, 'user', simpleCrypto.encrypt(uuid()))
+          setCookie(undefined, 'user', simpleCrypto.encrypt(uuid()))
           toast.success('Login realizado com sucesso!')
           push('/')
         } else {
@@ -97,8 +97,10 @@ export function UserProvider({ children }: UserProviderProps) {
   )
 
   const handleLogoutUser = useCallback(() => {
-    destroyCookie(null, 'user')
-    push('/register')
+    destroyCookie(undefined, 'user')
+    setTimeout(() => {
+      push('/login')
+    }, 700)
   }, [])
 
   return (

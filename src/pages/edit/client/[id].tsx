@@ -1,7 +1,9 @@
 import { GetStaticProps, GetStaticPropsContext, GetStaticPaths } from 'next'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { FormEvent, useCallback, useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
+import { parseCookies } from 'nookies'
 import { isEmpty } from 'lodash'
 
 import { supabase } from '../../../services/supabase'
@@ -18,6 +20,8 @@ interface PersonProps {
 }
 
 const Client = ({ client, cities }: PersonProps) => {
+  const { push } = useRouter()
+
   const [clientData, setClientData] = useState<ClientData>(client)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isClientActive, setIsClientActive] = useState<boolean>(
@@ -27,6 +31,17 @@ const Client = ({ client, cities }: PersonProps) => {
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState<boolean>(false)
   const [isAllFieldsValuesTheSame, setIsAllFieldsValuesTheSame] =
     useState<boolean>(false)
+
+  useEffect(() => {
+    setIsLoading(true)
+    const isUserAuthenticated = !!parseCookies(undefined)?.['user']
+
+    if (!isUserAuthenticated) {
+      push('/login')
+    } else {
+      setIsLoading(false)
+    }
+  }, [])
 
   useEffect(() => {
     const data: any = { ...clientData }
@@ -166,7 +181,7 @@ const Client = ({ client, cities }: PersonProps) => {
       </Head>
 
       <Header />
-      
+
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-20 px-4 py-12 sm:px-6">
         {isLoading ? (
           <Loading />

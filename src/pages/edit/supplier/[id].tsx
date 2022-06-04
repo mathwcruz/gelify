@@ -1,9 +1,11 @@
 import { GetStaticProps, GetStaticPropsContext, GetStaticPaths } from 'next'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { FormEvent, useCallback, useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
+import { parseCookies } from 'nookies'
 
 import { supabase } from '../../../services/supabase'
 import { SupplierData } from '../../../contexts/SupplierContext'
@@ -16,6 +18,8 @@ interface SupplierProps {
 }
 
 const Supplier = ({ supplier }: SupplierProps) => {
+  const { push } = useRouter()
+
   const [supplierData, setSupplierData] = useState<SupplierData>(supplier)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isSupplierActive, setIsSupplierActive] = useState<boolean>(
@@ -25,6 +29,17 @@ const Supplier = ({ supplier }: SupplierProps) => {
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState<boolean>(false)
   const [isAllFieldsValuesTheSame, setIsAllFieldsValuesTheSame] =
     useState<boolean>(false)
+
+  useEffect(() => {
+    setIsLoading(true)
+    const isUserAuthenticated = !!parseCookies(undefined)?.['user']
+
+    if (!isUserAuthenticated) {
+      push('/login')
+    } else {
+      setIsLoading(false)
+    }
+  }, [])
 
   useEffect(() => {
     const data: any = { ...supplierData }

@@ -1,7 +1,8 @@
-import { NextPage } from 'next'
+import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useState } from 'react'
+import { parseCookies } from 'nookies'
 
 import { User, useUser } from '../contexts/UserContext'
 
@@ -99,6 +100,23 @@ const Login: NextPage = () => {
       </div>
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies = parseCookies(ctx)
+
+  if (cookies['user']) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
 }
 
 export default Login

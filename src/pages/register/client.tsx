@@ -1,8 +1,9 @@
-import { GetStaticProps } from 'next'
+import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { FormEvent, useCallback, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { v4 as uuid } from 'uuid'
+import { parseCookies } from 'nookies'
 import { isEmpty } from 'lodash'
 
 import { supabase } from '../../services/supabase'
@@ -130,7 +131,7 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
         <title>Cadastrar novo cliente</title>
       </Head>
 
-       <Header />
+      <Header />
 
       <div className="mx-auto mt-28 max-w-7xl px-4 sm:px-6 md:col-span-2">
         {isLoading ? (
@@ -309,7 +310,18 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
 
 export default ClientRegister
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies = parseCookies(ctx)
+
+  if (!cookies['user']) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+
   const { data } = await supabase
     .from('city')
     .select('*')
@@ -325,6 +337,5 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       cities,
     },
-    revalidate: 60 * 30, // = 30 minutos
   }
 }

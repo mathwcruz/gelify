@@ -1,8 +1,9 @@
-import { NextPage } from 'next'
+import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import { FormEvent, useCallback, useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { v4 as uuid } from 'uuid'
+import { parseCookies } from 'nookies'
 
 import { supabase } from '../../services/supabase'
 import { Loading } from '../../components/Loading'
@@ -142,6 +143,23 @@ const CityRegister: NextPage = () => {
       </div>
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies = parseCookies(ctx)
+
+  if (!cookies['user']) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
 }
 
 export default CityRegister
