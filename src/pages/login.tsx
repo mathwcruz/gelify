@@ -14,7 +14,7 @@ const Login: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Gelify | Entra na conta</title>
+        <title>Gelify | Entrar na conta</title>
       </Head>
 
       <div className="flex h-screen w-screen flex-col items-center justify-center">
@@ -27,7 +27,7 @@ const Login: NextPage = () => {
                 alt="Gelify"
               />
               <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                Entra na sua conta agora mesmo
+                Entre na sua conta agora mesmo
               </h2>
               <p className="mt-2 text-center text-sm text-gray-600">
                 ou{' '}
@@ -85,7 +85,7 @@ const Login: NextPage = () => {
                   title={
                     !user?.email || !user?.password
                       ? 'Preencha todos os campos'
-                      : 'Entra na conta'
+                      : 'Entrar na conta'
                   }
                   disabled={!user?.email || !user?.password}
                   className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-indigo-600"
