@@ -47,8 +47,8 @@ const Supplier = ({ supplier }: SupplierProps) => {
     const initialSupplier: any = { ...supplier }
     delete initialSupplier.active
 
-    const initialSupplierValues = Object.values(supplier)
-    const supplierDataValues = Object.values(supplierData)
+    const initialSupplierValues = Object.values(initialSupplier)
+    const supplierDataValues = Object.values(data)
     let bothDataHasTheSameValue = false
 
     bothDataHasTheSameValue = initialSupplierValues?.every(
@@ -58,7 +58,7 @@ const Supplier = ({ supplier }: SupplierProps) => {
     setIsAllFieldsValuesTheSame(bothDataHasTheSameValue)
 
     setIsAllFieldsFilled(
-      Object.values(supplierData).filter((value) => !!value)?.length === 6
+      Object.values(data).filter((value) => !!value)?.length === 6
     )
   }, [supplier, supplierData])
 

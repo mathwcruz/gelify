@@ -49,8 +49,8 @@ const Client = ({ client, cities }: PersonProps) => {
     const initialClient: any = { ...client }
     delete initialClient.active
 
-    const initialClientValues = Object.values(client)
-    const clientDataValues = Object.values(clientData)
+    const initialClientValues = Object.values(initialClient)
+    const clientDataValues = Object.values(data)
     let bothDataHasTheSameValue = false
 
     bothDataHasTheSameValue = initialClientValues?.every(
@@ -60,7 +60,7 @@ const Client = ({ client, cities }: PersonProps) => {
     setIsAllFieldsValuesTheSame(bothDataHasTheSameValue)
 
     setIsAllFieldsFilled(
-      Object.values(clientData).filter((value) => !!value)?.length === 8
+      Object.values(data).filter((value) => !!value)?.length === 8
     )
   }, [clientData, client])
 

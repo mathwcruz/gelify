@@ -46,8 +46,8 @@ const Product = ({ product }: ProductProps) => {
     const initialProduct: any = { ...product }
     delete initialProduct.active
 
-    const initialProductValues = Object.values(product)
-    const productDataValues = Object.values(productData)
+    const initialProductValues = Object.values(initialProduct)
+    const productDataValues = Object.values(data)
     let bothDataHasTheSameValue = false
 
     bothDataHasTheSameValue = initialProductValues?.every(
@@ -57,7 +57,7 @@ const Product = ({ product }: ProductProps) => {
     setIsAllFieldsValuesTheSame(bothDataHasTheSameValue)
 
     setIsAllFieldsFilled(
-      Object.values(productData).filter((value) => !!value)?.length === 5
+      Object.values(data).filter((value) => !!value)?.length === 5
     )
   }, [product, productData])
 

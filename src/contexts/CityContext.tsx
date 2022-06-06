@@ -49,7 +49,7 @@ export function CityProvider({ children }: CityProviderProps) {
       return city as CityData
     } catch (error) {
       console.log(error)
-      toast.error('Ocorreu um erro ao buscar as cidades', {
+      toast.error(`Ocorreu um erro ao buscar as cidades com o id: ${cityId}`, {
         position: 'top-center',
         autoClose: 500,
         hideProgressBar: true,

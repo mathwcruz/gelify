@@ -62,12 +62,12 @@ export function Header() {
                   >
                     <Popover.Panel className="absolute z-10 -ml-4 mt-3 w-screen max-w-md transform px-2 sm:px-0 lg:left-1/2 lg:ml-0 lg:-translate-x-1/2">
                       <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                        <div className="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                        <div className="relative grid grid-cols-2 gap-8 bg-white px-5 py-6 sm:gap-8 sm:p-8">
                           {solutions?.REGISTER?.map((item) => (
                             <Link key={item?.name} href={item.href}>
                               <a
                                 key={item.name}
-                                className="-m-3 flex items-start rounded-lg p-3 hover:bg-gray-50"
+                                className="-m-3 flex items-center rounded-lg p-3 hover:bg-gray-50"
                               >
                                 <item.icon
                                   className="h-6 w-6 flex-shrink-0 text-green-500"
@@ -121,12 +121,12 @@ export function Header() {
                   >
                     <Popover.Panel className="absolute z-10 -ml-4 mt-3 w-screen max-w-md transform px-2 sm:px-0 lg:left-1/2 lg:ml-0 lg:-translate-x-1/2">
                       <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                        <div className="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8">
+                        <div className="relative grid grid-cols-2 gap-8 bg-white px-5 py-6 sm:gap-8 sm:p-8">
                           {solutions?.LIST?.map((item) => (
                             <Link key={item?.name} href={item.href}>
                               <a
                                 key={item.name}
-                                className="-m-3 flex items-start rounded-lg p-3 hover:bg-gray-50"
+                                className="-m-3 flex items-center rounded-lg p-3 hover:bg-gray-50"
                               >
                                 <item.icon
                                   className="h-6 w-6 flex-shrink-0 text-green-500"

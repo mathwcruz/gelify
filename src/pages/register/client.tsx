@@ -34,16 +34,6 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
       e.preventDefault()
       setIsLoading(true)
 
-      if (isEmpty(clientData)) {
-        setIsLoading(false)
-
-        return toast.error('Preencha todos os campos, por favor', {
-          position: 'top-center',
-          autoClose: 1000,
-          hideProgressBar: true,
-        })
-      }
-
       if (
         !validateCPF(clientData?.cpf?.replaceAll('.', '')?.replaceAll('-', ''))
       ) {
@@ -278,7 +268,7 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
                     >
                       <>
                         <option value="" disabled>
-                          Selecione uma cidade
+                          Selecione a cidade
                         </option>
                         {cities?.map((city) => (
                           <option key={city?.id} value={city?.id}>
@@ -322,17 +312,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
 
-  const { data } = await supabase
+  const { data: cities } = await supabase
     .from('city')
     .select('*')
     .match({ active: true })
     .order('id', { ascending: true })
-
-  const cities = data?.map((city) => {
-    return {
-      ...city,
-    }
-  })
 
   return {
     props: {
