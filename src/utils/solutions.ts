@@ -3,6 +3,7 @@ import {
   UserIcon,
   IdentificationIcon,
   ShoppingBagIcon,
+  ShoppingCartIcon,
 } from '@heroicons/react/outline'
 
 export const solutions = {
@@ -12,6 +13,12 @@ export const solutions = {
       description: 'Confira as cidades já cadastradas',
       href: '/list/cities',
       icon: OfficeBuildingIcon,
+    },
+    {
+      name: 'Produtos',
+      description: 'Confira os seus produtos',
+      href: '/list/products',
+      icon: ShoppingBagIcon,
     },
     {
       name: 'Clientes',
@@ -26,10 +33,10 @@ export const solutions = {
       icon: IdentificationIcon,
     },
     {
-      name: 'Produtos',
-      description: 'Confira os seus produtos',
-      href: '/list/products',
-      icon: ShoppingBagIcon,
+      name: 'Ordens de compra',
+      description: 'Confira as suas ordens de compras a fornecedores',
+      href: '/list/purchase-orders',
+      icon: ShoppingCartIcon,
     },
   ],
   REGISTER: [
@@ -38,6 +45,12 @@ export const solutions = {
       description: 'Cadastre uma nova cidade',
       href: '/register/city',
       icon: OfficeBuildingIcon,
+    },
+    {
+      name: 'Produto',
+      description: 'Cadastre um  novo produto',
+      href: '/register/product',
+      icon: ShoppingBagIcon,
     },
     {
       name: 'Cliente',
@@ -52,10 +65,10 @@ export const solutions = {
       icon: IdentificationIcon,
     },
     {
-      name: 'Produto',
-      description: 'Cadastre um  novo produto',
-      href: '/register/product',
-      icon: ShoppingBagIcon,
+      name: 'Ordem de compra',
+      description: 'Cadastre uma nova ordem de compra',
+      href: '/register/purchase-order',
+      icon: ShoppingCartIcon,
     },
   ],
 }

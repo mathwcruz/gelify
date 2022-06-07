@@ -7,6 +7,7 @@ import '../styles/globals.css'
 import { CityProvider } from '../contexts/CityContext'
 import { ClientProvider } from '../contexts/ClientContext'
 import { ProductProvider } from '../contexts/ProductContext'
+import { PurchaseTransactionProvider } from '../contexts/PurchaseTransactionContext'
 import { SupplierProvider } from '../contexts/SupplierContext'
 import { UserProvider } from '../contexts/UserContext'
 
@@ -17,8 +18,10 @@ function App({ Component, pageProps }: AppProps) {
         <ClientProvider>
           <SupplierProvider>
             <ProductProvider>
-              <ToastContainer />
-              <Component {...pageProps} />
+              <PurchaseTransactionProvider>
+                <ToastContainer />
+                <Component {...pageProps} />
+              </PurchaseTransactionProvider>
             </ProductProvider>
           </SupplierProvider>
         </ClientProvider>

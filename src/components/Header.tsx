@@ -8,7 +8,7 @@ import { FaPowerOff } from 'react-icons/fa'
 import { useUser } from '../contexts/UserContext'
 import { solutions } from '../utils/solutions'
 
-export function Header() {
+export const Header = () => {
   const { handleLogoutUser } = useUser()
 
   const classNames = (...classes: string[]) => {
@@ -193,15 +193,45 @@ export function Header() {
                     <Link key={item?.name} href={item.href}>
                       <a
                         key={item.name}
-                        className="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50"
+                        className="-m-3 flex items-center rounded-lg p-3 hover:bg-gray-50"
                       >
                         <item.icon
                           className="h-6 w-6 flex-shrink-0 text-green-500"
                           aria-hidden="true"
                         />
-                        <span className="ml-3 text-base font-medium text-gray-900">
-                          {item.name}
-                        </span>
+                        <div className="ml-4">
+                          <p className="text-base font-medium text-gray-900">
+                            {item.name}
+                          </p>
+                          <p className="mt-1 text-sm text-gray-500">
+                            {item.description}
+                          </p>
+                        </div>
+                      </a>
+                    </Link>
+                  ))}
+                </nav>
+              </div>
+              <div className="mt-6">
+                <nav className="grid gap-y-8">
+                  {solutions?.REGISTER?.map((item) => (
+                    <Link key={item?.name} href={item.href}>
+                      <a
+                        key={item.name}
+                        className="-m-3 flex items-center rounded-lg p-3 hover:bg-gray-50"
+                      >
+                        <item.icon
+                          className="h-6 w-6 flex-shrink-0 text-green-500"
+                          aria-hidden="true"
+                        />
+                        <div className="ml-4">
+                          <p className="text-base font-medium text-gray-900">
+                            {item.name}
+                          </p>
+                          <p className="mt-1 text-sm text-gray-500">
+                            {item.description}
+                          </p>
+                        </div>
                       </a>
                     </Link>
                   ))}
