@@ -8,6 +8,9 @@ export type PurchaseItemData = {
   quantity: number
   total_value: number
   product_id: string
+  product_description?: string
+  product_unitary_value?: number
+  product_stock_quantity?: number
   purchase_id: string
 }
 
