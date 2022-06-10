@@ -34,7 +34,7 @@ export const solutions = {
     },
     {
       name: 'Ordens de compra',
-      description: 'Confira as suas ordens de compras a fornecedores',
+      description: 'Confira as suas ordens de compra a fornecedores',
       href: '/list/purchase-orders',
       icon: ShoppingCartIcon,
     },

@@ -1,14 +1,12 @@
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
-import { toast } from 'react-toastify'
 import { parseCookies } from 'nookies'
 
 import { CityData } from '../../contexts/CityContext'
-import { Loading } from '../../components/Loading'
 import { Search } from '../../components/Search'
 import { Header } from '../../components/Header'
 import { CityItem } from '../../components/City/CityItem'
@@ -29,7 +27,7 @@ const Cities = ({ cities }: CitiesProps) => {
       </Head>
 
       <Header />
-      
+
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-20 px-4 py-12 sm:px-6">
         <div className="flex max-w-3xl flex-col items-center justify-center gap-2">
           <h1 className="text-center text-3xl font-bold text-black">
@@ -116,6 +114,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
       cities,
-    }
+    },
   }
 }

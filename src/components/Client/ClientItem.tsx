@@ -86,7 +86,7 @@ export const ClientItem = ({ client }: ClientItemProps) => {
                         title={`Visualizar ${clientCity}`}
                         className="flex items-center"
                       >
-                        <OfficeBuildingIcon className="h-4 w-4 text-green-400 transition-colors duration-300 ease-linear hover:text-green-600" />
+                        <OfficeBuildingIcon className="h-5 w-5 text-green-400 transition-colors duration-300 ease-linear hover:text-green-600" />
                       </a>
                     </Link>
                   </span>

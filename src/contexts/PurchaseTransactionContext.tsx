@@ -16,6 +16,7 @@ export type PurchaseItemData = {
 
 export type PurchaseTransactionData = {
   id: string
+  total_value?: number
   date: string
   created_at: string
   supplier_id: string

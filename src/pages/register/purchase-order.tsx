@@ -58,7 +58,7 @@ const PurchaseOrderRegister = ({
       0
     )
 
-    setPurchaseTransactionItemsTotalValue(total)
+    setPurchaseTransactionItemsTotalValue(Math.floor(total))
   }, [purchaseTransactionItems])
 
   const groupPurchaseTransactionItemsProducts = useCallback((array) => {
@@ -193,6 +193,7 @@ const PurchaseOrderRegister = ({
       purchaseTransactionData,
       purchaseTransactionItems,
       groupPurchaseTransactionItemsProducts,
+      purchaseTransactionItemsTotalValue,
     ]
   )
 
@@ -307,11 +308,11 @@ const PurchaseOrderRegister = ({
                   <h3 className="text-left text-base font-semibold text-gray-700">
                     Itens adicionados
                   </h3>
-                  <ul className="flex flex-col justify-center gap-4">
+                  <ul className="mb-4 flex flex-col justify-center gap-4">
                     {purchaseTransactionItems?.map((item) => (
                       <li
                         key={item?.id}
-                        className="flex w-full flex-row items-center justify-between"
+                        className="flex w-full flex-row items-center justify-between border-b border-gray-300 pb-4"
                       >
                         <section className="mt-2 mr-10 flex w-full flex-row items-center justify-between gap-6">
                           <div className="flex flex-col items-center gap-1">
