@@ -2,16 +2,16 @@ import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useState } from 'react'
+import { parseCookies } from 'nookies'
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
-import { parseCookies } from 'nookies'
 
 import { PurchaseTransactionData } from '../../contexts/PurchaseTransactionContext'
 import { Header } from '../../components/Header'
 import { Search } from '../../components/Search'
+import { PurchaseTransactionItem } from '../../components/PurchaseTransaction/PurchaseTransactionItem'
 
 import { supabase } from '../../services/supabase'
-import { PurchaseTransactionItem } from '../../components/PurchaseTransaction/PurchaseTransactionItem'
 
 interface PurchaseOrdersProps {
   purchases: PurchaseTransactionData[]

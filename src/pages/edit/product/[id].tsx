@@ -2,15 +2,16 @@ import { GetStaticProps, GetStaticPropsContext, GetStaticPaths } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { FormEvent, useCallback, useState, useEffect } from 'react'
-import { toast } from 'react-toastify'
+import { parseCookies } from 'nookies'
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
-import { parseCookies } from 'nookies'
+import { toast } from 'react-toastify'
 
-import { supabase } from '../../../services/supabase'
 import { ProductData } from '../../../contexts/ProductContext'
 import { Loading } from '../../../components/Loading'
 import { Header } from '../../../components/Header'
+
+import { supabase } from '../../../services/supabase'
 
 interface ProductProps {
   product: ProductData

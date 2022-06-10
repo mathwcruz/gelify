@@ -1,6 +1,6 @@
-import { PencilIcon, OfficeBuildingIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { PencilIcon, OfficeBuildingIcon } from '@heroicons/react/outline'
 
 import { useCity } from '../../contexts/CityContext'
 import { ClientData } from '../../contexts/ClientContext'

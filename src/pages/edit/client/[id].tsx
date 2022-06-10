@@ -2,17 +2,18 @@ import { GetStaticProps, GetStaticPropsContext, GetStaticPaths } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { FormEvent, useCallback, useState, useEffect } from 'react'
-import { toast } from 'react-toastify'
 import { parseCookies } from 'nookies'
 import { isEmpty } from 'lodash'
+import { toast } from 'react-toastify'
 
-import { supabase } from '../../../services/supabase'
 import { CityData } from '../../../contexts/CityContext'
 import { ClientData } from '../../../contexts/ClientContext'
-import { Loading } from '../../../components/Loading'
 import { Header } from '../../../components/Header'
+import { Loading } from '../../../components/Loading'
 import { Mask, Regex } from '../../../utils/formatters'
 import { validateCPF, validateDate } from '../../../utils/validations'
+
+import { supabase } from '../../../services/supabase'
 
 interface PersonProps {
   client: ClientData

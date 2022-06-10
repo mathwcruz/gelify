@@ -1,5 +1,5 @@
-import { PencilIcon } from '@heroicons/react/outline'
 import Link from 'next/link'
+import { PencilIcon } from '@heroicons/react/outline'
 
 import { CityData } from '../../contexts/CityContext'
 

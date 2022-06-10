@@ -1,7 +1,7 @@
 import { FormEvent, useCallback, useState } from 'react'
-import { PlusCircleIcon } from '@heroicons/react/solid'
 import { v4 as uuid } from 'uuid'
 import { toast } from 'react-toastify'
+import { PlusCircleIcon } from '@heroicons/react/solid'
 
 import { ProductData } from '../../contexts/ProductContext'
 import { PurchaseItemData } from '../../contexts/PurchaseTransactionContext'

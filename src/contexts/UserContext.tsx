@@ -6,10 +6,10 @@ import {
   useCallback,
   useContext,
 } from 'react'
-import { toast } from 'react-toastify'
-import { setCookie, destroyCookie } from 'nookies'
-import SimpleCrypto from 'simple-crypto-js'
 import { v4 as uuid } from 'uuid'
+import SimpleCrypto from 'simple-crypto-js'
+import { setCookie, destroyCookie } from 'nookies'
+import { toast } from 'react-toastify'
 const simpleCrypto = new SimpleCrypto('@gelify:user')
 
 import { supabase } from '../services/supabase'

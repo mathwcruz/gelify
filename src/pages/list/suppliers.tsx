@@ -2,14 +2,14 @@ import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useState } from 'react'
+import { parseCookies } from 'nookies'
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
-import { parseCookies } from 'nookies'
 
-import { Search } from '../../components/Search'
-import { Header } from '../../components/Header'
-import { SupplierItem } from '../../components/Supplier/SupplierItem'
 import { SupplierData } from '../../contexts/SupplierContext'
+import { Header } from '../../components/Header'
+import { Search } from '../../components/Search'
+import { SupplierItem } from '../../components/Supplier/SupplierItem'
 
 import { supabase } from '../../services/supabase'
 

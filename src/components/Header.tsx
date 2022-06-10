@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import { Fragment } from 'react'
+import { FaPowerOff } from 'react-icons/fa'
 import { Popover, Transition } from '@headlessui/react'
 import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import { ChevronDownIcon } from '@heroicons/react/solid'
-import { FaPowerOff } from 'react-icons/fa'
 
 import { useUser } from '../contexts/UserContext'
 import { solutions } from '../utils/solutions'
