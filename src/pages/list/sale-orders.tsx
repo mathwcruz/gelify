@@ -20,7 +20,6 @@ interface SaleOrdersProps {
 }
 
 const SaleOrders = ({ sells }: SaleOrdersProps) => {
-  const [sellsList, setSellsList] = useState<SalesTransactionData[]>(sells)
   const [search, setSearch] = useState<string>('')
 
   return (
@@ -41,7 +40,7 @@ const SaleOrders = ({ sells }: SaleOrdersProps) => {
           </p>
         </div>
 
-        {sellsList?.length > 0 ? (
+        {sells?.length > 0 ? (
           <div className="flex flex-col justify-center gap-4">
             <Search
               search={search}
@@ -49,7 +48,7 @@ const SaleOrders = ({ sells }: SaleOrdersProps) => {
               placeholder="Pesquisar por data da ordem de venda"
             />
             <ul className="flex w-72 flex-col justify-center gap-5 md:w-96">
-              {sellsList
+              {sells
                 ?.filter((sale) => {
                   if (!search) {
                     return sale
@@ -63,10 +62,7 @@ const SaleOrders = ({ sells }: SaleOrdersProps) => {
                   }
                 })
                 ?.map((sale) => (
-                  <SaleTransactionItem
-                    sale={sale}
-                    onRemoveSaleTransaction={setSellsList}
-                  />
+                  <SaleTransactionItem sale={sale} />
                 ))}
             </ul>
           </div>

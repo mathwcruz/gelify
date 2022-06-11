@@ -1,7 +1,6 @@
 import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
-import { IdentificationIcon, TrashIcon } from '@heroicons/react/outline'
+import { useEffect, useState } from 'react'
+import { IdentificationIcon } from '@heroicons/react/outline'
 
 import { PurchaseTransactionData } from '../../contexts/PurchaseTransactionContext'
 import { useSupplier } from '../../contexts/SupplierContext'
@@ -12,12 +11,10 @@ import { supabase } from '../../services/supabase'
 
 interface PurchaseTransactionItemProps {
   purchase: PurchaseTransactionData
-  onRemovePurchaseTransaction: any
 }
 
 export const PurchaseTransactionItem = ({
   purchase,
-  onRemovePurchaseTransaction,
 }: PurchaseTransactionItemProps) => {
   const { getSupplierById } = useSupplier()
 
@@ -39,59 +36,6 @@ export const PurchaseTransactionItem = ({
     }
   }, [])
 
-  const handleRemovePurchaseTransaction = useCallback(
-    async (purchaseId) => {
-      try {
-        setIsLoading(true)
-
-        const purchaseTransactionItems = purchase?.purchase_items?.map(
-          (purchaseItem) => purchaseItem?.id
-        )
-
-        const purchaseTransactionItemsPromises = purchaseTransactionItems?.map(
-          async (purchaseItemId) => {
-            try {
-              await supabase
-                .from('purchase_item')
-                .delete()
-                .match({ id: purchaseItemId })
-            } catch (error) {
-              console.log({ error })
-            }
-          }
-        )
-
-        await Promise.all(purchaseTransactionItemsPromises)
-
-        const { data: purchases, error } = await supabase
-          .from('purchase')
-          .delete()
-          .match({ id: purchaseId })
-
-        if (!!error) {
-          return toast.error('Ocorreu um erro ao remover a ordem de compra', {
-            position: 'top-center',
-            autoClose: 500,
-            hideProgressBar: true,
-          })
-        }
-
-        toast.success('Ordem de compra removida com sucesso', {
-          position: 'top-center',
-          autoClose: 1500,
-          hideProgressBar: true,
-        })
-
-        onRemovePurchaseTransaction(purchases)
-      } catch (error) {
-        console.log({ error })
-      } finally {
-        setIsLoading(false)
-      }
-    },
-    [onRemovePurchaseTransaction]
-  )
-
   return (
     <>
       {isLoading ? (
@@ -101,7 +45,7 @@ export const PurchaseTransactionItem = ({
           className="flex flex-col gap-1 rounded-md border border-gray-400 px-3 py-2"
           key={purchase?.id}
         >
-          <div className="relative mb-2 flex">
+          <div className="mb-2 flex">
             <div className="flex w-full flex-col justify-center gap-[6px]">
               <div className="flex flex-col justify-center">
                 <span className="mb-[1px] block text-xs text-gray-500">
@@ -153,15 +97,6 @@ export const PurchaseTransactionItem = ({
                   ))}
                 </ul>
               </div>
-            </div>
-            <div className="top-0 right-0 flex gap-1 self-start">
-              <button
-                className="flex items-center justify-center"
-                title="Remover ordem de compra"
-                onClick={() => handleRemovePurchaseTransaction(purchase?.id)}
-              >
-                <TrashIcon className="h-5 w-5 text-red-400 transition-colors duration-300 ease-linear hover:text-red-600" />
-              </button>
             </div>
           </div>
           <div className="flex gap-2 self-end text-sm">

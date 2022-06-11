@@ -20,8 +20,6 @@ interface PurchaseOrdersProps {
 }
 
 const PurchaseOrders = ({ purchases }: PurchaseOrdersProps) => {
-  const [purchasesList, setPurchasesList] =
-    useState<PurchaseTransactionData[]>(purchases)
   const [search, setSearch] = useState<string>('')
 
   return (
@@ -42,7 +40,7 @@ const PurchaseOrders = ({ purchases }: PurchaseOrdersProps) => {
           </p>
         </div>
 
-        {purchasesList?.length > 0 ? (
+        {purchases?.length > 0 ? (
           <div className="flex flex-col justify-center gap-4">
             <Search
               search={search}
@@ -50,7 +48,7 @@ const PurchaseOrders = ({ purchases }: PurchaseOrdersProps) => {
               placeholder="Pesquisar por data da ordem de compra"
             />
             <ul className="flex w-72 flex-col justify-center gap-5 md:w-96">
-              {purchasesList
+              {purchases
                 ?.filter((purchase) => {
                   if (!search) {
                     return purchase
@@ -64,10 +62,7 @@ const PurchaseOrders = ({ purchases }: PurchaseOrdersProps) => {
                   }
                 })
                 ?.map((purchase) => (
-                  <PurchaseTransactionItem
-                    purchase={purchase}
-                    onRemovePurchaseTransaction={setPurchasesList}
-                  />
+                  <PurchaseTransactionItem purchase={purchase} />
                 ))}
             </ul>
           </div>

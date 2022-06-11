@@ -1,24 +1,17 @@
 import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
-import { IdentificationIcon, TrashIcon } from '@heroicons/react/outline'
+import { useEffect, useState } from 'react'
+import { IdentificationIcon } from '@heroicons/react/outline'
 
 import { SalesTransactionData } from '../../contexts/SalesTransactionContext'
 import { useClient } from '../../contexts/ClientContext'
 import { Loading } from '../Loading'
 import { SaleItem } from './SaleItem'
 
-import { supabase } from '../../services/supabase'
-
 interface SaleTransactionItemProps {
   sale: SalesTransactionData
-  onRemoveSaleTransaction: any
 }
 
-export const SaleTransactionItem = ({
-  sale,
-  onRemoveSaleTransaction,
-}: SaleTransactionItemProps) => {
+export const SaleTransactionItem = ({ sale }: SaleTransactionItemProps) => {
   const { getClientById } = useClient()
 
   const [sellClient, setSellClient] = useState<string | undefined>(undefined)
@@ -37,59 +30,6 @@ export const SaleTransactionItem = ({
     }
   }, [])
 
-  const handleRemoveSellTransaction = useCallback(
-    async (sellId) => {
-      try {
-        setIsLoading(true)
-
-        const sellTransactionItems = sale?.sells_items?.map(
-          (sellItem) => sellItem?.id
-        )
-
-        const sellTransactionItemsPromises = sellTransactionItems?.map(
-          async (sellItemId) => {
-            try {
-              await supabase
-                .from('purchase_item')
-                .delete()
-                .match({ id: sellItemId })
-            } catch (error) {
-              console.log({ error })
-            }
-          }
-        )
-
-        await Promise.all(sellTransactionItemsPromises)
-
-        const { data: sells, error } = await supabase
-          .from('sell')
-          .delete()
-          .match({ id: sellId })
-
-        if (!!error) {
-          return toast.error('Ocorreu um erro ao remover a ordem de venda', {
-            position: 'top-center',
-            autoClose: 500,
-            hideProgressBar: true,
-          })
-        }
-
-        toast.success('Ordem de venda removida com sucesso', {
-          position: 'top-center',
-          autoClose: 1500,
-          hideProgressBar: true,
-        })
-
-        onRemoveSaleTransaction(sells)
-      } catch (error) {
-        console.log({ error })
-      } finally {
-        setIsLoading(false)
-      }
-    },
-    [onRemoveSaleTransaction]
-  )
-
   return (
     <>
       {isLoading ? (
@@ -99,7 +39,7 @@ export const SaleTransactionItem = ({
           className="flex flex-col gap-1 rounded-md border border-gray-400 px-3 py-2"
           key={sale?.id}
         >
-          <div className="relative mb-2 flex">
+          <div className="mb-2 flex">
             <div className="flex w-full flex-col justify-center gap-[6px]">
               <div className="flex flex-col justify-center">
                 <span className="mb-[1px] block text-xs text-gray-500">
@@ -168,15 +108,6 @@ export const SaleTransactionItem = ({
                   ))}
                 </ul>
               </div>
-            </div>
-            <div className="absolute top-0 right-0 flex gap-1 self-start">
-              <button
-                className="flex items-center justify-center"
-                title="Remover ordem de compra"
-                onClick={() => handleRemoveSellTransaction(sale?.id)}
-              >
-                <TrashIcon className="h-5 w-5 text-red-400 transition-colors duration-300 ease-linear hover:text-red-600" />
-              </button>
             </div>
           </div>
           <div className="flex gap-2 self-end text-sm">
