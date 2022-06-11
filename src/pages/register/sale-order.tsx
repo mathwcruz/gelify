@@ -469,6 +469,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     .from('product')
     .select('*')
     .match({ active: true })
+    .gt('stock_quantity', 0)
     .order('id', { ascending: true })
 
   return {

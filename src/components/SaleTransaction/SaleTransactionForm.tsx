@@ -176,7 +176,14 @@ export const SaleTransactionForm = ({
       </div>
       <button
         className="mt-6 flex items-center justify-center transition-opacity duration-200 ease-in-out hover:opacity-80 focus:outline disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:opacity-30"
-        title="Adicionar item"
+        title={
+          !saleTransactionDataItem?.product_id ||
+          saleTransactionDataItem?.quantity <= 0 ||
+          !saleTransactionDataItem?.quantity ||
+          isProductQuantityMoreThanStock
+            ? 'Preencha os campos ao lado'
+            : 'Adicionar item'
+        }
         disabled={
           !saleTransactionDataItem?.product_id ||
           saleTransactionDataItem?.quantity <= 0 ||
