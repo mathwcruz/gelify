@@ -60,7 +60,7 @@ export function UserProvider({ children }: UserProviderProps) {
         })
       }
 
-      const { error } = await supabase.from('user').insert({
+      const { error, data: userData } = await supabase.from('user').insert({
         ...user,
         password: simpleCrypto.encrypt(user?.password),
         active: true,
@@ -68,8 +68,8 @@ export function UserProvider({ children }: UserProviderProps) {
       })
 
       if (!error) {
-        setCookie(undefined, 'user', simpleCrypto.encrypt(uuid()))
-        setUserId(simpleCrypto.encrypt(uuid()))
+        setCookie(undefined, 'user', simpleCrypto.encrypt(userData?.[0]?.id))
+        setUserId(simpleCrypto.encrypt(userData?.[0]?.id))
         toast.success('Usuário cadastrado com sucesso!')
         push('/')
       } else {

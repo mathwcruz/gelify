@@ -44,6 +44,7 @@ const CityRegister: NextPage = () => {
         return
       }
 
+      console.log(simpleCrypto.decrypt(userId || ''))
       try {
         const { data } = await supabase.from('city').insert({
           ...cityData,
