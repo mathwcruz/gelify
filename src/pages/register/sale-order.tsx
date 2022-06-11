@@ -226,7 +226,7 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
                         htmlFor="date"
                         className="block text-sm font-medium text-gray-700"
                       >
-                        Data da compra*
+                        Data da venda*
                       </label>
                       <input
                         type="text"

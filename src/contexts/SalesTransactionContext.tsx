@@ -1,8 +1,6 @@
 import { createContext, ReactNode, useContext } from 'react'
 import { toast } from 'react-toastify'
 
-import { useUser } from './UserContext'
-
 import { supabase } from '../services/supabase'
 
 export type SalesItemData = {
@@ -42,14 +40,10 @@ export const SalesTransactionContext = createContext(
 export function SalesTransactionProvider({
   children,
 }: SalesTransactionProviderProps) {
-  const { userId } = useUser()
-
   const getSalesTransactions = async () => {
     try {
-      const response = await supabase
-        .from('sale')
-        .select('*')
-        .match({ user_id: userId })
+      const response = await supabase.from('sale').select('*')
+
       const sales = response?.data as SalesTransactionData[]
       return sales as SalesTransactionData[]
     } catch (error) {

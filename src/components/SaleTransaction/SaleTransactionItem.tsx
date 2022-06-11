@@ -43,7 +43,7 @@ export const SaleTransactionItem = ({ sale }: SaleTransactionItemProps) => {
             <div className="flex w-full flex-col justify-center gap-[6px]">
               <div className="flex flex-col justify-center">
                 <span className="mb-[1px] block text-xs text-gray-500">
-                  Data da compra
+                  Data da venda
                 </span>
                 <h3 className="text-md text-left font-medium">{sale?.date}</h3>
               </div>

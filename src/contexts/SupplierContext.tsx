@@ -1,8 +1,6 @@
 import { createContext, ReactNode, useContext } from 'react'
 import { toast } from 'react-toastify'
 
-import { useUser } from './UserContext'
-
 import { supabase } from '../services/supabase'
 
 export type SupplierData = {
@@ -27,14 +25,9 @@ interface SupplierProviderProps {
 export const SupplierContext = createContext({} as SupplierContextData)
 
 export function SupplierProvider({ children }: SupplierProviderProps) {
-  const { userId } = useUser()
-
   const getSuppliers = async () => {
     try {
-      const response = await supabase
-        .from('supplier')
-        .select('*')
-        .match({ user_id: userId })
+      const response = await supabase.from('supplier').select('*')
       const suppliers = response?.data as SupplierData[]
       return suppliers as SupplierData[]
     } catch (error) {
@@ -53,7 +46,7 @@ export function SupplierProvider({ children }: SupplierProviderProps) {
       const response = await supabase
         .from('supplier')
         .select('*')
-        .match({ id: supplierId, user_id: userId })
+        .match({ id: supplierId })
       const supplier = response?.data?.[0] as SupplierData
       return supplier as SupplierData
     } catch (error) {

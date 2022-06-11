@@ -7,8 +7,6 @@ import { useSupplier } from '../../contexts/SupplierContext'
 import { Loading } from '../Loading'
 import { PurchaseItem } from './PurchaseItem'
 
-import { supabase } from '../../services/supabase'
-
 interface PurchaseTransactionItemProps {
   purchase: PurchaseTransactionData
 }
@@ -25,6 +23,7 @@ export const PurchaseTransactionItem = ({
 
   useEffect(() => {
     setIsLoading(true)
+
     try {
       getSupplierById(purchase?.supplier_id || '').then((supplier) => {
         setPurchaseSupplier(supplier?.name || '')

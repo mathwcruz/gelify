@@ -1,8 +1,6 @@
 import { createContext, ReactNode, useContext } from 'react'
 import { toast } from 'react-toastify'
 
-import { useUser } from './UserContext'
-
 import { supabase } from '../services/supabase'
 
 export type CityData = {
@@ -25,14 +23,10 @@ interface CityProviderProps {
 export const CityContext = createContext({} as CityContextData)
 
 export function CityProvider({ children }: CityProviderProps) {
-  const { userId } = useUser()
-
   const getCities = async () => {
     try {
-      const response = await supabase
-        .from('city')
-        .select('*')
-        .match({ user_id: userId })
+      const response = await supabase.from('city').select('*')
+
       const cities = response?.data as CityData[]
       return cities as CityData[]
     } catch (error) {
@@ -51,7 +45,7 @@ export function CityProvider({ children }: CityProviderProps) {
       const response = await supabase
         .from('city')
         .select('*')
-        .match({ id: cityId, user_id: userId })
+        .match({ id: cityId })
       const city = response?.data?.[0] as CityData
       return city as CityData
     } catch (error) {

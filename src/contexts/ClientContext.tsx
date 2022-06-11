@@ -1,8 +1,6 @@
 import { createContext, ReactNode, useContext } from 'react'
 import { toast } from 'react-toastify'
 
-import { useUser } from './UserContext'
-
 import { supabase } from '../services/supabase'
 
 export type ClientData = {
@@ -29,14 +27,10 @@ interface ClientProviderProps {
 export const ClientContext = createContext({} as ClientContextData)
 
 export function ClientProvider({ children }: ClientProviderProps) {
-  const { userId } = useUser()
-
   const getClients = async () => {
     try {
-      const response = await supabase
-        .from('client')
-        .select('*')
-        .match({ user_id: userId })
+      const response = await supabase.from('client').select('*')
+
       const clients = response?.data as ClientData[]
       return clients as ClientData[]
     } catch (error) {
@@ -55,7 +49,7 @@ export function ClientProvider({ children }: ClientProviderProps) {
       const response = await supabase
         .from('client')
         .select('*')
-        .match({ id: clientId, user_id: userId })
+        .match({ id: clientId })
       const client = response?.data?.[0] as ClientData
       return client as ClientData
     } catch (error) {
