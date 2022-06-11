@@ -2,12 +2,15 @@ import type { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { FormEvent, useCallback, useState, useEffect } from 'react'
 import { v4 as uuid } from 'uuid'
+import SimpleCrypto from 'simple-crypto-js'
 import { parseCookies } from 'nookies'
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
 import { TrashIcon } from '@heroicons/react/solid'
 import { toast } from 'react-toastify'
+const simpleCrypto = new SimpleCrypto('@gelify:user')
 
+import { useUser } from '../../contexts/UserContext'
 import {
   PurchaseTransactionData,
   PurchaseItemData,
@@ -31,6 +34,8 @@ const PurchaseOrderRegister = ({
   suppliers,
   products,
 }: PurchaseOrderRegisterProps) => {
+  const { userId } = useUser()
+
   const [purchaseTransactionData, setPurchaseTransactionData] =
     useState<PurchaseTransactionData>({} as PurchaseTransactionData)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -108,6 +113,7 @@ const PurchaseOrderRegister = ({
           ...purchaseTransactionData,
           total_value: purchaseTransactionItemsTotalValue,
           id: uuid(),
+          user_id: simpleCrypto.decrypt(userId || ''),
         })
 
         if (error) {
@@ -135,7 +141,10 @@ const PurchaseOrderRegister = ({
         const purchaseTransactionItemsPromises =
           purchaseTransactionItemsFormatted?.map(async (item) => {
             try {
-              await supabase.from('purchase_item').insert({ ...item })
+              await supabase.from('purchase_item').insert({
+                ...item,
+                user_id: simpleCrypto.decrypt(userId || ''),
+              })
             } catch (error) {
               console.log({ error })
             }
@@ -159,7 +168,10 @@ const PurchaseOrderRegister = ({
                   stock_quantity:
                     (product?.stock_quantity || 0) + product?.quantity,
                 })
-                .match({ id: product?.id })
+                .match({
+                  id: product?.id,
+                  user_id: simpleCrypto.decrypt(userId || ''),
+                })
             } catch (error) {
               console.log({ error })
             }

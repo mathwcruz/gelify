@@ -2,18 +2,21 @@ import type { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { FormEvent, useCallback, useState, useEffect } from 'react'
 import { v4 as uuid } from 'uuid'
+import SimpleCrypto from 'simple-crypto-js'
 import { parseCookies } from 'nookies'
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
 import { TrashIcon } from '@heroicons/react/solid'
 import { toast } from 'react-toastify'
+const simpleCrypto = new SimpleCrypto('@gelify:user')
 
+import { ClientData } from '../../contexts/ClientContext'
+import { ProductData } from '../../contexts/ProductContext'
 import {
   SalesItemData,
   SalesTransactionData,
 } from '../../contexts/SalesTransactionContext'
-import { ClientData } from '../../contexts/ClientContext'
-import { ProductData } from '../../contexts/ProductContext'
+import { useUser } from '../../contexts/UserContext'
 import { Loading } from '../../components/Loading'
 import { Header } from '../../components/Header'
 import { SaleTransactionForm } from '../../components/SaleTransaction/SaleTransactionForm'
@@ -28,6 +31,8 @@ interface SaleOrderRegisterProps {
 }
 
 const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
+  const { userId } = useUser()
+
   const [saleTransactionData, setSaleTransactionData] =
     useState<SalesTransactionData>({} as SalesTransactionData)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -101,6 +106,7 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
           ...saleTransactionData,
           total_value: saleTransactionItemsTotalValue,
           id: uuid(),
+          user_id: simpleCrypto.decrypt(userId || ''),
         })
 
         if (error) {
@@ -128,7 +134,10 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
         const saleTransactionItemsPromises = saleTransactionItemsFormatted?.map(
           async (item) => {
             try {
-              await supabase.from('sale_item').insert({ ...item })
+              await supabase.from('sale_item').insert({
+                ...item,
+                user_id: simpleCrypto.decrypt(userId || ''),
+              })
             } catch (error) {
               console.log({ error })
             }
@@ -153,7 +162,10 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
                   stock_quantity:
                     (product?.stock_quantity || 0) - product?.quantity,
                 })
-                .match({ id: product?.id })
+                .match({
+                  id: product?.id,
+                  user_id: simpleCrypto.decrypt(userId || ''),
+                })
             } catch (error) {
               console.log({ error })
             }

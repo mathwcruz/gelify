@@ -2,16 +2,22 @@ import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import { FormEvent, useCallback, useState, useEffect } from 'react'
 import { v4 as uuid } from 'uuid'
+import SimpleCrypto from 'simple-crypto-js'
 import { parseCookies } from 'nookies'
 import { toast } from 'react-toastify'
+const simpleCrypto = new SimpleCrypto('@gelify:user')
 
-import { supabase } from '../../services/supabase'
-import { Loading } from '../../components/Loading'
-import { Header } from '../../components/Header'
 import { SupplierData } from '../../contexts/SupplierContext'
+import { useUser } from '../../contexts/UserContext'
+import { Header } from '../../components/Header'
+import { Loading } from '../../components/Loading'
 import { Mask, Regex } from '../../utils/formatters'
 
+import { supabase } from '../../services/supabase'
+
 const SupplierRegister: NextPage = () => {
+  const { userId } = useUser()
+
   const [supplierData, setSupplierData] = useState<SupplierData>(
     {} as SupplierData
   )
@@ -70,7 +76,12 @@ const SupplierRegister: NextPage = () => {
       try {
         const { data } = await supabase
           .from('supplier')
-          .insert({ ...supplierData, id: uuid(), active: true })
+          .insert({
+            ...supplierData,
+            id: uuid(),
+            active: true,
+            user_id: simpleCrypto.decrypt(userId || ''),
+          })
 
         if (!!data?.length) {
           setSupplierData({} as SupplierData)

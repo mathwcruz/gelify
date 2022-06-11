@@ -2,10 +2,13 @@ import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import { FormEvent, useCallback, useState, useEffect } from 'react'
 import { v4 as uuid } from 'uuid'
+import SimpleCrypto from 'simple-crypto-js'
 import { parseCookies } from 'nookies'
 import { toast } from 'react-toastify'
+const simpleCrypto = new SimpleCrypto('@gelify:user')
 
 import { CityData } from '../../contexts/CityContext'
+import { useUser } from '../../contexts/UserContext'
 import { Header } from '../../components/Header'
 import { Loading } from '../../components/Loading'
 import { Mask, Regex } from '../../utils/formatters'
@@ -13,6 +16,8 @@ import { Mask, Regex } from '../../utils/formatters'
 import { supabase } from '../../services/supabase'
 
 const CityRegister: NextPage = () => {
+  const { userId } = useUser()
+
   const [cityData, setCityData] = useState<CityData>({} as CityData)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState<boolean>(false)
@@ -40,9 +45,12 @@ const CityRegister: NextPage = () => {
       }
 
       try {
-        const { data } = await supabase
-          .from('city')
-          .insert({ ...cityData, id: uuid(), active: true })
+        const { data } = await supabase.from('city').insert({
+          ...cityData,
+          id: uuid(),
+          active: true,
+          user_id: simpleCrypto.decrypt(userId || ''),
+        })
 
         if (!!data?.length) {
           setCityData({} as CityData)

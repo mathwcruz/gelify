@@ -2,11 +2,14 @@ import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { FormEvent, useCallback, useEffect, useState } from 'react'
 import { v4 as uuid } from 'uuid'
+import SimpleCrypto from 'simple-crypto-js'
 import { parseCookies } from 'nookies'
 import { toast } from 'react-toastify'
+const simpleCrypto = new SimpleCrypto('@gelify:user')
 
 import { CityData } from '../../contexts/CityContext'
 import { ClientData } from '../../contexts/ClientContext'
+import { useUser } from '../../contexts/UserContext'
 import { Header } from '../../components/Header'
 import { Loading } from '../../components/Loading'
 import { Mask, Regex } from '../../utils/formatters'
@@ -19,6 +22,8 @@ interface ClientRegisterProps {
 }
 
 const ClientRegister = ({ cities }: ClientRegisterProps) => {
+  const { userId } = useUser()
+
   const [clientData, setClientData] = useState<ClientData>({} as ClientData)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState<boolean>(false)
@@ -88,9 +93,12 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
       }
 
       try {
-        const { data } = await supabase
-          .from('client')
-          .insert({ ...clientData, id: uuid(), active: true })
+        const { data } = await supabase.from('client').insert({
+          ...clientData,
+          id: uuid(),
+          active: true,
+          user_id: simpleCrypto.decrypt(userId || ''),
+        })
 
         if (!!data?.length) {
           setClientData({} as ClientData)

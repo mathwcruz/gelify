@@ -2,9 +2,12 @@ import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import { FormEvent, useCallback, useState, useEffect } from 'react'
 import { v4 as uuid } from 'uuid'
+import SimpleCrypto from 'simple-crypto-js'
 import { parseCookies } from 'nookies'
 import { toast } from 'react-toastify'
+const simpleCrypto = new SimpleCrypto('@gelify:user')
 
+import { useUser } from '../../contexts/UserContext'
 import { ProductData } from '../../contexts/ProductContext'
 import { Loading } from '../../components/Loading'
 import { Header } from '../../components/Header'
@@ -12,6 +15,8 @@ import { Header } from '../../components/Header'
 import { supabase } from '../../services/supabase'
 
 const ProductRegister: NextPage = () => {
+  const { userId } = useUser()
+
   const [productData, setProductData] = useState<ProductData>({} as ProductData)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isAllFieldsFilled, setIsAllFieldsFilled] = useState<boolean>(false)
@@ -28,9 +33,12 @@ const ProductRegister: NextPage = () => {
       setIsLoading(true)
 
       try {
-        const { data } = await supabase
-          .from('product')
-          .insert({ ...productData, id: uuid(), active: true })
+        const { data } = await supabase.from('product').insert({
+          ...productData,
+          id: uuid(),
+          active: true,
+          user_id: simpleCrypto.decrypt(userId || ''),
+        })
 
         if (!!data?.length) {
           setProductData({} as ProductData)
