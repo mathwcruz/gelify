@@ -2,9 +2,11 @@ import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useState } from 'react'
+import SimpleCrypto from 'simple-crypto-js'
 import { parseCookies } from 'nookies'
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
+const simpleCrypto = new SimpleCrypto('@gelify:user')
 
 import { PurchaseTransactionData } from '../../contexts/PurchaseTransactionContext'
 import { Header } from '../../components/Header'
@@ -100,20 +102,25 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
 
+  const userId = simpleCrypto.decrypt(cookies['user'])
+
   const { data: purchases } = await supabase
     .from('purchase')
     .select('*')
     .order('id', { ascending: true })
+    .match({ user_id: userId })
 
   const { data: purchasesItems } = await supabase
     .from('purchase_item')
     .select('*')
     .order('id', { ascending: true })
+    .match({ user_id: userId })
 
   const { data: products } = await supabase
     .from('product')
     .select('*')
     .order('id', { ascending: true })
+    .match({ user_id: userId })
 
   if (!purchases?.length) {
     return {

@@ -23,7 +23,7 @@ export const ProductItem = ({ product }: ProductItemProps) => {
               {product?.description}
             </h3>
           </div>
-          <div className="flex w-full flex-row justify-between gap-[80px]">
+          <div className="flex w-full flex-row justify-between gap-[60px]">
             <div className="flex flex-col justify-center">
               <span className="mb-[1px] block text-xs text-gray-500">
                 Valor unitário

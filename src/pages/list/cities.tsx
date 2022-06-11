@@ -2,9 +2,11 @@ import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useState } from 'react'
+import SimpleCrypto from 'simple-crypto-js'
 import { parseCookies } from 'nookies'
 import { format } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
+const simpleCrypto = new SimpleCrypto('@gelify:user')
 
 import { CityData } from '../../contexts/CityContext'
 import { Search } from '../../components/Search'
@@ -101,6 +103,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     .from('city')
     .select('*')
     .order('id', { ascending: true })
+    .match({ user_id: simpleCrypto.decrypt(cookies['user']) })
 
   const cities = data?.map((city) => {
     return {

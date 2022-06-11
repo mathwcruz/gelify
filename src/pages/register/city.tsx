@@ -87,7 +87,7 @@ const CityRegister: NextPage = () => {
                       htmlFor="description"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Descrição
+                      Descrição*
                     </label>
                     <input
                       type="text"
@@ -108,7 +108,7 @@ const CityRegister: NextPage = () => {
                       htmlFor="cep"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      CEP
+                      CEP*
                     </label>
                     <input
                       type="text"

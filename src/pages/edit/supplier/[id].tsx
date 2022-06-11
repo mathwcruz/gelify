@@ -169,7 +169,7 @@ const Supplier = ({ supplier }: SupplierProps) => {
                       htmlFor="name"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Nome
+                      Nome*
                     </label>
                     <input
                       type="text"
@@ -190,7 +190,7 @@ const Supplier = ({ supplier }: SupplierProps) => {
                       htmlFor="email"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Email
+                      Email*
                     </label>
                     <input
                       type="text"
@@ -212,7 +212,7 @@ const Supplier = ({ supplier }: SupplierProps) => {
                       htmlFor="cellphone"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Número de celular
+                      Número de celular*
                     </label>
                     <input
                       type="text"
@@ -236,7 +236,7 @@ const Supplier = ({ supplier }: SupplierProps) => {
                       htmlFor="cnpj"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      CNPJ
+                      CNPJ*
                     </label>
                     <input
                       type="text"

@@ -9,42 +9,37 @@ import { TrashIcon } from '@heroicons/react/solid'
 import { toast } from 'react-toastify'
 
 import {
-  PurchaseTransactionData,
-  PurchaseItemData,
-} from '../../contexts/PurchaseTransactionContext'
-import { SupplierData } from '../../contexts/SupplierContext'
+  SalesItemData,
+  SalesTransactionData,
+} from '../../contexts/SalesTransactionContext'
+import { ClientData } from '../../contexts/ClientContext'
 import { ProductData } from '../../contexts/ProductContext'
 import { Loading } from '../../components/Loading'
 import { Header } from '../../components/Header'
-import { PurchaseTransactionForm } from '../../components/PurchaseTransaction/PurchaseTransactionForm'
+import { SaleTransactionForm } from '../../components/SaleTransaction/SaleTransactionForm'
 import { Mask } from '../../utils/formatters'
 import { validateDate } from '../../utils/validations'
 
 import { supabase } from '../../services/supabase'
 
-interface PurchaseOrderRegisterProps {
-  suppliers: SupplierData[]
+interface SaleOrderRegisterProps {
+  clients: ClientData[]
   products: ProductData[]
 }
 
-const PurchaseOrderRegister = ({
-  suppliers,
-  products,
-}: PurchaseOrderRegisterProps) => {
-  const [purchaseTransactionData, setPurchaseTransactionData] =
-    useState<PurchaseTransactionData>({} as PurchaseTransactionData)
+const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
+  const [saleTransactionData, setSaleTransactionData] =
+    useState<SalesTransactionData>({} as SalesTransactionData)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [purchaseTransactionItems, setPurchaseTransactionItems] = useState<
-    PurchaseItemData[]
+  const [saleTransactionItems, setSaleTransactionItems] = useState<
+    SalesItemData[]
   >([])
-  const [
-    purchaseTransactionItemsTotalValue,
-    setPurchaseTransactionItemsTotalValue,
-  ] = useState<number>(0)
+  const [saleTransactionItemsTotalValue, setSaleTransactionItemsTotalValue] =
+    useState<number>(0)
 
   useEffect(
     () =>
-      setPurchaseTransactionData((old) => ({
+      setSaleTransactionData((old) => ({
         ...old,
         date: format(new Date(), 'dd/MM/yyyy', {
           locale: ptBR,
@@ -54,15 +49,15 @@ const PurchaseOrderRegister = ({
   )
 
   useEffect(() => {
-    const total = purchaseTransactionItems.reduce(
+    const total = saleTransactionItems.reduce(
       (acc, item) => acc + item?.total_value,
       0
     )
 
-    setPurchaseTransactionItemsTotalValue(Number(total?.toFixed(2)))
-  }, [purchaseTransactionItems])
+    setSaleTransactionItemsTotalValue(Number(total?.toFixed(2)))
+  }, [saleTransactionItems])
 
-  const groupPurchaseTransactionItemsProducts = useCallback((array) => {
+  const groupSaleTransactionItemsProducts = useCallback((array) => {
     let result: any[] = []
 
     array?.reduce((acc: any, item: any) => {
@@ -82,18 +77,16 @@ const PurchaseOrderRegister = ({
     return result
   }, [])
 
-  const handleRemovePurchaseTransactionItem = useCallback((itemId) => {
-    setPurchaseTransactionItems((old) =>
-      old?.filter((item) => item.id !== itemId)
-    )
+  const handleRemoveSaleTransactionItem = useCallback((itemId) => {
+    setSaleTransactionItems((old) => old?.filter((item) => item.id !== itemId))
   }, [])
 
-  const handleCreatePurchaseTransaction = useCallback(
+  const handleCreateSaleTransaction = useCallback(
     async (e: FormEvent) => {
       e.preventDefault()
       setIsLoading(true)
 
-      if (!validateDate(purchaseTransactionData?.date)) {
+      if (!validateDate(saleTransactionData?.date)) {
         setIsLoading(false)
 
         return toast.error('Data inválida, informe uma correta', {
@@ -104,51 +97,52 @@ const PurchaseOrderRegister = ({
       }
 
       try {
-        const { data, error } = await supabase.from('purchase').insert({
-          ...purchaseTransactionData,
-          total_value: purchaseTransactionItemsTotalValue,
+        const { data, error } = await supabase.from('sale').insert({
+          ...saleTransactionData,
+          total_value: saleTransactionItemsTotalValue,
           id: uuid(),
         })
 
         if (error) {
-          return toast.error('Erro ao criar a ordem de compra', {
+          return toast.error('Erro ao criar a ordem de venda', {
             position: 'top-center',
             autoClose: 500,
             hideProgressBar: true,
           })
         }
 
-        const purchaseTransactionId: string = data?.[0]?.id as string
+        const saleTransactionId: string = data?.[0]?.id as string
 
-        const purchaseTransactionItemsFormatted = purchaseTransactionItems?.map(
+        const saleTransactionItemsFormatted = saleTransactionItems?.map(
           (item) => {
             return {
               id: item?.id,
               quantity: item?.quantity,
               total_value: item?.total_value,
               product_id: item?.product_id,
-              purchase_id: purchaseTransactionId,
+              sale_id: saleTransactionId,
             }
           }
         )
 
-        const purchaseTransactionItemsPromises =
-          purchaseTransactionItemsFormatted?.map(async (item) => {
+        const saleTransactionItemsPromises = saleTransactionItemsFormatted?.map(
+          async (item) => {
             try {
-              await supabase.from('purchase_item').insert({ ...item })
+              await supabase.from('sale_item').insert({ ...item })
             } catch (error) {
               console.log({ error })
             }
-          })
+          }
+        )
 
-        let allProductsSelected = purchaseTransactionItems?.map((item) => ({
+        let allProductsSelected = saleTransactionItems?.map((item) => ({
           id: item?.product_id,
           quantity: item?.quantity,
           stock_quantity: item?.product_stock_quantity,
         }))
 
         allProductsSelected =
-          groupPurchaseTransactionItemsProducts(allProductsSelected)
+          groupSaleTransactionItemsProducts(allProductsSelected)
 
         const purchaseProductsSelected = allProductsSelected?.map(
           async (product) => {
@@ -157,7 +151,7 @@ const PurchaseOrderRegister = ({
                 .from('product')
                 .update({
                   stock_quantity:
-                    (product?.stock_quantity || 0) + product?.quantity,
+                    (product?.stock_quantity || 0) - product?.quantity,
                 })
                 .match({ id: product?.id })
             } catch (error) {
@@ -167,21 +161,21 @@ const PurchaseOrderRegister = ({
         )
 
         await Promise.all([
-          purchaseTransactionItemsPromises,
+          saleTransactionItemsPromises,
           purchaseProductsSelected,
         ])
 
         setIsLoading(false)
-        setPurchaseTransactionData({} as PurchaseTransactionData)
-        setPurchaseTransactionItems([])
-        toast.success('Ordem de compra criada com sucesso', {
+        setSaleTransactionData({} as SalesTransactionData)
+        setSaleTransactionItems([])
+        toast.success('Ordem de venda criada com sucesso', {
           position: 'top-center',
           autoClose: 500,
           hideProgressBar: true,
         })
       } catch (error) {
         console.log(error)
-        toast.error('Ocorreu um erro ao criar a ordem de compra', {
+        toast.error('Ocorreu um erro ao criar a ordem de venda', {
           position: 'top-center',
           autoClose: 500,
           hideProgressBar: true,
@@ -191,17 +185,17 @@ const PurchaseOrderRegister = ({
       }
     },
     [
-      purchaseTransactionData,
-      purchaseTransactionItems,
-      groupPurchaseTransactionItemsProducts,
-      purchaseTransactionItemsTotalValue,
+      saleTransactionData,
+      saleTransactionItems,
+      groupSaleTransactionItemsProducts,
+      saleTransactionItemsTotalValue,
     ]
   )
 
   return (
     <>
       <Head>
-        <title>Cadastrar nova ordem de compra</title>
+        <title>Cadastrar nova ordem de venda</title>
       </Head>
 
       <Header />
@@ -211,7 +205,7 @@ const PurchaseOrderRegister = ({
           <Loading />
         ) : (
           <>
-            <form onSubmit={handleCreatePurchaseTransaction}>
+            <form onSubmit={handleCreateSaleTransaction}>
               <div className="overflow-hidden shadow sm:rounded-md">
                 <div className="bg-white px-4 py-5 sm:p-6">
                   <div className="mb-8 grid grid-cols-10 gap-6">
@@ -227,11 +221,11 @@ const PurchaseOrderRegister = ({
                         name="date"
                         id="date"
                         autoComplete="off"
-                        value={purchaseTransactionData?.date}
+                        value={saleTransactionData?.date}
                         onChange={(e) => {
                           if (e.target.value?.length > 10) return
 
-                          setPurchaseTransactionData((old) => ({
+                          setSaleTransactionData((old) => ({
                             ...old,
                             date: Mask.birthdate(e.target.value),
                           }))
@@ -241,43 +235,87 @@ const PurchaseOrderRegister = ({
                     </div>
                     <div className="col-span-2">
                       <label
-                        htmlFor="supplier"
+                        htmlFor="client"
                         className="block text-sm font-medium text-gray-700"
                       >
-                        Fornecedor*
+                        Cliente*
                       </label>
                       <select
-                        id="supplier"
-                        name="supplier"
+                        id="client"
+                        name="client"
                         defaultValue=""
                         onChange={(e) =>
-                          setPurchaseTransactionData((old) => ({
+                          setSaleTransactionData((old) => ({
                             ...old,
-                            supplier_id: e.target.value,
+                            client_id: e.target.value,
                           }))
                         }
                         className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                       >
                         <>
                           <option value="" disabled>
-                            Selecione o fornecedor
+                            Selecione o cliente
                           </option>
-                          {suppliers?.map((supplier) => (
-                            <option key={supplier?.id} value={supplier?.id}>
-                              {supplier?.name}
+                          {clients?.map((client) => (
+                            <option key={client?.id} value={client?.id}>
+                              {client?.name}
                             </option>
                           ))}
                         </>
                       </select>
                     </div>
+                    <div className="col-span-3">
+                      <label
+                        htmlFor="delivery_address"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Endereço de envio*
+                      </label>
+                      <input
+                        type="text"
+                        name="delivery_address"
+                        id="delivery_address"
+                        autoComplete="off"
+                        value={saleTransactionData?.delivery_address}
+                        onChange={(e) =>
+                          setSaleTransactionData((old) => ({
+                            ...old,
+                            delivery_address: e.target.value,
+                          }))
+                        }
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      />
+                    </div>
+                    <div className="col-span-3">
+                      <label
+                        htmlFor="observation"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Observações (opcional)
+                      </label>
+                      <textarea
+                        rows={1}
+                        name="observation"
+                        id="observation"
+                        autoComplete="off"
+                        value={saleTransactionData?.observation}
+                        onChange={(e) =>
+                          setSaleTransactionData((old) => ({
+                            ...old,
+                            observation: e.target.value,
+                          }))
+                        }
+                        className="mt-1 block w-full resize-x rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      />
+                    </div>
                   </div>
                   <div className="flex flex-col gap-3">
                     <h4 className="text-left text-base font-semibold text-gray-800">
-                      Adicione um novo item à sua compra
+                      Adicione um novo item
                     </h4>
-                    <PurchaseTransactionForm
+                    <SaleTransactionForm
                       products={products}
-                      setPurchaseTransactionItems={setPurchaseTransactionItems}
+                      setSaleTransactionItems={setSaleTransactionItems}
                     />
                   </div>
                 </div>
@@ -285,32 +323,34 @@ const PurchaseOrderRegister = ({
                   <button
                     type="submit"
                     disabled={
-                      !purchaseTransactionItems.length ||
-                      !purchaseTransactionData?.date ||
-                      !purchaseTransactionData?.supplier_id
+                      !saleTransactionItems.length ||
+                      !saleTransactionData?.delivery_address ||
+                      !saleTransactionData?.date ||
+                      !saleTransactionData?.client_id
                     }
                     title={
-                      !purchaseTransactionItems.length ||
-                      !purchaseTransactionData?.date ||
-                      !purchaseTransactionData?.supplier_id
+                      !saleTransactionItems.length ||
+                      !saleTransactionData?.delivery_address ||
+                      !saleTransactionData?.date ||
+                      !saleTransactionData?.client_id
                         ? 'Preencha todos os campos'
                         : ''
                     }
                     className="inline-flex justify-center rounded-md border border-transparent bg-green-500 py-2 px-4 text-sm font-medium text-white shadow-sm transition-colors duration-300 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-green-500 disabled:hover:opacity-60"
                   >
-                    Cadastrar ordem de compra
+                    Cadastrar ordem de venda
                   </button>
                 </div>
               </div>
             </form>
-            {purchaseTransactionItems?.length > 0 && (
+            {saleTransactionItems?.length > 0 && (
               <div className="mt-5 flex flex-col items-end rounded-md bg-white px-4 py-5 shadow sm:p-6">
                 <div className="flex w-full flex-col self-start">
                   <h3 className="text-left text-base font-semibold text-gray-700">
                     Itens adicionados
                   </h3>
                   <ul className="mb-4 flex flex-col justify-center gap-4">
-                    {purchaseTransactionItems?.map((item) => (
+                    {saleTransactionItems?.map((item) => (
                       <li
                         key={item?.id}
                         className="flex w-full flex-row items-center justify-between border-b border-gray-300 pb-4"
@@ -366,7 +406,7 @@ const PurchaseOrderRegister = ({
                         <button
                           title={`Remover ${item?.product_description}`}
                           onClick={() =>
-                            handleRemovePurchaseTransactionItem(item?.id)
+                            handleRemoveSaleTransactionItem(item?.id)
                           }
                         >
                           <TrashIcon className="w-5 text-red-500" />
@@ -383,7 +423,7 @@ const PurchaseOrderRegister = ({
                     {new Intl.NumberFormat('pt-BR', {
                       style: 'currency',
                       currency: 'BRL',
-                    }).format(purchaseTransactionItemsTotalValue || 0)}
+                    }).format(saleTransactionItemsTotalValue || 0)}
                   </span>
                 </div>
               </div>
@@ -407,8 +447,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     }
   }
 
-  const { data: suppliers } = await supabase
-    .from('supplier')
+  const { data: clients } = await supabase
+    .from('client')
     .select('*')
     .match({ active: true })
     .order('id', { ascending: true })
@@ -421,10 +461,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   return {
     props: {
-      suppliers,
+      clients,
       products,
     },
   }
 }
 
-export default PurchaseOrderRegister
+export default SaleOrderRegister

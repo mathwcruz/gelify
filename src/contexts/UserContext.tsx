@@ -5,10 +5,11 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useState,
 } from 'react'
 import { v4 as uuid } from 'uuid'
 import SimpleCrypto from 'simple-crypto-js'
-import { setCookie, destroyCookie } from 'nookies'
+import { setCookie, destroyCookie, parseCookies } from 'nookies'
 import { toast } from 'react-toastify'
 const simpleCrypto = new SimpleCrypto('@gelify:user')
 
@@ -25,6 +26,7 @@ interface UserContextData {
   handleRegisterUser: (e: FormEvent, user: User) => void
   handleAuthenticateUser: (e: FormEvent, user: User) => void
   handleLogoutUser: () => void
+  userId: string | null
 }
 
 interface UserProviderProps {
@@ -34,12 +36,30 @@ interface UserProviderProps {
 export const UserContext = createContext({} as UserContextData)
 
 export function UserProvider({ children }: UserProviderProps) {
+  const [userId, setUserId] = useState<string | null>(
+    parseCookies()['user'] || null
+  )
+
   const { push } = useRouter()
 
   const handleRegisterUser = useCallback(async (e: FormEvent, user: User) => {
     e.preventDefault()
 
     try {
+      const { data } = await supabase.from('user').select('email')
+      const usersEmails = data as { email: string }[]
+
+      if (
+        !!usersEmails?.length &&
+        usersEmails?.some(({ email }) => email === user?.email)
+      ) {
+        return toast.error('Email já cadastrado', {
+          position: 'top-center',
+          autoClose: 500,
+          hideProgressBar: true,
+        })
+      }
+
       const { error } = await supabase.from('user').insert({
         ...user,
         password: simpleCrypto.encrypt(user?.password),
@@ -49,6 +69,7 @@ export function UserProvider({ children }: UserProviderProps) {
 
       if (!error) {
         setCookie(undefined, 'user', simpleCrypto.encrypt(uuid()))
+        setUserId(simpleCrypto.encrypt(uuid()))
         toast.success('Usuário cadastrado com sucesso!')
         push('/')
       } else {
@@ -81,7 +102,8 @@ export function UserProvider({ children }: UserProviderProps) {
             )
           }
 
-          setCookie(undefined, 'user', simpleCrypto.encrypt(uuid()))
+          setCookie(undefined, 'user', simpleCrypto.encrypt(data?.[0]?.id))
+          setUserId(simpleCrypto.encrypt(data?.[0]?.id))
           toast.success('Login realizado com sucesso!')
           push('/')
         } else {
@@ -98,6 +120,7 @@ export function UserProvider({ children }: UserProviderProps) {
 
   const handleLogoutUser = useCallback(() => {
     destroyCookie(undefined, 'user')
+    setUserId(null)
     setTimeout(() => {
       push('/login')
     }, 700)
@@ -105,7 +128,12 @@ export function UserProvider({ children }: UserProviderProps) {
 
   return (
     <UserContext.Provider
-      value={{ handleRegisterUser, handleAuthenticateUser, handleLogoutUser }}
+      value={{
+        handleRegisterUser,
+        handleAuthenticateUser,
+        handleLogoutUser,
+        userId,
+      }}
     >
       {children}
     </UserContext.Provider>

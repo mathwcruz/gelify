@@ -139,7 +139,7 @@ const City = ({ city }: CityProps) => {
                       htmlFor="description"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Descrição
+                      Descrição*
                     </label>
                     <input
                       type="text"
@@ -160,7 +160,7 @@ const City = ({ city }: CityProps) => {
                       htmlFor="cep"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      CEP
+                      CEP*
                     </label>
                     <input
                       type="text"

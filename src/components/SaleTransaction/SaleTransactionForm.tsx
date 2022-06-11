@@ -1,13 +1,13 @@
-import { FormEvent, useCallback, useState } from 'react'
+import { FormEvent, useCallback, useEffect, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { toast } from 'react-toastify'
 import { PlusCircleIcon } from '@heroicons/react/solid'
 
 import { ProductData } from '../../contexts/ProductContext'
-import { PurchaseItemData } from '../../contexts/PurchaseTransactionContext'
+import { SalesItemData } from '../../contexts/SalesTransactionContext'
 import { supabase } from '../../services/supabase'
 
-type PurchaseTransactionProductData = {
+type SaleTransactionProductData = {
   unitary_value: number
   stock_quantity: number
   description: string
@@ -15,39 +15,65 @@ type PurchaseTransactionProductData = {
 
 interface PurchaseTransactionFormProps {
   products: ProductData[]
-  setPurchaseTransactionItems: any
+  setSaleTransactionItems: any
 }
 
-export const PurchaseTransactionForm = ({
+export const SaleTransactionForm = ({
   products,
-  setPurchaseTransactionItems,
+  setSaleTransactionItems,
 }: PurchaseTransactionFormProps) => {
-  const [purchaseTransactionDataItem, setPurchaseTransactionDataItem] =
-    useState<PurchaseItemData>({} as PurchaseItemData)
-  const [productData, setProductData] =
-    useState<PurchaseTransactionProductData>(
-      {} as PurchaseTransactionProductData
-    )
+  const [saleTransactionDataItem, setSaleTransactionDataItem] =
+    useState<SalesItemData>({} as SalesItemData)
+  const [productData, setProductData] = useState<SaleTransactionProductData>(
+    {} as SaleTransactionProductData
+  )
+  const [isProductQuantityMoreThanStock, setIsProductQuantityMoreThanStock] =
+    useState<boolean>(false)
+
+  const validateProductStockQuantity = useCallback(
+    (productQuantity: number) => {
+      if (productQuantity > productData?.stock_quantity) {
+        toast.error(`Quantidade solicitada maior que a quantidade em estoque`, {
+          position: 'top-center',
+          autoClose: 500,
+          hideProgressBar: true,
+        })
+        return false
+      }
+
+      return true
+    },
+    [productData.stock_quantity]
+  )
+
+  useEffect(() => {
+    if (saleTransactionDataItem?.quantity > 0) {
+      const enoughProductQuantity = validateProductStockQuantity(
+        saleTransactionDataItem?.quantity
+      )
+      setIsProductQuantityMoreThanStock(!enoughProductQuantity)
+    }
+  }, [saleTransactionDataItem.quantity, productData.description])
 
   const handleAddNewPurchaseTransactionItem = useCallback(
     (e: FormEvent) => {
       e.preventDefault()
 
-      setPurchaseTransactionItems((old: any) => [
+      setSaleTransactionItems((old: any) => [
         ...old,
         {
-          ...purchaseTransactionDataItem,
+          ...saleTransactionDataItem,
           total_value:
-            productData?.unitary_value * purchaseTransactionDataItem?.quantity,
+            productData?.unitary_value * saleTransactionDataItem?.quantity,
           product_description: productData?.description,
           product_unitary_value: productData?.unitary_value,
           product_stock_quantity: productData?.stock_quantity,
           id: uuid(),
-          purchase_id: undefined,
+          sale_id: undefined,
         },
       ])
 
-      setPurchaseTransactionDataItem({} as PurchaseItemData)
+      setSaleTransactionDataItem({} as SalesItemData)
 
       toast.success('Item adicionado com sucesso', {
         position: 'top-center',
@@ -55,7 +81,7 @@ export const PurchaseTransactionForm = ({
         hideProgressBar: true,
       })
     },
-    [purchaseTransactionDataItem, productData]
+    [saleTransactionDataItem, productData]
   )
 
   const handleGetProductData = useCallback(async (productId: string) => {
@@ -67,7 +93,7 @@ export const PurchaseTransactionForm = ({
 
       if (data?.length) {
         const { description, stock_quantity, unitary_value } =
-          data?.[0] as PurchaseTransactionProductData
+          data?.[0] as SaleTransactionProductData
         setProductData({ description, stock_quantity, unitary_value })
       }
     } catch (error) {
@@ -77,7 +103,7 @@ export const PurchaseTransactionForm = ({
 
   return (
     <li className="flex w-full max-w-lg flex-row items-center gap-6">
-      <div className="w-full">
+      <div className="relative w-full">
         <label
           htmlFor="quantity"
           className="block text-sm font-medium text-gray-700"
@@ -89,15 +115,28 @@ export const PurchaseTransactionForm = ({
           name="quantity"
           id="quantity"
           autoComplete="off"
-          value={Number(purchaseTransactionDataItem?.quantity) ?? null}
+          value={Number(saleTransactionDataItem?.quantity) ?? null}
           onChange={(e) =>
-            setPurchaseTransactionDataItem((old) => ({
+            setSaleTransactionDataItem((old) => ({
               ...old,
               quantity: Number(e.target.value),
             }))
           }
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+          className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm ${
+            isProductQuantityMoreThanStock
+              ? 'hover:border-red-500 focus:border-red-500 focus:ring-red-400'
+              : ''
+          }`}
         />
+        <span
+          className={`absolute -bottom-5 block text-left text-xs font-semibold text-red-400 ${
+            isProductQuantityMoreThanStock
+              ? 'opacity-100 transition-opacity duration-150 ease-in-out'
+              : 'opacity-0'
+          }`}
+        >
+          Estoque insuficiente
+        </span>
       </div>
       <div className="w-full">
         <label
@@ -110,11 +149,11 @@ export const PurchaseTransactionForm = ({
           id="product"
           name="product"
           defaultValue=""
-          value={purchaseTransactionDataItem?.product_id ?? ''}
+          value={saleTransactionDataItem?.product_id ?? ''}
           onChange={async (e) => {
             e.preventDefault()
 
-            setPurchaseTransactionDataItem((old) => ({
+            setSaleTransactionDataItem((old) => ({
               ...old,
               product_id: e.target.value,
             }))
@@ -139,9 +178,10 @@ export const PurchaseTransactionForm = ({
         className="mt-6 flex items-center justify-center transition-opacity duration-200 ease-in-out hover:opacity-80 focus:outline disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:opacity-30"
         title="Adicionar item"
         disabled={
-          !purchaseTransactionDataItem?.product_id ||
-          purchaseTransactionDataItem?.quantity <= 0 ||
-          !purchaseTransactionDataItem?.quantity
+          !saleTransactionDataItem?.product_id ||
+          saleTransactionDataItem?.quantity <= 0 ||
+          !saleTransactionDataItem?.quantity ||
+          isProductQuantityMoreThanStock
         }
         onClick={handleAddNewPurchaseTransactionItem}
       >

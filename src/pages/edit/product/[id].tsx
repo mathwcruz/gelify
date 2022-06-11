@@ -130,7 +130,7 @@ const Product = ({ product }: ProductProps) => {
                       htmlFor="description"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Descrição
+                      Descrição*
                     </label>
                     <input
                       type="text"
@@ -151,7 +151,7 @@ const Product = ({ product }: ProductProps) => {
                       htmlFor="unitary_value"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Valor unitário
+                      Valor unitário*
                     </label>
                     <input
                       type="number"
@@ -173,7 +173,7 @@ const Product = ({ product }: ProductProps) => {
                       htmlFor="stock_quantity"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Quantidade em estoque
+                      Quantidade em estoque*
                     </label>
                     <input
                       type="number"

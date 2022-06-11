@@ -1,6 +1,8 @@
 import { createContext, ReactNode, useContext } from 'react'
 import { toast } from 'react-toastify'
 
+import { useUser } from './UserContext'
+
 import { supabase } from '../services/supabase'
 
 export type PurchaseItemData = {
@@ -16,8 +18,8 @@ export type PurchaseItemData = {
 
 export type PurchaseTransactionData = {
   id: string
-  total_value?: number
   date: string
+  total_value?: number
   created_at: string
   supplier_id: string
   purchase_items: PurchaseItemData[]
@@ -25,9 +27,6 @@ export type PurchaseTransactionData = {
 
 interface PurchaseTransactionContextData {
   getPurchasesTransactions: () => Promise<PurchaseTransactionData[]>
-  getPurchaseTransactionById: (
-    purchaseId: string
-  ) => Promise<PurchaseTransactionData>
 }
 
 interface PurchaseTransactionProviderProps {
@@ -41,14 +40,19 @@ export const PurchaseTransactionContext = createContext(
 export function PurchaseTransactionProvider({
   children,
 }: PurchaseTransactionProviderProps) {
+  const { userId } = useUser()
+
   const getPurchasesTransactions = async () => {
     try {
-      const response = await supabase.from('purchase').select('*')
+      const response = await supabase
+        .from('purchase')
+        .select('*')
+        .match({ user_id: userId })
       const purchases = response?.data as PurchaseTransactionData[]
       return purchases as PurchaseTransactionData[]
     } catch (error) {
       console.log(error)
-      toast.error('Ocorreu um erro ao buscar as ordens de compras', {
+      toast.error('Ocorreu um erro ao buscar as ordens de compra', {
         position: 'top-center',
         autoClose: 500,
         hideProgressBar: true,
@@ -57,37 +61,13 @@ export function PurchaseTransactionProvider({
     }
   }
 
-  const getPurchaseTransactionById = async (purchaseId: string) => {
-    try {
-      const response = await supabase
-        .from('purchase')
-        .select('*')
-        .match({ id: purchaseId })
-      const purchase = response?.data?.[0] as PurchaseTransactionData
-      return purchase as PurchaseTransactionData
-    } catch (error) {
-      console.log(error)
-      toast.error(
-        `Ocorreu um erro ao buscar a ordem de compra com id: ${purchaseId}`,
-        {
-          position: 'top-center',
-          autoClose: 500,
-          hideProgressBar: true,
-        }
-      )
-      return {} as PurchaseTransactionData
-    }
-  }
-
   return (
-    <PurchaseTransactionContext.Provider
-      value={{ getPurchasesTransactions, getPurchaseTransactionById }}
-    >
+    <PurchaseTransactionContext.Provider value={{ getPurchasesTransactions }}>
       {children}
     </PurchaseTransactionContext.Provider>
   )
 }
 
-export const useCity = () => {
+export const usePurchaseTransaction = () => {
   return useContext(PurchaseTransactionContext)
 }

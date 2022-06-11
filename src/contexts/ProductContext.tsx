@@ -1,6 +1,8 @@
 import { createContext, ReactNode, useContext } from 'react'
 import { toast } from 'react-toastify'
 
+import { useUser } from './UserContext'
+
 import { supabase } from '../services/supabase'
 
 export type ProductData = {
@@ -24,9 +26,14 @@ interface ProductProviderProps {
 export const ProductContext = createContext({} as ProductContextData)
 
 export function ProductProvider({ children }: ProductProviderProps) {
+  const { userId } = useUser()
+
   const getProducts = async () => {
     try {
-      const response = await supabase.from('product').select('*')
+      const response = await supabase
+        .from('product')
+        .select('*')
+        .match({ user_id: userId })
       const products = response?.data as ProductData[]
       return products as ProductData[]
     } catch (error) {
@@ -45,7 +52,7 @@ export function ProductProvider({ children }: ProductProviderProps) {
       const response = await supabase
         .from('product')
         .select('*')
-        .match({ id: productId })
+        .match({ id: productId, user_id: userId })
       const product = response?.data?.[0] as ProductData
       return product as ProductData
     } catch (error) {

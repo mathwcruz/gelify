@@ -3,6 +3,7 @@ import {
   UserIcon,
   IdentificationIcon,
   ShoppingBagIcon,
+  TagIcon,
   ShoppingCartIcon,
 } from '@heroicons/react/outline'
 
@@ -18,7 +19,7 @@ export const solutions = {
       name: 'Produtos',
       description: 'Confira os seus produtos',
       href: '/list/products',
-      icon: ShoppingBagIcon,
+      icon: TagIcon,
     },
     {
       name: 'Clientes',
@@ -38,6 +39,12 @@ export const solutions = {
       href: '/list/purchase-orders',
       icon: ShoppingCartIcon,
     },
+    {
+      name: 'Ordens de venda',
+      description: 'Confira as suas ordens de venda a clientes',
+      href: '/list/sale-orders',
+      icon: ShoppingBagIcon,
+    },
   ],
   REGISTER: [
     {
@@ -50,7 +57,7 @@ export const solutions = {
       name: 'Produto',
       description: 'Cadastre um  novo produto',
       href: '/register/product',
-      icon: ShoppingBagIcon,
+      icon: TagIcon,
     },
     {
       name: 'Cliente',
@@ -69,6 +76,12 @@ export const solutions = {
       description: 'Cadastre uma nova ordem de compra',
       href: '/register/purchase-order',
       icon: ShoppingCartIcon,
+    },
+    {
+      name: 'Ordem de venda',
+      description: 'Cadastre uma nova ordem de venda',
+      href: '/register/sale-order',
+      icon: ShoppingBagIcon,
     },
   ],
 }

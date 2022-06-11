@@ -196,7 +196,7 @@ const Client = ({ client, cities }: PersonProps) => {
                       htmlFor="name"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Nome
+                      Nome*
                     </label>
                     <input
                       type="text"
@@ -218,7 +218,7 @@ const Client = ({ client, cities }: PersonProps) => {
                       htmlFor="cpf"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      CPF
+                      CPF*
                     </label>
                     <input
                       type="text"
@@ -242,7 +242,7 @@ const Client = ({ client, cities }: PersonProps) => {
                       htmlFor="birthdate"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Data de nascimento
+                      Data de nascimento*
                     </label>
                     <input
                       type="text"
@@ -266,7 +266,7 @@ const Client = ({ client, cities }: PersonProps) => {
                       htmlFor="email"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Email
+                      Email*
                     </label>
                     <input
                       type="text"
@@ -288,7 +288,7 @@ const Client = ({ client, cities }: PersonProps) => {
                       htmlFor="cellphone"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Número de celular
+                      Número de celular*
                     </label>
                     <input
                       type="text"
@@ -312,7 +312,7 @@ const Client = ({ client, cities }: PersonProps) => {
                       htmlFor="city"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Cidade
+                      Cidade*
                     </label>
                     <select
                       id="country"

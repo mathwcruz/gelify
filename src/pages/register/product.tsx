@@ -75,7 +75,7 @@ const ProductRegister: NextPage = () => {
                       htmlFor="description"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Descrição
+                      Descrição*
                     </label>
                     <input
                       type="text"
@@ -96,7 +96,7 @@ const ProductRegister: NextPage = () => {
                       htmlFor="unitary_value"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Valor unitário
+                      Valor unitário*
                     </label>
                     <input
                       type="number"
@@ -118,7 +118,7 @@ const ProductRegister: NextPage = () => {
                       htmlFor="stock_quantity"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Quantidade em estoque
+                      Quantidade em estoque*
                     </label>
                     <input
                       type="number"

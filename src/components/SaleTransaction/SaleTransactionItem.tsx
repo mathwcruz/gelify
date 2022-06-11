@@ -3,34 +3,32 @@ import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { IdentificationIcon, TrashIcon } from '@heroicons/react/outline'
 
-import { PurchaseTransactionData } from '../../contexts/PurchaseTransactionContext'
-import { useSupplier } from '../../contexts/SupplierContext'
+import { SalesTransactionData } from '../../contexts/SalesTransactionContext'
+import { useClient } from '../../contexts/ClientContext'
 import { Loading } from '../Loading'
-import { PurchaseItem } from './PurchaseItem'
+import { SaleItem } from './SaleItem'
 
 import { supabase } from '../../services/supabase'
 
-interface PurchaseTransactionItemProps {
-  purchase: PurchaseTransactionData
-  onRemovePurchaseTransaction: any
+interface SaleTransactionItemProps {
+  sale: SalesTransactionData
+  onRemoveSaleTransaction: any
 }
 
-export const PurchaseTransactionItem = ({
-  purchase,
-  onRemovePurchaseTransaction,
-}: PurchaseTransactionItemProps) => {
-  const { getSupplierById } = useSupplier()
+export const SaleTransactionItem = ({
+  sale,
+  onRemoveSaleTransaction,
+}: SaleTransactionItemProps) => {
+  const { getClientById } = useClient()
 
-  const [purchaseSupplier, setPurchaseSupplier] = useState<string | undefined>(
-    undefined
-  )
+  const [sellClient, setSellClient] = useState<string | undefined>(undefined)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
     setIsLoading(true)
     try {
-      getSupplierById(purchase?.supplier_id || '').then((supplier) => {
-        setPurchaseSupplier(supplier?.name || '')
+      getClientById(sale?.client_id || '').then((client) => {
+        setSellClient(client?.name || '')
       })
     } catch (error) {
       console.log({ error })
@@ -39,57 +37,57 @@ export const PurchaseTransactionItem = ({
     }
   }, [])
 
-  const handleRemovePurchaseTransaction = useCallback(
-    async (purchaseId) => {
+  const handleRemoveSellTransaction = useCallback(
+    async (sellId) => {
       try {
         setIsLoading(true)
 
-        const purchaseTransactionItems = purchase?.purchase_items?.map(
-          (purchaseItem) => purchaseItem?.id
+        const sellTransactionItems = sale?.sells_items?.map(
+          (sellItem) => sellItem?.id
         )
 
-        const purchaseTransactionItemsPromises = purchaseTransactionItems?.map(
-          async (purchaseItemId) => {
+        const sellTransactionItemsPromises = sellTransactionItems?.map(
+          async (sellItemId) => {
             try {
               await supabase
                 .from('purchase_item')
                 .delete()
-                .match({ id: purchaseItemId })
+                .match({ id: sellItemId })
             } catch (error) {
               console.log({ error })
             }
           }
         )
 
-        await Promise.all(purchaseTransactionItemsPromises)
+        await Promise.all(sellTransactionItemsPromises)
 
-        const { data: purchases, error } = await supabase
-          .from('purchase')
+        const { data: sells, error } = await supabase
+          .from('sell')
           .delete()
-          .match({ id: purchaseId })
+          .match({ id: sellId })
 
         if (!!error) {
-          return toast.error('Ocorreu um erro ao remover a ordem de compra', {
+          return toast.error('Ocorreu um erro ao remover a ordem de venda', {
             position: 'top-center',
             autoClose: 500,
             hideProgressBar: true,
           })
         }
 
-        toast.success('Ordem de compra removida com sucesso', {
+        toast.success('Ordem de venda removida com sucesso', {
           position: 'top-center',
           autoClose: 1500,
           hideProgressBar: true,
         })
 
-        onRemovePurchaseTransaction(purchases)
+        onRemoveSaleTransaction(sells)
       } catch (error) {
         console.log({ error })
       } finally {
         setIsLoading(false)
       }
     },
-    [onRemovePurchaseTransaction]
+    [onRemoveSaleTransaction]
   )
 
   return (
@@ -99,7 +97,7 @@ export const PurchaseTransactionItem = ({
       ) : (
         <li
           className="flex flex-col gap-1 rounded-md border border-gray-400 px-3 py-2"
-          key={purchase?.id}
+          key={sale?.id}
         >
           <div className="relative mb-2 flex">
             <div className="flex w-full flex-col justify-center gap-[6px]">
@@ -107,9 +105,7 @@ export const PurchaseTransactionItem = ({
                 <span className="mb-[1px] block text-xs text-gray-500">
                   Data da compra
                 </span>
-                <h3 className="text-md text-left font-medium">
-                  {purchase?.date}
-                </h3>
+                <h3 className="text-md text-left font-medium">{sale?.date}</h3>
               </div>
               <div className="flex w-full flex-row items-start justify-between gap-[50px]">
                 <div className="flex flex-col justify-center">
@@ -120,18 +116,18 @@ export const PurchaseTransactionItem = ({
                     {new Intl.NumberFormat('pt-BR', {
                       style: 'currency',
                       currency: 'BRL',
-                    }).format(purchase?.total_value || 0)}
+                    }).format(sale?.total_value || 0)}
                   </span>
                 </div>
                 <div className="mr-auto -ml-1 flex flex-col justify-center">
                   <span className="mb-[1px] block text-xs text-gray-500">
-                    Fornecedor
+                    Cliente
                   </span>
                   <span className="text-left text-sm font-medium">
-                    {purchaseSupplier}
-                    <Link href={`/edit/supplier/${purchase?.supplier_id}`}>
+                    {sellClient}
+                    <Link href={`/edit/supplier/${sale?.client_id}`}>
                       <a
-                        title={`Visualizar ${purchaseSupplier}`}
+                        title={`Visualizar ${sellClient}`}
                         className="flex items-center"
                       >
                         <IdentificationIcon className="h-5 w-5 text-green-400 transition-colors duration-300 ease-linear hover:text-green-600" />
@@ -140,25 +136,44 @@ export const PurchaseTransactionItem = ({
                   </span>
                 </div>
               </div>
+              <div className="flex w-full flex-row items-start justify-between gap-[200px]">
+                <div className="flex flex-col justify-center">
+                  <span className="mb-[1px] block text-xs text-gray-500">
+                    Endereço de envio
+                  </span>
+                  <span className="text-left text-sm font-medium">
+                    {sale?.delivery_address}
+                  </span>
+                </div>
+              </div>
+              {!!sale?.observation && (
+                <div className="flex w-full flex-row items-start justify-between gap-[200px]">
+                  <div className="flex flex-col justify-center">
+                    <span className="mb-[1px] block text-xs text-gray-500">
+                      Observações
+                    </span>
+                    <h3 className="text-md text-left font-medium">
+                      {sale?.observation}
+                    </h3>
+                  </div>
+                </div>
+              )}
               <div className="mt-2 flex w-full flex-col justify-center gap-2">
                 <h5 className="text-left text-sm font-semibold text-gray-600">
-                  Itens comprados
+                  Itens vendidos
                 </h5>
                 <ul className="flex flex-col justify-center gap-2">
-                  {purchase?.purchase_items?.map((purchaseItem) => (
-                    <PurchaseItem
-                      key={purchaseItem?.id}
-                      purchaseItem={purchaseItem}
-                    />
+                  {sale?.sells_items?.map((saleItem) => (
+                    <SaleItem key={saleItem?.id} saleItem={saleItem} />
                   ))}
                 </ul>
               </div>
             </div>
-            <div className="top-0 right-0 flex gap-1 self-start">
+            <div className="absolute top-0 right-0 flex gap-1 self-start">
               <button
                 className="flex items-center justify-center"
                 title="Remover ordem de compra"
-                onClick={() => handleRemovePurchaseTransaction(purchase?.id)}
+                onClick={() => handleRemoveSellTransaction(sale?.id)}
               >
                 <TrashIcon className="h-5 w-5 text-red-400 transition-colors duration-300 ease-linear hover:text-red-600" />
               </button>
@@ -168,7 +183,7 @@ export const PurchaseTransactionItem = ({
             <p>
               Criada em{' '}
               <span className="font-semibold text-green-500">
-                {purchase?.created_at}
+                {sale?.created_at}
               </span>
             </p>
           </div>

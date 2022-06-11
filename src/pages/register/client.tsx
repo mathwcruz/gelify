@@ -136,7 +136,7 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
                       htmlFor="name"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Nome
+                      Nome*
                     </label>
                     <input
                       type="text"
@@ -158,7 +158,7 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
                       htmlFor="cpf"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      CPF
+                      CPF*
                     </label>
                     <input
                       type="text"
@@ -182,7 +182,7 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
                       htmlFor="birthdate"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Data de nascimento
+                      Data de nascimento*
                     </label>
                     <input
                       type="text"
@@ -206,7 +206,7 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
                       htmlFor="email"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Email
+                      Email*
                     </label>
                     <input
                       type="text"
@@ -228,7 +228,7 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
                       htmlFor="cellphone"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Número de celular
+                      Número de celular*
                     </label>
                     <input
                       type="text"
@@ -252,7 +252,7 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
                       htmlFor="city"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Cidade
+                      Cidade*
                     </label>
                     <select
                       id="country"
