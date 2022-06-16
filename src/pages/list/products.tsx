@@ -47,7 +47,7 @@ const Products = ({ products }: ProductsProps) => {
               setSearch={setSearch}
               placeholder="Pesquisar por produtos"
             />
-            <ul className="flex w-72 flex-col justify-center gap-5 md:w-96">
+            <ul className="grid w-72 grid-cols-1 justify-center gap-7 md:w-[700px] md:grid-cols-2">
               {products
                 ?.filter((product) => {
                   if (!search) {
