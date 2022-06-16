@@ -47,7 +47,7 @@ const Suppliers = ({ suppliers }: SuppliersProps) => {
               setSearch={setSearch}
               placeholder="Pesquisar por fornecedores"
             />
-            <ul className="grid w-72 grid-cols-1 justify-center gap-7 md:w-[400px]">
+            <ul className="grid w-72 grid-cols-1 items-start justify-center gap-7 md:w-[800px] md:grid-cols-2">
               {suppliers
                 ?.filter((supplier) => {
                   if (!search) {

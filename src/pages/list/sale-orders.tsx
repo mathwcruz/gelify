@@ -91,10 +91,10 @@ const SaleOrders = ({ sales, clients }: SaleOrdersProps) => {
                 new Date(saleFilterData?.finalDate)
               ))
         )
-        ?.filter((purchase) =>
+        ?.filter((sale) =>
           !!saleFilterData?.client
-            ? purchase?.client_id === saleFilterData?.client
-            : purchase
+            ? sale?.client_id === saleFilterData?.client
+            : sale
         )
 
       setSalesList(salesFiltered)
@@ -108,12 +108,14 @@ const SaleOrders = ({ sales, clients }: SaleOrdersProps) => {
       })
     }
 
+    setIsLoading(false)
+
     return toast.error('Confira os campos informados e tente novamente.', {
       position: 'top-center',
       autoClose: 500,
       hideProgressBar: true,
     })
-  }, [saleFilterData])
+  }, [saleFilterData, isSameDay, isBefore, isAfter, validateDate])
 
   useEffect(() => {
     setIsSomeFieldFilled(
@@ -196,13 +198,13 @@ const SaleOrders = ({ sales, clients }: SaleOrdersProps) => {
             {isLoading ? (
               <Loading />
             ) : (
-              <ul className="grid w-72 grid-cols-1 items-start justify-center gap-7 md:w-[750px] md:grid-cols-2">
+              <>
                 {salesList?.length > 0 ? (
-                  <>
+                  <ul className="grid w-72 grid-cols-1 items-start justify-center gap-7 md:w-[750px] md:grid-cols-2">
                     {salesList?.map((sale) => (
                       <SaleTransactionItem sale={sale} />
                     ))}
-                  </>
+                  </ul>
                 ) : (
                   <div className="flex flex-col gap-3">
                     <h1 className="text-center text-2xl font-medium text-black dark:text-white">
@@ -219,7 +221,7 @@ const SaleOrders = ({ sales, clients }: SaleOrdersProps) => {
                     </Link>
                   </div>
                 )}
-              </ul>
+              </>
             )}
           </main>
         ) : (

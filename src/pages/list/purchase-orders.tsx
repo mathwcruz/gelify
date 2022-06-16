@@ -72,15 +72,16 @@ const PurchaseOrders = ({ purchases, suppliers }: PurchaseOrdersProps) => {
       !!validateDate(purchaseFilterData?.finalDate)
     ) {
       const purchasesFiltered = purchases
-        ?.filter((purchase) => {
-          ;(isSameDay(
-            new Date(purchaseFilterData?.initialDate),
-            new Date(purchase?.date)
-          ) ||
-            isAfter(
-              new Date(purchase?.date),
-              new Date(purchaseFilterData?.initialDate)
-            )) &&
+        ?.filter(
+          (purchase) =>
+            (isSameDay(
+              new Date(purchaseFilterData?.initialDate),
+              new Date(purchase?.date)
+            ) ||
+              isAfter(
+                new Date(purchase?.date),
+                new Date(purchaseFilterData?.initialDate)
+              )) &&
             (isSameDay(
               new Date(purchaseFilterData?.finalDate),
               new Date(purchase?.date)
@@ -89,7 +90,7 @@ const PurchaseOrders = ({ purchases, suppliers }: PurchaseOrdersProps) => {
                 new Date(purchase?.date),
                 new Date(purchaseFilterData?.finalDate)
               ))
-        })
+        )
         ?.filter((purchase) =>
           !!purchaseFilterData?.supplier
             ? purchase?.supplier_id === purchaseFilterData?.supplier
@@ -112,7 +113,7 @@ const PurchaseOrders = ({ purchases, suppliers }: PurchaseOrdersProps) => {
       autoClose: 500,
       hideProgressBar: true,
     })
-  }, [purchaseFilterData])
+  }, [purchaseFilterData, isSameDay, isAfter, isBefore])
 
   useEffect(() => {
     setIsSomeFieldFilled(
@@ -195,13 +196,13 @@ const PurchaseOrders = ({ purchases, suppliers }: PurchaseOrdersProps) => {
             {isLoading ? (
               <Loading />
             ) : (
-              <ul className="grid w-72 grid-cols-1 items-start justify-center gap-7 md:w-[750px] md:grid-cols-2">
+              <>
                 {purchasesList?.length > 0 ? (
-                  <>
+                  <ul className="grid w-72 grid-cols-1 items-start justify-center gap-7 md:w-[750px] md:grid-cols-2">
                     {purchasesList?.map((purchase) => (
                       <PurchaseTransactionItem purchase={purchase} />
                     ))}
-                  </>
+                  </ul>
                 ) : (
                   <div className="flex flex-col gap-3">
                     <h1 className="text-center text-2xl font-medium text-black dark:text-white">
@@ -218,7 +219,7 @@ const PurchaseOrders = ({ purchases, suppliers }: PurchaseOrdersProps) => {
                     </Link>
                   </div>
                 )}
-              </ul>
+              </>
             )}
           </main>
         ) : (
