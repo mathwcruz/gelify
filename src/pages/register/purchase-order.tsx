@@ -321,18 +321,18 @@ const PurchaseOrderRegister = ({
                   <h3 className="text-left text-base font-semibold text-gray-700">
                     Itens adicionados
                   </h3>
-                  <ul className="mb-4 flex flex-col justify-center gap-4">
+                  <ul className="my-4 flex flex-col justify-center gap-4">
                     {purchaseTransactionItems?.map((item) => (
                       <li
                         key={item?.id}
                         className="flex w-full flex-row items-center justify-between border-b border-gray-300 pb-4"
                       >
-                        <section className="mt-2 mr-10 flex w-full flex-row items-center justify-between gap-6">
+                        <section className="mt-2 mr-10 flex w-full flex-row items-center justify-around gap-6">
                           <div className="flex flex-col items-center gap-1">
                             <strong className="text-base font-semibold text-gray-800">
                               Identificador (Id)
                             </strong>
-                            <span className="max-w-[250px] text-center text-sm text-gray-700">
+                            <span className="w-[250px] text-center text-sm text-gray-700">
                               {item?.id}
                             </span>
                           </div>
@@ -340,7 +340,7 @@ const PurchaseOrderRegister = ({
                             <strong className="text-base font-semibold text-gray-800">
                               Produto
                             </strong>
-                            <span className="max-w-[120px] text-center text-sm text-gray-700">
+                            <span className="w-[120px] text-center text-sm text-gray-700">
                               {item?.product_description}
                             </span>
                           </div>

@@ -120,7 +120,7 @@ const PurchaseOrders = ({ purchases, suppliers }: PurchaseOrdersProps) => {
         (value) => typeof value === 'string' && !!value
       )
     )
-  }, [purchaseFilterData, isBefore, isAfter, isSameDay])
+  }, [purchaseFilterData])
 
   return (
     <>
@@ -166,7 +166,6 @@ const PurchaseOrders = ({ purchases, suppliers }: PurchaseOrdersProps) => {
                   field="supplier"
                   placeholder="Selecione o fornecedor"
                   label="Fornecedor"
-                  multiple={false}
                   options={suppliers}
                   value={purchaseFilterData?.supplier}
                   setValue={(value) =>
