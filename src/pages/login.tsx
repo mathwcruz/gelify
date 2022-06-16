@@ -25,6 +25,7 @@ const Login: NextPage = () => {
                 className="mx-auto h-12 w-auto"
                 src="/favicon.png"
                 alt="Gelify"
+                title="Gelify"
               />
               <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                 Entre na sua conta agora mesmo

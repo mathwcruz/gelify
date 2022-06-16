@@ -239,7 +239,7 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
 
                           setSaleTransactionData((old) => ({
                             ...old,
-                            date: Mask.birthdate(e.target.value),
+                            date: Mask.date(e.target.value),
                           }))
                         }}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"

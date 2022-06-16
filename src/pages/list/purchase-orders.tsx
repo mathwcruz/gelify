@@ -1,26 +1,126 @@
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import SimpleCrypto from 'simple-crypto-js'
 import { parseCookies } from 'nookies'
-import { format } from 'date-fns'
+import { format, isBefore, isAfter, isSameDay } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
+import _ from 'lodash'
+import { toast } from 'react-toastify'
+import { RefreshIcon } from '@heroicons/react/solid'
 const simpleCrypto = new SimpleCrypto('@gelify:user')
 
 import { PurchaseTransactionData } from '../../contexts/PurchaseTransactionContext'
+import { SupplierData } from '../../contexts/SupplierContext'
 import { Header } from '../../components/Header'
-import { Search } from '../../components/Search'
 import { PurchaseTransactionItem } from '../../components/PurchaseTransaction/PurchaseTransactionItem'
+import { FinalDate, InitialDate } from '../../components/Filter/Date'
+import { Select } from '../../components/Filter/Select'
+import { FilterSearchButton } from '../../components/Filter/FilterSearchButton'
+import { Loading } from '../../components/Loading'
+import { validateDate } from '../../utils/validations'
 
 import { supabase } from '../../services/supabase'
 
-interface PurchaseOrdersProps {
-  purchases: PurchaseTransactionData[]
+interface PurchaseFilterData {
+  initialDate: string
+  finalDate: string
+  supplier: string
 }
 
-const PurchaseOrders = ({ purchases }: PurchaseOrdersProps) => {
-  const [search, setSearch] = useState<string>('')
+interface PurchaseOrdersProps {
+  purchases: PurchaseTransactionData[]
+  suppliers: SupplierData[]
+}
+
+const PurchaseOrders = ({ purchases, suppliers }: PurchaseOrdersProps) => {
+  const [purchasesList, setPurchasesList] =
+    useState<PurchaseTransactionData[]>(purchases)
+  const [purchaseFilterData, setPurchaseFilterData] =
+    useState<PurchaseFilterData>({} as PurchaseFilterData)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isSomeFieldFilled, setIsSomeFieldFilled] = useState<boolean>(false)
+
+  const handleResetFilterData = useCallback(() => {
+    setPurchaseFilterData({
+      finalDate: '',
+      initialDate: '',
+      supplier: '',
+    } as PurchaseFilterData)
+
+    setPurchasesList(purchases)
+
+    toast.success('Filtros resetados', {
+      position: 'top-center',
+      autoClose: 500,
+      hideProgressBar: true,
+    })
+  }, [])
+
+  const handleSearchPurchaseOrders = useCallback(() => {
+    setIsLoading(true)
+
+    const isAllFieldsFilledAndValid =
+      Object.values(purchaseFilterData).filter(
+        (value) => !!value && typeof value === 'string'
+      )?.length >= 2
+
+    if (
+      isAllFieldsFilledAndValid &&
+      !!validateDate(purchaseFilterData?.initialDate) &&
+      !!validateDate(purchaseFilterData?.finalDate)
+    ) {
+      const purchasesFiltered = purchases
+        ?.filter((purchase) => {
+          ;(isSameDay(
+            new Date(purchaseFilterData?.initialDate),
+            new Date(purchase?.date)
+          ) ||
+            isAfter(
+              new Date(purchase?.date),
+              new Date(purchaseFilterData?.initialDate)
+            )) &&
+            (isSameDay(
+              new Date(purchaseFilterData?.finalDate),
+              new Date(purchase?.date)
+            ) ||
+              isBefore(
+                new Date(purchase?.date),
+                new Date(purchaseFilterData?.finalDate)
+              ))
+        })
+        ?.filter((purchase) =>
+          !!purchaseFilterData?.supplier
+            ? purchase?.supplier_id === purchaseFilterData?.supplier
+            : purchase
+        )
+
+      setPurchasesList(purchasesFiltered)
+
+      setIsLoading(false)
+
+      return toast.success('Lista atualizada conforme filtros', {
+        position: 'top-center',
+        autoClose: 1000,
+        hideProgressBar: true,
+      })
+    }
+
+    return toast.error('Confira os campos informados e tente novamente.', {
+      position: 'top-center',
+      autoClose: 500,
+      hideProgressBar: true,
+    })
+  }, [purchaseFilterData])
+
+  useEffect(() => {
+    setIsSomeFieldFilled(
+      Object.values(purchaseFilterData)?.some(
+        (value) => typeof value === 'string' && !!value
+      )
+    )
+  }, [purchaseFilterData, isBefore, isAfter, isSameDay])
 
   return (
     <>
@@ -41,34 +141,89 @@ const PurchaseOrders = ({ purchases }: PurchaseOrdersProps) => {
         </div>
 
         {purchases?.length > 0 ? (
-          <div className="flex flex-col justify-center gap-4">
-            <Search
-              search={search}
-              setSearch={setSearch}
-              placeholder="Pesquisar por data da ordem de compra"
-            />
-            <ul className="grid w-72 grid-cols-1 justify-center gap-7 md:w-[400px]">
-              {purchases
-                ?.filter((purchase) => {
-                  if (!search) {
-                    return purchase
+          <main className="flex w-full max-w-3xl flex-col items-center justify-center gap-12">
+            <div className="flex flex-row items-center justify-center gap-4">
+              <section className="-mt-5 grid w-full grid-cols-3 items-center justify-center gap-3">
+                <InitialDate
+                  initialDate={purchaseFilterData?.initialDate}
+                  setInitialDate={(value) =>
+                    setPurchaseFilterData((old) => ({
+                      ...old,
+                      initialDate: value,
+                    }))
                   }
-
-                  if (
-                    !!search &&
-                    purchase?.date.toLowerCase().includes(search.toLowerCase())
-                  ) {
-                    return purchase
+                />
+                <FinalDate
+                  finalDate={purchaseFilterData?.finalDate}
+                  setFinalDate={(value) =>
+                    setPurchaseFilterData((old) => ({
+                      ...old,
+                      finalDate: value,
+                    }))
                   }
-                })
-                ?.map((purchase) => (
-                  <PurchaseTransactionItem purchase={purchase} />
-                ))}
-            </ul>
-          </div>
+                />
+                <Select
+                  field="supplier"
+                  placeholder="Selecione o fornecedor"
+                  label="Fornecedor"
+                  multiple={false}
+                  options={suppliers}
+                  setValue={(value) =>
+                    setPurchaseFilterData((old) => ({
+                      ...old,
+                      supplier: value,
+                    }))
+                  }
+                />
+              </section>
+              <section className="flex flex-row items-center justify-center gap-2">
+                <FilterSearchButton
+                  disabled={!isSomeFieldFilled}
+                  onSearchData={handleSearchPurchaseOrders}
+                />
+                <button
+                  type="button"
+                  title="Limpar filtros"
+                  disabled={!isSomeFieldFilled}
+                  onClick={handleResetFilterData}
+                  className="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-md border border-transparent bg-green-500 p-1 text-sm font-medium text-white shadow-sm transition-colors duration-300 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-green-500"
+                >
+                  <RefreshIcon className="h-5 w-5 text-gray-300" />
+                </button>
+              </section>
+            </div>
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <ul className="grid w-72 grid-cols-1 justify-center gap-7 md:w-[400px]">
+                {purchasesList?.length > 0 ? (
+                  <>
+                    {purchasesList?.map((purchase) => (
+                      <PurchaseTransactionItem purchase={purchase} />
+                    ))}
+                  </>
+                ) : (
+                  <div className="flex flex-col gap-3">
+                    <h1 className="text-center text-2xl font-medium text-black">
+                      Não há ordens de compra com os filtros informados
+                    </h1>
+                    <p className="text-center text-base font-normal text-gray-700">
+                      Pesquise por outros filtros ou até mesmo clique no botão
+                      abaixo para cadastrar uma nova ordem de compra
+                    </p>
+                    <Link href="/register/purchase-order">
+                      <a className="mt-2 flex w-60 items-center justify-center self-center rounded-lg border border-white bg-green-500 p-2 text-base font-semibold text-white transition-colors duration-300 hover:bg-green-600">
+                        Cadastrar ordem de compra
+                      </a>
+                    </Link>
+                  </div>
+                )}
+              </ul>
+            )}
+          </main>
         ) : (
           <div className="flex flex-col gap-4">
-            <h1 className="text-center text-lg font-medium text-black">
+            <h1 className="text-center text-2xl font-medium text-black">
               Não há ordens de compra cadastradas
             </h1>
             <Link href="/register/purchase-order">
@@ -98,6 +253,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   const userId = simpleCrypto.decrypt(cookies['user'])
+
+  const { data: suppliers } = await supabase
+    .from('supplier')
+    .select('*')
+    .order('id', { ascending: true })
+    .match({ user_id: userId })
 
   const { data: purchases } = await supabase
     .from('purchase')
@@ -154,6 +315,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
       purchases: purchasesWithItems,
+      suppliers,
     },
   }
 }

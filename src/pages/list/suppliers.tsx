@@ -68,7 +68,7 @@ const Suppliers = ({ suppliers }: SuppliersProps) => {
           </div>
         ) : (
           <div className="flex flex-col gap-4">
-            <h1 className="text-center text-lg font-medium text-black">
+            <h1 className="text-center text-2xl font-medium text-black">
               Não há fornecedores cadastrados
             </h1>
             <Link href="/register/supplier">

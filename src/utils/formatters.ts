@@ -1,5 +1,5 @@
 export const Mask = {
-  birthdate(date: string) {
+  date(date: string) {
     return date
       .replace(/\D/g, '')
       .replace(/(\d{2})(\d)/, '$1/$2')
