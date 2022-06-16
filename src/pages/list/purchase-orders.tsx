@@ -168,6 +168,7 @@ const PurchaseOrders = ({ purchases, suppliers }: PurchaseOrdersProps) => {
                   label="Fornecedor"
                   multiple={false}
                   options={suppliers}
+                  value={purchaseFilterData?.supplier}
                   setValue={(value) =>
                     setPurchaseFilterData((old) => ({
                       ...old,

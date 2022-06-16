@@ -327,6 +327,7 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
                     </h4>
                     <SaleTransactionForm
                       products={products}
+                      saleTransactionItems={saleTransactionItems}
                       setSaleTransactionItems={setSaleTransactionItems}
                     />
                   </div>

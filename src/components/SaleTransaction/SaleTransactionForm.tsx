@@ -15,11 +15,13 @@ type SaleTransactionProductData = {
 
 interface PurchaseTransactionFormProps {
   products: ProductData[]
+  saleTransactionItems: SalesItemData[]
   setSaleTransactionItems: any
 }
 
 export const SaleTransactionForm = ({
   products,
+  saleTransactionItems,
   setSaleTransactionItems,
 }: PurchaseTransactionFormProps) => {
   const [saleTransactionDataItem, setSaleTransactionDataItem] =
@@ -53,7 +55,26 @@ export const SaleTransactionForm = ({
       )
       setIsProductQuantityMoreThanStock(!enoughProductQuantity)
     }
-  }, [saleTransactionDataItem.quantity, productData.description])
+  }, [saleTransactionDataItem?.quantity, productData?.description])
+
+  useEffect(() => {
+    if (saleTransactionItems?.length > 0) {
+      const allProductItemTransactions = saleTransactionItems?.filter(
+        (item) => item?.product_id === saleTransactionDataItem?.product_id
+      )
+
+      const totalQuantity = allProductItemTransactions?.reduce(
+        (acc, cur) => acc + cur?.quantity,
+        0
+      )
+
+      const enoughProductQuantity = validateProductStockQuantity(
+        totalQuantity + saleTransactionDataItem?.quantity
+      )
+
+      setIsProductQuantityMoreThanStock(!enoughProductQuantity)
+    }
+  }, [saleTransactionItems, saleTransactionDataItem])
 
   const handleAddNewPurchaseTransactionItem = useCallback(
     (e: FormEvent) => {
