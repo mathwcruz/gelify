@@ -4,7 +4,10 @@ import { toast } from 'react-toastify'
 import { PlusCircleIcon } from '@heroicons/react/solid'
 
 import { ProductData } from '../../contexts/ProductContext'
-import { SalesItemData } from '../../contexts/SalesTransactionContext'
+import {
+  SalesItemData,
+  SalesTransactionData,
+} from '../../contexts/SalesTransactionContext'
 import { supabase } from '../../services/supabase'
 
 type SaleTransactionProductData = {
@@ -17,12 +20,14 @@ interface PurchaseTransactionFormProps {
   products: ProductData[]
   saleTransactionItems: SalesItemData[]
   setSaleTransactionItems: any
+  setSaleTransactionData: any
 }
 
 export const SaleTransactionForm = ({
   products,
   saleTransactionItems,
   setSaleTransactionItems,
+  setSaleTransactionData,
 }: PurchaseTransactionFormProps) => {
   const [saleTransactionDataItem, setSaleTransactionDataItem] =
     useState<SalesItemData>({} as SalesItemData)
@@ -35,11 +40,6 @@ export const SaleTransactionForm = ({
   const validateProductStockQuantity = useCallback(
     (productQuantity: number) => {
       if (productQuantity > productData?.stock_quantity) {
-        toast.error(`Quantidade solicitada maior que a quantidade em estoque`, {
-          position: 'top-center',
-          autoClose: 500,
-          hideProgressBar: true,
-        })
         return false
       }
 
@@ -95,6 +95,7 @@ export const SaleTransactionForm = ({
       ])
 
       setSaleTransactionDataItem({} as SalesItemData)
+      setSaleTransactionData({} as SalesTransactionData)
 
       toast.success('Item adicionado com sucesso', {
         position: 'top-center',

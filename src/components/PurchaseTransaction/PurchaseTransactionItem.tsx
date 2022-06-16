@@ -84,7 +84,7 @@ export const PurchaseTransactionItem = ({
                 </div>
               </div>
               <div className="mt-2 flex w-full flex-col justify-center gap-2">
-                <h5 className="text-left text-sm font-semibold text-gray-600">
+                <h5 className="text-left text-sm font-semibold text-gray-600 dark:text-gray-200">
                   Itens comprados
                 </h5>
                 <ul className="flex flex-col justify-center gap-2">

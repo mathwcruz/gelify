@@ -195,7 +195,7 @@ const PurchaseOrders = ({ purchases, suppliers }: PurchaseOrdersProps) => {
             {isLoading ? (
               <Loading />
             ) : (
-              <ul className="grid w-72 grid-cols-1 justify-center gap-7 md:w-[400px]">
+              <ul className="grid w-72 grid-cols-1 items-start justify-center gap-7 md:w-[750px] md:grid-cols-2">
                 {purchasesList?.length > 0 ? (
                   <>
                     {purchasesList?.map((purchase) => (

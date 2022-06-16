@@ -35,7 +35,7 @@ const Cities = ({ cities }: CitiesProps) => {
           <h1 className="text-center text-3xl font-bold text-black dark:text-white">
             Cidades cadastradas
           </h1>
-          <p className="text-base font-medium text-gray-600 dark:text-gray-200 dark:text-gray-200">
+          <p className="text-base font-medium text-gray-600 dark:text-gray-200">
             Confira as cidades disponíveis no sistema
           </p>
         </div>

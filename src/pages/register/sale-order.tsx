@@ -334,6 +334,7 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
                       products={products}
                       saleTransactionItems={saleTransactionItems}
                       setSaleTransactionItems={setSaleTransactionItems}
+                      setSaleTransactionData={setSaleTransactionData}
                     />
                   </div>
                 </div>
