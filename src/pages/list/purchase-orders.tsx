@@ -6,6 +6,7 @@ import SimpleCrypto from 'simple-crypto-js'
 import { parseCookies } from 'nookies'
 import { format, isBefore, isAfter, isSameDay } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
+import enUS from 'date-fns/locale/en-US'
 import _ from 'lodash'
 import { toast } from 'react-toastify'
 import { RefreshIcon } from '@heroicons/react/solid'
@@ -19,7 +20,7 @@ import { FinalDate, InitialDate } from '../../components/Filter/Date'
 import { Select } from '../../components/Filter/Select'
 import { FilterSearchButton } from '../../components/Filter/FilterSearchButton'
 import { Loading } from '../../components/Loading'
-import { validateDate } from '../../utils/validations'
+import { formatDateToEnUS, validateDate } from '../../utils/validations'
 
 import { supabase } from '../../services/supabase'
 
@@ -75,30 +76,31 @@ const PurchaseOrders = ({ purchases, suppliers }: PurchaseOrdersProps) => {
         ?.filter(
           (purchase) =>
             (isSameDay(
-              new Date(purchaseFilterData?.initialDate),
-              new Date(purchase?.date)
+              formatDateToEnUS(purchase?.date),
+              formatDateToEnUS(purchaseFilterData?.initialDate)
             ) ||
               isAfter(
-                new Date(purchase?.date),
-                new Date(purchaseFilterData?.initialDate)
+                formatDateToEnUS(purchase?.date),
+                formatDateToEnUS(purchaseFilterData?.initialDate)
               )) &&
             (isSameDay(
-              new Date(purchaseFilterData?.finalDate),
-              new Date(purchase?.date)
+              formatDateToEnUS(purchase?.date),
+              formatDateToEnUS(purchaseFilterData?.finalDate)
             ) ||
               isBefore(
-                new Date(purchase?.date),
-                new Date(purchaseFilterData?.finalDate)
+                formatDateToEnUS(purchase?.date),
+                formatDateToEnUS(purchaseFilterData?.finalDate)
               ))
         )
-        ?.filter((purchase) =>
-          !!purchaseFilterData?.supplier
-            ? purchase?.supplier_id === purchaseFilterData?.supplier
-            : purchase
-        )
+        ?.filter((purchase) => {
+          if (!!purchaseFilterData?.supplier) {
+            return purchase?.supplier_id === purchaseFilterData?.supplier
+          }
+
+          return purchase
+        })
 
       setPurchasesList(purchasesFiltered)
-
       setIsLoading(false)
 
       return toast.success('Lista atualizada conforme filtros', {
@@ -113,7 +115,7 @@ const PurchaseOrders = ({ purchases, suppliers }: PurchaseOrdersProps) => {
       autoClose: 500,
       hideProgressBar: true,
     })
-  }, [purchaseFilterData, isSameDay, isAfter, isBefore])
+  }, [purchaseFilterData, formatDateToEnUS])
 
   useEffect(() => {
     setIsSomeFieldFilled(
@@ -208,7 +210,7 @@ const PurchaseOrders = ({ purchases, suppliers }: PurchaseOrdersProps) => {
                     <h1 className="text-center text-2xl font-medium text-black dark:text-white">
                       Não há ordens de compra com os filtros informados
                     </h1>
-                    <p className="text-center text-base font-normal text-gray-700">
+                    <p className="max-w-[450px] self-center text-center text-base font-normal text-gray-700">
                       Pesquise por outros filtros ou até mesmo clique no botão
                       abaixo para cadastrar uma nova ordem de compra
                     </p>

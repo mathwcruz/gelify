@@ -19,7 +19,7 @@ import { FinalDate, InitialDate } from '../../components/Filter/Date'
 import { Select } from '../../components/Filter/Select'
 import { FilterSearchButton } from '../../components/Filter/FilterSearchButton'
 import { Loading } from '../../components/Loading'
-import { validateDate } from '../../utils/validations'
+import { formatDateToEnUS, validateDate } from '../../utils/validations'
 
 import { supabase } from '../../services/supabase'
 
@@ -75,30 +75,31 @@ const SaleOrders = ({ sales, clients }: SaleOrdersProps) => {
         ?.filter(
           (sale) =>
             (isSameDay(
-              new Date(saleFilterData?.initialDate),
-              new Date(sale?.date)
+              formatDateToEnUS(saleFilterData?.initialDate),
+              formatDateToEnUS(sale?.date)
             ) ||
               isAfter(
-                new Date(sale?.date),
-                new Date(saleFilterData?.initialDate)
+                formatDateToEnUS(sale?.date),
+                formatDateToEnUS(saleFilterData?.initialDate)
               )) &&
             (isSameDay(
-              new Date(saleFilterData?.finalDate),
-              new Date(sale?.date)
+              formatDateToEnUS(saleFilterData?.finalDate),
+              formatDateToEnUS(sale?.date)
             ) ||
               isBefore(
-                new Date(sale?.date),
-                new Date(saleFilterData?.finalDate)
+                formatDateToEnUS(sale?.date),
+                formatDateToEnUS(saleFilterData?.finalDate)
               ))
         )
-        ?.filter((sale) =>
-          !!saleFilterData?.client
-            ? sale?.client_id === saleFilterData?.client
-            : sale
-        )
+        ?.filter((sale) => {
+          if (!!saleFilterData?.client) {
+            return sale?.client_id === saleFilterData?.client
+          }
+
+          return sale
+        })
 
       setSalesList(salesFiltered)
-
       setIsLoading(false)
 
       return toast.success('Lista atualizada conforme filtros', {
@@ -115,7 +116,7 @@ const SaleOrders = ({ sales, clients }: SaleOrdersProps) => {
       autoClose: 500,
       hideProgressBar: true,
     })
-  }, [saleFilterData, isSameDay, isBefore, isAfter, validateDate])
+  }, [saleFilterData, formatDateToEnUS])
 
   useEffect(() => {
     setIsSomeFieldFilled(
@@ -210,7 +211,7 @@ const SaleOrders = ({ sales, clients }: SaleOrdersProps) => {
                     <h1 className="text-center text-2xl font-medium text-black dark:text-white">
                       Não há ordens de venda com os filtros informados
                     </h1>
-                    <p className="text-center text-base font-normal text-gray-700">
+                    <p className="max-w-[450px] self-center text-center text-base font-normal text-gray-700">
                       Pesquise por outros filtros ou até mesmo clique no botão
                       abaixo para cadastrar uma nova ordem de venda
                     </p>

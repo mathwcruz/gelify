@@ -35,6 +35,11 @@ export function validateCPF(strCPF: string) {
   return true
 }
 
+export const formatDateToEnUS = (date: string) => {
+  const dateParts = date.split('/')
+  return new Date(+dateParts[2], +dateParts[1] - 1, +dateParts[0])
+}
+
 export function validateDate(date: string = '') {
   if (!date.length) return false
 
