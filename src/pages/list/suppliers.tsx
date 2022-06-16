@@ -32,10 +32,10 @@ const Suppliers = ({ suppliers }: SuppliersProps) => {
 
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-20 px-4 py-12 sm:px-6">
         <div className="flex max-w-3xl flex-col items-center justify-center gap-2">
-          <h1 className="text-center text-3xl font-bold text-black">
+          <h1 className="text-center text-3xl font-bold text-black dark:text-white">
             Fornecedores cadastrados
           </h1>
-          <p className="text-base font-medium text-gray-600">
+          <p className="text-base font-medium text-gray-600 dark:text-gray-200">
             Confira os fornecedores que já foram cadastrados no sistema
           </p>
         </div>
@@ -47,7 +47,7 @@ const Suppliers = ({ suppliers }: SuppliersProps) => {
               setSearch={setSearch}
               placeholder="Pesquisar por fornecedores"
             />
-            <ul className="grid w-72 grid-cols-1 justify-center gap-7 md:w-[700px] md:grid-cols-2">
+            <ul className="grid w-72 grid-cols-1 justify-center gap-7 md:w-[400px]">
               {suppliers
                 ?.filter((supplier) => {
                   if (!search) {
@@ -68,7 +68,7 @@ const Suppliers = ({ suppliers }: SuppliersProps) => {
           </div>
         ) : (
           <div className="flex flex-col gap-4">
-            <h1 className="text-center text-2xl font-medium text-black">
+            <h1 className="text-center text-2xl font-medium text-black dark:text-white">
               Não há fornecedores cadastrados
             </h1>
             <Link href="/register/supplier">

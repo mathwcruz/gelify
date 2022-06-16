@@ -42,14 +42,14 @@ export const SaleTransactionItem = ({ sale }: SaleTransactionItemProps) => {
           <div className="mb-2 flex">
             <div className="flex w-full flex-col justify-center gap-[6px]">
               <div className="flex flex-col justify-center">
-                <span className="mb-[1px] block text-xs text-gray-500">
+                <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
                   Data da venda
                 </span>
                 <h3 className="text-md text-left font-medium">{sale?.date}</h3>
               </div>
               <div className="flex w-full flex-row items-start justify-between gap-[50px]">
                 <div className="flex flex-col justify-center">
-                  <span className="mb-[1px] block text-xs text-gray-500">
+                  <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
                     Valor total
                   </span>
                   <span className="text-left text-sm font-medium">
@@ -60,7 +60,7 @@ export const SaleTransactionItem = ({ sale }: SaleTransactionItemProps) => {
                   </span>
                 </div>
                 <div className="mr-auto -ml-1 flex flex-col justify-center">
-                  <span className="mb-[1px] block text-xs text-gray-500">
+                  <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
                     Cliente
                   </span>
                   <span className="text-left text-sm font-medium">
@@ -78,7 +78,7 @@ export const SaleTransactionItem = ({ sale }: SaleTransactionItemProps) => {
               </div>
               <div className="flex w-full flex-row items-start justify-between gap-[200px]">
                 <div className="flex flex-col justify-center">
-                  <span className="mb-[1px] block text-xs text-gray-500">
+                  <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
                     Endereço de envio
                   </span>
                   <span className="text-left text-sm font-medium">
@@ -89,7 +89,7 @@ export const SaleTransactionItem = ({ sale }: SaleTransactionItemProps) => {
               {!!sale?.observation && (
                 <div className="flex w-full flex-row items-start justify-between gap-[200px]">
                   <div className="flex flex-col justify-center">
-                    <span className="mb-[1px] block text-xs text-gray-500">
+                    <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
                       Observações
                     </span>
                     <h3 className="text-md text-left font-medium">

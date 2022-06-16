@@ -161,7 +161,7 @@ const Supplier = ({ supplier }: SupplierProps) => {
           <Loading />
         ) : (
           <form onSubmit={handleUpdateSupplier}>
-            <div className="overflow-hidden shadow sm:rounded-md">
+            <div className="overflow-hidden shadow dark:shadow-zinc-700 sm:rounded-md">
               <div className="bg-white px-4 py-5 sm:p-6">
                 <div className="grid grid-cols-10 gap-6">
                   <div className="col-span-3">
@@ -182,7 +182,7 @@ const Supplier = ({ supplier }: SupplierProps) => {
                           name: e.target.value,
                         }))
                       }
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 sm:text-sm"
                     />
                   </div>
                   <div className="col-span-2">
@@ -204,7 +204,7 @@ const Supplier = ({ supplier }: SupplierProps) => {
                           email: e.target.value,
                         }))
                       }}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 sm:text-sm"
                     />
                   </div>
                   <div className="col-span-2">
@@ -228,7 +228,7 @@ const Supplier = ({ supplier }: SupplierProps) => {
                           cellphone: Mask.phone(e.target.value),
                         }))
                       }}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 sm:text-sm"
                     />
                   </div>
                   <div className="col-span-2">
@@ -252,18 +252,18 @@ const Supplier = ({ supplier }: SupplierProps) => {
                           cnpj: Mask.cnpj(e.target.value),
                         }))
                       }}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 sm:text-sm"
                     />
                   </div>
                 </div>
-                <p className="mt-3 w-full text-right text-sm font-medium text-black">
+                <p className="mt-3 w-full text-right text-sm font-medium text-black dark:text-white">
                   Criado em{' '}
                   {format(new Date(supplier?.created_at), 'dd/MM/yyyy', {
                     locale: ptBR,
                   })}
                 </p>
               </div>
-              <div className="flex flex-row items-center justify-end gap-4 bg-gray-50 px-4 py-3 text-right sm:px-6">
+              <div className="flex flex-row items-center justify-end gap-4 bg-gray-50 px-4 py-3 text-right dark:bg-zinc-900 sm:px-6">
                 <div className="flex items-center justify-center gap-2">
                   <input
                     className="text-green-400 focus:text-green-400 focus:ring-green-400"
@@ -274,7 +274,7 @@ const Supplier = ({ supplier }: SupplierProps) => {
                     onChange={() => setIsSupplierActive((old) => !old)}
                   />
                   <label
-                    className="text-sm font-medium text-black"
+                    className="text-sm font-medium text-black dark:text-white"
                     htmlFor="active"
                   >
                     {isSupplierActive ? 'Ativo' : 'Inativo'}
@@ -290,7 +290,7 @@ const Supplier = ({ supplier }: SupplierProps) => {
                       ? 'Os valores dos campos não alteraram'
                       : ''
                   }
-                  className="inline-flex justify-center rounded-md border border-transparent bg-green-500 py-2 px-4 text-sm font-medium text-white shadow-sm transition-colors duration-300 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-green-500"
+                  className=" inline-flex justify-center rounded-md border border-transparent bg-green-500 py-2 px-4 text-sm font-medium text-white shadow transition-colors duration-300 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-green-500"
                 >
                   Salvar
                 </button>

@@ -32,10 +32,10 @@ const Products = ({ products }: ProductsProps) => {
 
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-20 px-4 py-12 sm:px-6">
         <div className="flex max-w-3xl flex-col items-center justify-center gap-2">
-          <h1 className="text-center text-3xl font-bold text-black">
+          <h1 className="text-center text-3xl font-bold text-black dark:text-white">
             Produtos cadastrados
           </h1>
-          <p className="text-base font-medium text-gray-600">
+          <p className="text-base font-medium text-gray-600 dark:text-gray-200">
             Confira os produtos que já foram cadastrados no sistema
           </p>
         </div>
@@ -70,7 +70,7 @@ const Products = ({ products }: ProductsProps) => {
           </div>
         ) : (
           <div className="flex flex-col gap-4">
-            <h1 className="text-center text-2xl font-medium text-black">
+            <h1 className="text-center text-2xl font-medium text-black dark:text-white">
               Não há produtos cadastrados
             </h1>
             <Link href="/register/product">

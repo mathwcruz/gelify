@@ -1,4 +1,5 @@
 import type { AppProps } from 'next/app'
+import { ThemeProvider } from 'next-themes'
 import { ToastContainer } from 'react-toastify'
 
 import 'react-toastify/dist/ReactToastify.css'
@@ -14,22 +15,24 @@ import { UserProvider } from '../contexts/UserContext'
 
 function App({ Component, pageProps }: AppProps) {
   return (
-    <UserProvider>
-      <CityProvider>
-        <ClientProvider>
-          <SupplierProvider>
-            <ProductProvider>
-              <PurchaseTransactionProvider>
-                <SalesTransactionProvider>
-                  <ToastContainer />
-                  <Component {...pageProps} />
-                </SalesTransactionProvider>
-              </PurchaseTransactionProvider>
-            </ProductProvider>
-          </SupplierProvider>
-        </ClientProvider>
-      </CityProvider>
-    </UserProvider>
+    <ThemeProvider attribute="class">
+      <UserProvider>
+        <CityProvider>
+          <ClientProvider>
+            <SupplierProvider>
+              <ProductProvider>
+                <PurchaseTransactionProvider>
+                  <SalesTransactionProvider>
+                    <ToastContainer />
+                    <Component {...pageProps} />
+                  </SalesTransactionProvider>
+                </PurchaseTransactionProvider>
+              </ProductProvider>
+            </SupplierProvider>
+          </ClientProvider>
+        </CityProvider>
+      </UserProvider>
+    </ThemeProvider>
   )
 }
 

@@ -15,7 +15,9 @@ export const PurchaseItem = ({ purchaseItem }: PurchaseItemProps) => {
     >
       <div className="mb-2 flex w-full flex-row justify-between gap-[60px]">
         <div className="flex w-full flex-col justify-center">
-          <span className="mb-[1px] block text-xs text-gray-500">Produto</span>
+          <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
+            Produto
+          </span>
           <span className="flex flex-row items-center justify-center gap-2 text-left text-sm font-medium">
             {purchaseItem?.product_description}
             <Link href={`/edit/product/${purchaseItem?.product_id}`}>
@@ -31,7 +33,7 @@ export const PurchaseItem = ({ purchaseItem }: PurchaseItemProps) => {
       </div>
       <div className="flex w-full flex-row justify-between gap-[60px]">
         <div className="flex flex-col items-center justify-center">
-          <span className="mb-[1px] block text-xs text-gray-500">
+          <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
             Quantidade
           </span>
           <span className="text-left text-sm font-medium">
@@ -39,7 +41,7 @@ export const PurchaseItem = ({ purchaseItem }: PurchaseItemProps) => {
           </span>
         </div>
         <div className="flex flex-col items-center justify-center">
-          <span className="mb-[1px] block text-xs text-gray-500">
+          <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
             Valor total
           </span>
           <span className="text-left text-sm font-medium">

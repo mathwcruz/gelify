@@ -47,7 +47,7 @@ export const PurchaseTransactionItem = ({
           <div className="mb-2 flex">
             <div className="flex w-full flex-col justify-center gap-[6px]">
               <div className="flex flex-col justify-center">
-                <span className="mb-[1px] block text-xs text-gray-500">
+                <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
                   Data da compra
                 </span>
                 <h3 className="text-md text-left font-medium">
@@ -56,7 +56,7 @@ export const PurchaseTransactionItem = ({
               </div>
               <div className="flex w-full flex-row items-start justify-between gap-[50px]">
                 <div className="flex flex-col justify-center">
-                  <span className="mb-[1px] block text-xs text-gray-500">
+                  <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
                     Valor total
                   </span>
                   <span className="text-left text-sm font-medium">
@@ -67,7 +67,7 @@ export const PurchaseTransactionItem = ({
                   </span>
                 </div>
                 <div className="mr-auto -ml-1 flex flex-col justify-center">
-                  <span className="mb-[1px] block text-xs text-gray-500">
+                  <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
                     Fornecedor
                   </span>
                   <span className="text-left text-sm font-medium">

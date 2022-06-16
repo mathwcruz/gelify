@@ -16,7 +16,7 @@ export const ProductItem = ({ product }: ProductItemProps) => {
       <div className="mb-2 flex justify-between">
         <div className="flex flex-col justify-center gap-[6px]">
           <div className="flex flex-col justify-center">
-            <span className="mb-[1px] block text-xs text-gray-500">
+            <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
               Descrição
             </span>
             <h3 className="text-md text-left font-medium">
@@ -25,7 +25,7 @@ export const ProductItem = ({ product }: ProductItemProps) => {
           </div>
           <div className="flex w-full flex-row justify-between gap-[60px]">
             <div className="flex flex-col justify-center">
-              <span className="mb-[1px] block text-xs text-gray-500">
+              <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
                 Valor unitário
               </span>
               <span className="text-left text-sm font-medium">
@@ -36,7 +36,7 @@ export const ProductItem = ({ product }: ProductItemProps) => {
               </span>
             </div>
             <div className="flex flex-col justify-center">
-              <span className="mb-[1px] block text-xs text-gray-500">
+              <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
                 Quantidade em estoque
               </span>
               <span className="text-left text-sm font-medium">
@@ -57,7 +57,7 @@ export const ProductItem = ({ product }: ProductItemProps) => {
         </div>
       </div>
       <div className="flex gap-2 self-end text-sm">
-        <span className="text-left font-semibold text-black">
+        <span className="text-left font-semibold text-black dark:text-white">
           {product?.active ? 'Ativo' : 'Inativo'}
         </span>
         <p>

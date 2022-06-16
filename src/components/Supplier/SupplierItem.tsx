@@ -16,18 +16,22 @@ export const SupplierItem = ({ supplier }: SupplierItemProps) => {
       <div className="mb-2 flex justify-between">
         <div className="flex flex-col justify-center gap-[6px]">
           <div className="flex flex-col justify-center">
-            <span className="mb-[1px] block text-xs text-gray-500">Nome</span>
+            <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
+              Nome
+            </span>
             <h3 className="text-md text-left font-medium">{supplier?.name}</h3>
           </div>
           <div className="flex w-full flex-row justify-between gap-[80px]">
             <div className="flex flex-col justify-center">
-              <span className="mb-[1px] block text-xs text-gray-500">CNPJ</span>
+              <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
+                CNPJ
+              </span>
               <span className="text-left text-sm font-medium">
                 {supplier?.cnpj}
               </span>
             </div>
             <div className="flex flex-col justify-center">
-              <span className="mb-[1px] block text-xs text-gray-500">
+              <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
                 Número de celular
               </span>
               <span className="text-left text-sm font-medium">
@@ -36,7 +40,9 @@ export const SupplierItem = ({ supplier }: SupplierItemProps) => {
             </div>
           </div>
           <div className="flex flex-col justify-center">
-            <span className="mb-[1px] block text-xs text-gray-500">Email</span>
+            <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
+              Email
+            </span>
             <span className="block max-w-[50px] text-left text-sm font-medium">
               {supplier?.email}
             </span>
@@ -51,7 +57,7 @@ export const SupplierItem = ({ supplier }: SupplierItemProps) => {
         </div>
       </div>
       <div className="flex gap-2 self-end text-sm">
-        <span className="text-left font-semibold text-black">
+        <span className="text-left font-semibold text-black dark:text-white">
           {supplier?.active ? 'Ativo' : 'Inativo'}
         </span>
         <p>

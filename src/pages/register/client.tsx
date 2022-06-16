@@ -136,13 +136,13 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
           <Loading />
         ) : (
           <form onSubmit={handleCreateClient}>
-            <div className="overflow-hidden shadow sm:rounded-md">
-              <div className="flex flex-col justify-center gap-3 bg-white px-4 py-5 sm:p-6">
-                <div className="grid grid-cols-12 gap-3">
-                  <div className="col-span-3">
+            <div className="overflow-hidden shadow dark:shadow-zinc-700 sm:rounded-md">
+              <div className="flex flex-col justify-center gap-3 bg-white px-4 py-5 dark:bg-zinc-900 sm:p-6">
+                <div className="grid w-full grid-cols-6 gap-3">
+                  <div className="col-span-1">
                     <label
                       htmlFor="name"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Nome*
                     </label>
@@ -158,13 +158,13 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
                           name: e.target.value,
                         }))
                       }
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
-                  <div className="col-span-2">
+                  <div className="col-span-1">
                     <label
                       htmlFor="cpf"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       CPF*
                     </label>
@@ -182,13 +182,13 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
                           cpf: Mask.cpf(e.target.value),
                         }))
                       }}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
-                  <div className="col-span-2">
+                  <div className="col-span-1">
                     <label
                       htmlFor="birthdate"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Data de nascimento*
                     </label>
@@ -206,13 +206,13 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
                           birthdate: Mask.date(e.target.value),
                         }))
                       }}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
-                  <div className="col-span-3">
+                  <div className="col-span-1">
                     <label
                       htmlFor="email"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Email*
                     </label>
@@ -228,13 +228,13 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
                           email: e.target.value,
                         }))
                       }}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
-                  <div className="col-span-2">
+                  <div className="col-span-1">
                     <label
                       htmlFor="cellphone"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Número de celular*
                     </label>
@@ -252,13 +252,13 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
                           cellphone: Mask.phone(e.target.value),
                         }))
                       }}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
-                  <div className="col-span-3">
+                  <div className="col-span-1">
                     <label
                       htmlFor="city"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Cidade*
                     </label>
@@ -272,10 +272,14 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
                           city_id: e.target.value,
                         }))
                       }
-                      className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                      className=" mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow focus:border-green-400 focus:outline-none focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     >
                       <>
-                        <option value="" disabled>
+                        <option
+                          className="dark:text-gray-400"
+                          value=""
+                          disabled
+                        >
                           Selecione a cidade
                         </option>
                         {cities?.map((city) => (
@@ -288,12 +292,12 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
                   </div>
                 </div>
               </div>
-              <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
+              <div className="bg-gray-50 px-4 py-3 text-right dark:bg-zinc-900 sm:px-6">
                 <button
                   type="submit"
                   disabled={!isAllFieldsFilled}
                   title={!isAllFieldsFilled ? 'Preencha todos os campos' : ''}
-                  className="inline-flex justify-center rounded-md border border-transparent bg-green-500 py-2 px-4 text-sm font-medium text-white shadow-sm transition-colors duration-300 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-green-500 disabled:hover:opacity-60"
+                  className=" inline-flex justify-center rounded-md border border-transparent bg-green-500 py-2 px-4 text-sm font-medium text-white shadow transition-colors duration-300 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-green-500 disabled:hover:opacity-60"
                 >
                   Cadastrar cliente
                 </button>

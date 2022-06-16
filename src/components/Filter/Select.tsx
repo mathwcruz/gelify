@@ -24,7 +24,7 @@ export const Select = <T extends SelectOptionsData>({
     <div className="flex flex-col gap-[2px]">
       <label
         htmlFor={field}
-        className="block text-sm font-medium text-gray-700"
+        className="block text-sm font-medium text-gray-700 dark:text-gray-200"
       >
         {label}
       </label>
@@ -34,10 +34,10 @@ export const Select = <T extends SelectOptionsData>({
         defaultValue=""
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+        className=" mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow focus:border-green-500 focus:outline-none focus:ring-green-500 dark:bg-zinc-900 dark:focus:border-gray-300 dark:focus:ring-gray-300 sm:text-sm"
       >
         <>
-          <option value="" disabled>
+          <option className="dark:text-gray-400" value="" disabled>
             {placeholder}
           </option>
           {options?.map((option) => (

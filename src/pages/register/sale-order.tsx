@@ -219,13 +219,13 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
         ) : (
           <>
             <form onSubmit={handleCreateSaleTransaction}>
-              <div className="overflow-hidden shadow sm:rounded-md">
-                <div className="bg-white px-4 py-5 sm:p-6">
+              <div className="overflow-hidden shadow dark:shadow-zinc-700 sm:rounded-md">
+                <div className="bg-white px-4 py-5 dark:bg-zinc-900 sm:p-6">
                   <div className="mb-8 grid grid-cols-10 gap-6">
                     <div className="col-span-2">
                       <label
                         htmlFor="date"
-                        className="block text-sm font-medium text-gray-700"
+                        className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                       >
                         Data da venda*
                       </label>
@@ -243,13 +243,13 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
                             date: Mask.date(e.target.value),
                           }))
                         }}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                        className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                       />
                     </div>
                     <div className="col-span-2">
                       <label
                         htmlFor="client"
-                        className="block text-sm font-medium text-gray-700"
+                        className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                       >
                         Cliente*
                       </label>
@@ -263,10 +263,14 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
                             client_id: e.target.value,
                           }))
                         }
-                        className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                        className=" mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow focus:border-green-400 focus:outline-none focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                       >
                         <>
-                          <option value="" disabled>
+                          <option
+                            className="dark:text-gray-400"
+                            value=""
+                            disabled
+                          >
                             Selecione o cliente
                           </option>
                           {clients?.map((client) => (
@@ -280,7 +284,7 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
                     <div className="col-span-3">
                       <label
                         htmlFor="delivery_address"
-                        className="block text-sm font-medium text-gray-700"
+                        className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                       >
                         Endereço de envio*
                       </label>
@@ -296,13 +300,13 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
                             delivery_address: e.target.value,
                           }))
                         }
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                        className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                       />
                     </div>
                     <div className="col-span-3">
                       <label
                         htmlFor="observation"
-                        className="block text-sm font-medium text-gray-700"
+                        className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                       >
                         Observações (opcional)
                       </label>
@@ -318,12 +322,12 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
                             observation: e.target.value,
                           }))
                         }
-                        className="mt-1 block w-full resize-x rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                        className=" mt-1 block w-full resize-x rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                       />
                     </div>
                   </div>
                   <div className="flex flex-col gap-3">
-                    <h4 className="text-left text-base font-semibold text-gray-800">
+                    <h4 className="text-left text-base font-semibold text-gray-800 dark:text-gray-400">
                       Adicione um novo item
                     </h4>
                     <SaleTransactionForm
@@ -333,7 +337,7 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
                     />
                   </div>
                 </div>
-                <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
+                <div className="bg-gray-50 px-4 py-3 text-right dark:bg-zinc-900 sm:px-6">
                   <button
                     type="submit"
                     disabled={
@@ -350,7 +354,7 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
                         ? 'Preencha todos os campos'
                         : ''
                     }
-                    className="inline-flex justify-center rounded-md border border-transparent bg-green-500 py-2 px-4 text-sm font-medium text-white shadow-sm transition-colors duration-300 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-green-500 disabled:hover:opacity-60"
+                    className=" inline-flex justify-center rounded-md border border-transparent bg-green-500 py-2 px-4 text-sm font-medium text-white shadow transition-colors duration-300 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-green-500 disabled:hover:opacity-60"
                   >
                     Cadastrar ordem de venda
                   </button>
@@ -358,47 +362,47 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
               </div>
             </form>
             {saleTransactionItems?.length > 0 && (
-              <div className="mt-5 flex flex-col items-end rounded-md bg-white px-4 py-5 shadow sm:p-6">
+              <div className="mt-5 flex flex-col items-end rounded-md bg-white px-4 py-5 shadow dark:bg-zinc-900 dark:shadow-zinc-700 sm:p-6">
                 <div className="flex w-full flex-col self-start">
-                  <h3 className="text-left text-base font-semibold text-gray-700">
+                  <h3 className="text-left text-base font-semibold text-gray-700 dark:text-gray-300">
                     Itens adicionados
                   </h3>
                   <ul className="my-4 flex flex-col justify-center gap-4">
                     {saleTransactionItems?.map((item) => (
                       <li
                         key={item?.id}
-                        className="flex w-full flex-row items-center justify-between border-b border-gray-300 pb-4"
+                        className="flex w-full flex-row items-center justify-between border-b border-gray-300 pb-4 dark:border-gray-100"
                       >
                         <section className="mt-2 mr-10 flex w-full flex-row items-center justify-around gap-6">
                           <div className="flex flex-col items-center gap-1">
-                            <strong className="text-base font-semibold text-gray-800">
+                            <strong className="text-base font-semibold text-gray-800 dark:text-gray-300">
                               Identificador (Id)
                             </strong>
-                            <span className="w-[250px] text-center text-sm text-gray-700">
+                            <span className="w-[250px] text-center text-sm text-gray-700 dark:text-gray-200">
                               {item?.id}
                             </span>
                           </div>
                           <div className="flex flex-col items-center gap-1">
-                            <strong className="text-base font-semibold text-gray-800">
+                            <strong className="text-base font-semibold text-gray-800 dark:text-gray-300">
                               Produto
                             </strong>
-                            <span className="w-[120px] text-center text-sm text-gray-700">
+                            <span className="w-[120px] text-center text-sm text-gray-700 dark:text-gray-200">
                               {item?.product_description}
                             </span>
                           </div>
                           <div className="flex flex-col items-center gap-1">
-                            <strong className="text-base font-semibold text-gray-800">
+                            <strong className="text-base font-semibold text-gray-800 dark:text-gray-300">
                               Quantidade
                             </strong>
-                            <span className="max-w-[120px] text-center text-sm text-gray-700">
+                            <span className="max-w-[120px] text-center text-sm text-gray-700 dark:text-gray-200">
                               {item?.quantity}
                             </span>
                           </div>
                           <div className="flex flex-col items-center gap-1">
-                            <strong className="text-base font-semibold text-gray-800">
+                            <strong className="text-base font-semibold text-gray-800 dark:text-gray-300">
                               Valor unitário
                             </strong>
-                            <span className="max-w-[120px] text-center text-sm text-gray-700">
+                            <span className="max-w-[120px] text-center text-sm text-gray-700 dark:text-gray-200">
                               {new Intl.NumberFormat('pt-BR', {
                                 style: 'currency',
                                 currency: 'BRL',
@@ -406,10 +410,10 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
                             </span>
                           </div>
                           <div className="flex flex-col items-center gap-1">
-                            <strong className="text-base font-semibold text-gray-800">
+                            <strong className="text-base font-semibold text-gray-800 dark:text-gray-300">
                               Subtotal
                             </strong>
-                            <span className="max-w-[120px] text-center text-sm text-gray-700">
+                            <span className="max-w-[120px] text-center text-sm text-gray-700 dark:text-gray-200">
                               {new Intl.NumberFormat('pt-BR', {
                                 style: 'currency',
                                 currency: 'BRL',
@@ -430,10 +434,10 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
                   </ul>
                 </div>
                 <div className="flex flex-row items-center justify-center gap-1">
-                  <p className="text-base font-semibold text-gray-700">
+                  <p className="text-base font-semibold text-gray-700 dark:text-gray-300">
                     Total acumulado
                   </p>
-                  <span className="text-sm font-normal text-black">
+                  <span className="text-sm font-normal text-black dark:text-white">
                     {new Intl.NumberFormat('pt-BR', {
                       style: 'currency',
                       currency: 'BRL',

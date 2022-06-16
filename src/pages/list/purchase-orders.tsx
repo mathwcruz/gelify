@@ -132,10 +132,10 @@ const PurchaseOrders = ({ purchases, suppliers }: PurchaseOrdersProps) => {
 
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-20 px-4 py-12 sm:px-6">
         <div className="flex max-w-3xl flex-col items-center justify-center gap-2">
-          <h1 className="text-center text-3xl font-bold text-black">
+          <h1 className="text-center text-3xl font-bold text-black dark:text-white">
             Ordens de compra efetuadas
           </h1>
-          <p className="text-base font-medium text-gray-600">
+          <p className="text-base font-medium text-gray-600 dark:text-gray-200">
             Confira todas as suas compras já realizadas até o momento
           </p>
         </div>
@@ -186,9 +186,9 @@ const PurchaseOrders = ({ purchases, suppliers }: PurchaseOrdersProps) => {
                   title="Limpar filtros"
                   disabled={!isSomeFieldFilled}
                   onClick={handleResetFilterData}
-                  className="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-md border border-transparent bg-green-500 p-1 text-sm font-medium text-white shadow-sm transition-colors duration-300 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-green-500"
+                  className=" mt-1 inline-flex h-8 w-8 items-center justify-center rounded-md border border-transparent bg-green-500 p-1 text-sm font-medium text-white shadow transition-colors duration-300 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-green-500 dark:text-gray-300 dark:disabled:opacity-60"
                 >
-                  <RefreshIcon className="h-5 w-5 text-gray-300" />
+                  <RefreshIcon className="h-5 w-5 text-gray-300 dark:text-gray-200" />
                 </button>
               </section>
             </div>
@@ -204,7 +204,7 @@ const PurchaseOrders = ({ purchases, suppliers }: PurchaseOrdersProps) => {
                   </>
                 ) : (
                   <div className="flex flex-col gap-3">
-                    <h1 className="text-center text-2xl font-medium text-black">
+                    <h1 className="text-center text-2xl font-medium text-black dark:text-white">
                       Não há ordens de compra com os filtros informados
                     </h1>
                     <p className="text-center text-base font-normal text-gray-700">
@@ -223,7 +223,7 @@ const PurchaseOrders = ({ purchases, suppliers }: PurchaseOrdersProps) => {
           </main>
         ) : (
           <div className="flex flex-col gap-4">
-            <h1 className="text-center text-2xl font-medium text-black">
+            <h1 className="text-center text-2xl font-medium text-black dark:text-white">
               Não há ordens de compra cadastradas
             </h1>
             <Link href="/register/purchase-order">

@@ -18,7 +18,7 @@ export const CityItem = ({ city }: CityItemProps) => {
           <h3 className="text-left text-lg font-semibold">
             {city?.description}
           </h3>
-          <span className="text-left text-sm font-medium text-gray-500">
+          <span className="text-left text-sm font-medium text-gray-500 dark:text-gray-300">
             {city?.cep}
           </span>
         </div>
@@ -34,7 +34,7 @@ export const CityItem = ({ city }: CityItemProps) => {
         </div>
       </div>
       <div className="flex gap-2 self-end text-sm">
-        <span className="text-left font-semibold text-black">
+        <span className="text-left font-semibold text-black dark:text-white">
           {city?.active ? 'Ativa' : 'Inativa'}
         </span>
         <p>

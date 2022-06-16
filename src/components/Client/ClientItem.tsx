@@ -41,7 +41,7 @@ export const ClientItem = ({ client }: ClientItemProps) => {
           <div className="mb-2 flex justify-between">
             <div className="flex flex-col justify-center gap-[6px]">
               <div className="flex flex-col justify-center">
-                <span className="mb-[1px] block text-xs text-gray-500">
+                <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
                   Nome
                 </span>
                 <h3 className="text-md text-left font-medium">
@@ -50,7 +50,7 @@ export const ClientItem = ({ client }: ClientItemProps) => {
               </div>
               <div className="flex w-full flex-row justify-between gap-[80px]">
                 <div className="flex flex-col justify-center">
-                  <span className="mb-[1px] block text-xs text-gray-500">
+                  <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
                     CPF
                   </span>
                   <span className="text-left text-sm font-medium">
@@ -58,7 +58,7 @@ export const ClientItem = ({ client }: ClientItemProps) => {
                   </span>
                 </div>
                 <div className="flex flex-col justify-center">
-                  <span className="mb-[1px] block text-xs text-gray-500">
+                  <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
                     Data de nascimento
                   </span>
                   <span className="text-left text-sm font-medium">
@@ -68,7 +68,7 @@ export const ClientItem = ({ client }: ClientItemProps) => {
               </div>
               <div className="flex w-full flex-row justify-between gap-[80px]">
                 <div className="flex flex-col justify-center">
-                  <span className="mb-[1px] block text-xs text-gray-500">
+                  <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
                     Número de celular
                   </span>
                   <span className="text-left text-sm font-medium">
@@ -76,7 +76,7 @@ export const ClientItem = ({ client }: ClientItemProps) => {
                   </span>
                 </div>
                 <div className="mr-auto -ml-1 flex flex-col justify-center">
-                  <span className="mb-[1px] block text-xs text-gray-500">
+                  <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
                     Cidade
                   </span>
                   <span className="text-left text-sm font-medium">
@@ -93,7 +93,7 @@ export const ClientItem = ({ client }: ClientItemProps) => {
                 </div>
               </div>
               <div className="flex flex-col justify-center">
-                <span className="mb-[1px] block text-xs text-gray-500">
+                <span className="mb-[1px] block text-xs text-gray-500 dark:text-gray-400">
                   Email
                 </span>
                 <span className="block max-w-[50px] text-left text-sm font-medium">
@@ -113,7 +113,7 @@ export const ClientItem = ({ client }: ClientItemProps) => {
             </div>
           </div>
           <div className="flex gap-2 self-end text-sm">
-            <span className="text-left font-semibold text-black">
+            <span className="text-left font-semibold text-black dark:text-white">
               {client?.active ? 'Ativo' : 'Inativo'}
             </span>
             <p>

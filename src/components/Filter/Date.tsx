@@ -18,7 +18,7 @@ export const InitialDate = ({
     <div className="flex flex-col gap-[2px]">
       <label
         htmlFor="initialDate"
-        className="block text-sm font-medium text-gray-700"
+        className="block text-sm font-medium text-gray-700 dark:text-gray-200"
       >
         Data inicial*
       </label>
@@ -33,7 +33,7 @@ export const InitialDate = ({
 
           setInitialDate(Mask.date(e.target.value))
         }}
-        className="mt-1 block rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+        className=" mt-1 block rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 dark:focus:border-gray-300 dark:focus:ring-gray-300 sm:text-sm"
       />
     </div>
   )
@@ -44,7 +44,7 @@ export const FinalDate = ({ finalDate, setFinalDate }: FinalDateProps) => {
     <div className="flex flex-col gap-[2px]">
       <label
         htmlFor="initialDate"
-        className="block text-sm font-medium text-gray-700"
+        className="block text-sm font-medium text-gray-700 dark:text-gray-200"
       >
         Data final*
       </label>
@@ -59,7 +59,7 @@ export const FinalDate = ({ finalDate, setFinalDate }: FinalDateProps) => {
 
           setFinalDate(Mask.date(e.target.value))
         }}
-        className="mt-1 block rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+        className=" mt-1 block rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 dark:focus:border-gray-300 dark:focus:ring-gray-300 sm:text-sm"
       />
     </div>
   )

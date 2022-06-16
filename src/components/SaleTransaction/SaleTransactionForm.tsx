@@ -127,7 +127,7 @@ export const SaleTransactionForm = ({
       <div className="relative w-full">
         <label
           htmlFor="quantity"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-200"
         >
           Quantidade*
         </label>
@@ -143,7 +143,7 @@ export const SaleTransactionForm = ({
               quantity: Number(e.target.value),
             }))
           }
-          className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm ${
+          className={` mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm ${
             isProductQuantityMoreThanStock
               ? 'hover:border-red-500 focus:border-red-500 focus:ring-red-400'
               : ''
@@ -162,7 +162,7 @@ export const SaleTransactionForm = ({
       <div className="w-full">
         <label
           htmlFor="supplier"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-200"
         >
           Produto*
         </label>
@@ -181,10 +181,10 @@ export const SaleTransactionForm = ({
 
             await handleGetProductData(e.target.value)
           }}
-          className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+          className=" mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow focus:border-green-400 focus:outline-none focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
         >
           <>
-            <option value="" disabled>
+            <option className="dark:text-gray-400" value="" disabled>
               Selecione o produto
             </option>
             {products?.map((product) => (
@@ -196,7 +196,7 @@ export const SaleTransactionForm = ({
         </select>
       </div>
       <button
-        className="mt-6 flex items-center justify-center transition-opacity duration-200 ease-in-out hover:opacity-80 focus:outline disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:opacity-30"
+        className="mt-6 flex items-center justify-center transition-opacity duration-200 ease-in-out hover:opacity-80 focus:outline disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:opacity-30 dark:disabled:opacity-50 dark:disabled:hover:opacity-50"
         title={
           !saleTransactionDataItem?.product_id ||
           saleTransactionDataItem?.quantity <= 0 ||

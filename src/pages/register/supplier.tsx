@@ -116,13 +116,13 @@ const SupplierRegister: NextPage = () => {
           <Loading />
         ) : (
           <form onSubmit={handleCreateSupplier}>
-            <div className="overflow-hidden shadow sm:rounded-md">
-              <div className="bg-white px-4 py-5 sm:p-6">
+            <div className="overflow-hidden shadow dark:shadow-zinc-700 sm:rounded-md">
+              <div className="bg-white px-4 py-5 dark:bg-zinc-900 sm:p-6">
                 <div className="grid grid-cols-10 gap-6">
                   <div className="col-span-3">
                     <label
                       htmlFor="name"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Nome
                     </label>
@@ -137,13 +137,13 @@ const SupplierRegister: NextPage = () => {
                           name: e.target.value,
                         }))
                       }
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
                   <div className="col-span-2">
                     <label
                       htmlFor="email"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Email
                     </label>
@@ -159,13 +159,13 @@ const SupplierRegister: NextPage = () => {
                           email: e.target.value,
                         }))
                       }}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
                   <div className="col-span-2">
                     <label
                       htmlFor="cellphone"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Número de celular
                     </label>
@@ -183,13 +183,13 @@ const SupplierRegister: NextPage = () => {
                           cellphone: Mask.phone(e.target.value),
                         }))
                       }}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
                   <div className="col-span-2">
                     <label
                       htmlFor="cnpj"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       CNPJ
                     </label>
@@ -207,17 +207,17 @@ const SupplierRegister: NextPage = () => {
                           cnpj: Mask.cnpj(e.target.value),
                         }))
                       }}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
                 </div>
               </div>
-              <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
+              <div className="bg-gray-50 px-4 py-3 text-right dark:bg-zinc-900 sm:px-6">
                 <button
                   type="submit"
                   disabled={!isAllFieldsFilled}
                   title={!isAllFieldsFilled ? 'Preencha todos os campos' : ''}
-                  className="inline-flex justify-center rounded-md border border-transparent bg-green-500 py-2 px-4 text-sm font-medium text-white shadow-sm transition-colors duration-300 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-green-500 disabled:hover:opacity-60"
+                  className=" inline-flex justify-center rounded-md border border-transparent bg-green-500 py-2 px-4 text-sm font-medium text-white shadow transition-colors duration-300 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-green-500 disabled:hover:opacity-60"
                 >
                   Cadastrar fornecedor
                 </button>
