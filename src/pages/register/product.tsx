@@ -15,7 +15,7 @@ import { Header } from '../../components/Header'
 import { supabase } from '../../services/supabase'
 
 const ProductRegister: NextPage = () => {
-  const { userId } = useUser()
+  const { loggedUser } = useUser()
 
   const [productData, setProductData] = useState<ProductData>({} as ProductData)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -37,7 +37,7 @@ const ProductRegister: NextPage = () => {
           ...productData,
           id: uuid(),
           active: true,
-          user_id: simpleCrypto.decrypt(userId || ''),
+          user_id: simpleCrypto.decrypt(loggedUser?.id || ''),
         })
 
         if (!!data?.length) {
@@ -59,7 +59,7 @@ const ProductRegister: NextPage = () => {
         setIsLoading(false)
       }
     },
-    [productData]
+    [productData, loggedUser]
   )
 
   return (

@@ -16,7 +16,7 @@ import { Mask, Regex } from '../../utils/formatters'
 import { supabase } from '../../services/supabase'
 
 const SupplierRegister: NextPage = () => {
-  const { userId } = useUser()
+  const { loggedUser } = useUser()
 
   const [supplierData, setSupplierData] = useState<SupplierData>(
     {} as SupplierData
@@ -74,14 +74,12 @@ const SupplierRegister: NextPage = () => {
       }
 
       try {
-        const { data } = await supabase
-          .from('supplier')
-          .insert({
-            ...supplierData,
-            id: uuid(),
-            active: true,
-            user_id: simpleCrypto.decrypt(userId || ''),
-          })
+        const { data } = await supabase.from('supplier').insert({
+          ...supplierData,
+          id: uuid(),
+          active: true,
+          user_id: simpleCrypto.decrypt(loggedUser?.id || ''),
+        })
 
         if (!!data?.length) {
           setSupplierData({} as SupplierData)
@@ -102,7 +100,7 @@ const SupplierRegister: NextPage = () => {
         setIsLoading(false)
       }
     },
-    [supplierData]
+    [supplierData, loggedUser]
   )
 
   return (

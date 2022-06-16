@@ -5,6 +5,7 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useState,
 } from 'react'
 import { v4 as uuid } from 'uuid'
@@ -26,7 +27,7 @@ interface UserContextData {
   handleRegisterUser: (e: FormEvent, user: User) => void
   handleAuthenticateUser: (e: FormEvent, user: User) => void
   handleLogoutUser: () => void
-  userId: string | null
+  loggedUser: User | null
 }
 
 interface UserProviderProps {
@@ -36,9 +37,7 @@ interface UserProviderProps {
 export const UserContext = createContext({} as UserContextData)
 
 export function UserProvider({ children }: UserProviderProps) {
-  const [userId, setUserId] = useState<string | null>(
-    parseCookies()['user'] || null
-  )
+  const [loggedUser, setLoggedUser] = useState<User | null>(null)
 
   const { push } = useRouter()
 
@@ -69,7 +68,7 @@ export function UserProvider({ children }: UserProviderProps) {
 
       if (!error) {
         setCookie(undefined, 'user', simpleCrypto.encrypt(userData?.[0]?.id))
-        setUserId(simpleCrypto.encrypt(userData?.[0]?.id))
+        setLoggedUser(userData?.[0])
         toast.success('Usuário cadastrado com sucesso!')
         push('/')
       } else {
@@ -103,7 +102,7 @@ export function UserProvider({ children }: UserProviderProps) {
           }
 
           setCookie(undefined, 'user', simpleCrypto.encrypt(data?.[0]?.id))
-          setUserId(simpleCrypto.encrypt(data?.[0]?.id))
+          setLoggedUser(data?.[0])
           toast.success('Login realizado com sucesso!')
           push('/')
         } else {
@@ -118,9 +117,32 @@ export function UserProvider({ children }: UserProviderProps) {
     []
   )
 
+  const getLoggerUser = useCallback(async () => {
+    try {
+      const { data } = await supabase
+        .from('user')
+        .select('*')
+        .match({
+          id: simpleCrypto.decrypt(parseCookies()['user']) ?? '',
+        })
+
+      if (!!data?.length) {
+        setLoggedUser(data?.[0])
+      } else {
+        return toast.error('Erro ao buscar os dados do usuário autenticado')
+      }
+    } catch (error) {
+      console.log({ error })
+    }
+  }, [])
+
+  useEffect(() => {
+    getLoggerUser()
+  }, [parseCookies()['user']])
+
   const handleLogoutUser = useCallback(() => {
     destroyCookie(undefined, 'user')
-    setUserId(null)
+    setLoggedUser(null)
     setTimeout(() => {
       push('/login')
     }, 700)
@@ -132,7 +154,7 @@ export function UserProvider({ children }: UserProviderProps) {
         handleRegisterUser,
         handleAuthenticateUser,
         handleLogoutUser,
-        userId,
+        loggedUser,
       }}
     >
       {children}

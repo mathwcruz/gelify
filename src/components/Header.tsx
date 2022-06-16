@@ -2,14 +2,14 @@ import Link from 'next/link'
 import { Fragment } from 'react'
 import { FaPowerOff } from 'react-icons/fa'
 import { Popover, Transition } from '@headlessui/react'
-import { MenuIcon, XIcon } from '@heroicons/react/outline'
+import { MenuIcon, XIcon, UserCircleIcon } from '@heroicons/react/outline'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 
 import { useUser } from '../contexts/UserContext'
 import { solutions } from '../utils/solutions'
 
 export const Header = () => {
-  const { handleLogoutUser } = useUser()
+  const { handleLogoutUser, loggedUser } = useUser()
 
   const classNames = (...classes: string[]) => {
     return classes.filter(Boolean).join(' ')
@@ -19,7 +19,7 @@ export const Header = () => {
     <Popover className="relative bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex items-center justify-between border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
-          <div className="flex justify-start lg:w-0 lg:flex-1">
+          <div className="flex justify-start gap-4 md:gap-10 lg:w-0 lg:flex-1">
             <a href="/">
               <span className="sr-only">Gelify</span>
               <img
@@ -29,6 +29,17 @@ export const Header = () => {
                 title="Gelify"
               />
             </a>
+            <section className="flex flex-row items-center justify-center gap-[7px]">
+              <UserCircleIcon className="h-6 w-6 text-green-600" />
+              <div className="flex flex-col justify-center">
+                <h4 className="w-full max-w-[350px] text-left text-sm font-semibold text-black">
+                  {loggedUser?.name}
+                </h4>
+                <p className="w-full max-w-[350px] text-left text-xs font-medium text-gray-500">
+                  {loggedUser?.email}
+                </p>
+              </div>
+            </section>
           </div>
           <div className="-my-2 -mr-2 md:hidden">
             <Popover.Button className="focus:ring-text-green-400 inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset">

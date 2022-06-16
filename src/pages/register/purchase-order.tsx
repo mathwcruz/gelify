@@ -34,7 +34,7 @@ const PurchaseOrderRegister = ({
   suppliers,
   products,
 }: PurchaseOrderRegisterProps) => {
-  const { userId } = useUser()
+  const { loggedUser } = useUser()
 
   const [purchaseTransactionData, setPurchaseTransactionData] =
     useState<PurchaseTransactionData>({} as PurchaseTransactionData)
@@ -113,7 +113,7 @@ const PurchaseOrderRegister = ({
           ...purchaseTransactionData,
           total_value: purchaseTransactionItemsTotalValue,
           id: uuid(),
-          user_id: simpleCrypto.decrypt(userId || ''),
+          user_id: simpleCrypto.decrypt(loggedUser?.id || ''),
         })
 
         if (error) {
@@ -143,7 +143,7 @@ const PurchaseOrderRegister = ({
             try {
               await supabase.from('purchase_item').insert({
                 ...item,
-                user_id: simpleCrypto.decrypt(userId || ''),
+                user_id: simpleCrypto.decrypt(loggedUser?.id || ''),
               })
             } catch (error) {
               console.log({ error })
@@ -170,7 +170,7 @@ const PurchaseOrderRegister = ({
                 })
                 .match({
                   id: product?.id,
-                  user_id: simpleCrypto.decrypt(userId || ''),
+                  user_id: simpleCrypto.decrypt(loggedUser?.id || ''),
                 })
             } catch (error) {
               console.log({ error })
@@ -207,6 +207,7 @@ const PurchaseOrderRegister = ({
       purchaseTransactionItems,
       groupPurchaseTransactionItemsProducts,
       purchaseTransactionItemsTotalValue,
+      loggedUser,
     ]
   )
 

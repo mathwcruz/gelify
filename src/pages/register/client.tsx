@@ -22,7 +22,7 @@ interface ClientRegisterProps {
 }
 
 const ClientRegister = ({ cities }: ClientRegisterProps) => {
-  const { userId } = useUser()
+  const { loggedUser } = useUser()
 
   const [clientData, setClientData] = useState<ClientData>({} as ClientData)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -97,7 +97,7 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
           ...clientData,
           id: uuid(),
           active: true,
-          user_id: simpleCrypto.decrypt(userId || ''),
+          user_id: simpleCrypto.decrypt(loggedUser?.id || ''),
         })
 
         if (!!data?.length) {
@@ -120,7 +120,7 @@ const ClientRegister = ({ cities }: ClientRegisterProps) => {
         setIsLoading(false)
       }
     },
-    [clientData]
+    [clientData, loggedUser]
   )
 
   return (

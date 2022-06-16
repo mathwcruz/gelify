@@ -16,7 +16,7 @@ import { Mask, Regex } from '../../utils/formatters'
 import { supabase } from '../../services/supabase'
 
 const CityRegister: NextPage = () => {
-  const { userId } = useUser()
+  const { loggedUser } = useUser()
 
   const [cityData, setCityData] = useState<CityData>({} as CityData)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -44,13 +44,12 @@ const CityRegister: NextPage = () => {
         return
       }
 
-      console.log(simpleCrypto.decrypt(userId || ''))
       try {
         const { data } = await supabase.from('city').insert({
           ...cityData,
           id: uuid(),
           active: true,
-          user_id: simpleCrypto.decrypt(userId || ''),
+          user_id: simpleCrypto.decrypt(loggedUser?.id || ''),
         })
 
         if (!!data?.length) {
@@ -72,7 +71,7 @@ const CityRegister: NextPage = () => {
         setIsLoading(false)
       }
     },
-    [cityData]
+    [cityData, loggedUser]
   )
 
   return (

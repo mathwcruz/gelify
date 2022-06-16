@@ -31,7 +31,7 @@ interface SaleOrderRegisterProps {
 }
 
 const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
-  const { userId } = useUser()
+  const { loggedUser } = useUser()
 
   const [saleTransactionData, setSaleTransactionData] =
     useState<SalesTransactionData>({} as SalesTransactionData)
@@ -106,7 +106,7 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
           ...saleTransactionData,
           total_value: saleTransactionItemsTotalValue,
           id: uuid(),
-          user_id: simpleCrypto.decrypt(userId || ''),
+          user_id: simpleCrypto.decrypt(loggedUser?.id || ''),
         })
 
         if (error) {
@@ -136,7 +136,7 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
             try {
               await supabase.from('sale_item').insert({
                 ...item,
-                user_id: simpleCrypto.decrypt(userId || ''),
+                user_id: simpleCrypto.decrypt(loggedUser?.id || ''),
               })
             } catch (error) {
               console.log({ error })
@@ -164,7 +164,7 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
                 })
                 .match({
                   id: product?.id,
-                  user_id: simpleCrypto.decrypt(userId || ''),
+                  user_id: simpleCrypto.decrypt(loggedUser?.id || ''),
                 })
             } catch (error) {
               console.log({ error })
@@ -201,6 +201,7 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
       saleTransactionItems,
       groupSaleTransactionItemsProducts,
       saleTransactionItemsTotalValue,
+      loggedUser,
     ]
   )
 
