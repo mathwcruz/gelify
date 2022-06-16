@@ -49,7 +49,7 @@ const CityRegister: NextPage = () => {
           ...cityData,
           id: uuid(),
           active: true,
-          user_id: simpleCrypto.decrypt(loggedUser?.id || ''),
+          user_id: loggedUser?.id,
         })
 
         if (!!data?.length) {

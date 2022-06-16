@@ -113,7 +113,7 @@ const PurchaseOrderRegister = ({
           ...purchaseTransactionData,
           total_value: purchaseTransactionItemsTotalValue,
           id: uuid(),
-          user_id: simpleCrypto.decrypt(loggedUser?.id || ''),
+          user_id: loggedUser?.id,
         })
 
         if (error) {
@@ -143,7 +143,7 @@ const PurchaseOrderRegister = ({
             try {
               await supabase.from('purchase_item').insert({
                 ...item,
-                user_id: simpleCrypto.decrypt(loggedUser?.id || ''),
+                user_id: loggedUser?.id,
               })
             } catch (error) {
               console.log({ error })
@@ -170,7 +170,7 @@ const PurchaseOrderRegister = ({
                 })
                 .match({
                   id: product?.id,
-                  user_id: simpleCrypto.decrypt(loggedUser?.id || ''),
+                  user_id: loggedUser?.id,
                 })
             } catch (error) {
               console.log({ error })
