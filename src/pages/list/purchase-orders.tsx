@@ -110,6 +110,8 @@ const PurchaseOrders = ({ purchases, suppliers }: PurchaseOrdersProps) => {
       })
     }
 
+    setIsLoading(false)
+
     return toast.error('Confira os campos informados e tente novamente.', {
       position: 'top-center',
       autoClose: 500,
@@ -210,7 +212,7 @@ const PurchaseOrders = ({ purchases, suppliers }: PurchaseOrdersProps) => {
                     <h1 className="text-center text-2xl font-medium text-black dark:text-white">
                       Não há ordens de compra com os filtros informados
                     </h1>
-                    <p className="max-w-[450px] self-center text-center text-base font-normal text-gray-700">
+                    <p className="max-w-[450px] self-center text-center text-base font-normal text-gray-700 dark:text-gray-200">
                       Pesquise por outros filtros ou até mesmo clique no botão
                       abaixo para cadastrar uma nova ordem de compra
                     </p>

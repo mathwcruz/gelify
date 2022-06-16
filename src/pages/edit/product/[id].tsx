@@ -123,12 +123,12 @@ const Product = ({ product }: ProductProps) => {
         ) : (
           <form onSubmit={handleUpdateProduct}>
             <div className="overflow-hidden shadow dark:shadow-zinc-700 sm:rounded-md">
-              <div className="bg-white px-4 py-5 sm:p-6">
+              <div className="bg-white px-4 py-5 dark:bg-zinc-900 sm:p-6">
                 <div className="grid grid-cols-10 gap-6">
                   <div className="col-span-3">
                     <label
                       htmlFor="description"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Descrição*
                     </label>
@@ -143,13 +143,13 @@ const Product = ({ product }: ProductProps) => {
                           description: e.target.value,
                         }))
                       }
-                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
                   <div className="col-span-2">
                     <label
                       htmlFor="unitary_value"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Valor unitário*
                     </label>
@@ -165,13 +165,13 @@ const Product = ({ product }: ProductProps) => {
                           unitary_value: Number(e.target.value),
                         }))
                       }}
-                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
                   <div className="col-span-2">
                     <label
                       htmlFor="stock_quantity"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Quantidade em estoque*
                     </label>
@@ -187,7 +187,7 @@ const Product = ({ product }: ProductProps) => {
                           stock_quantity: Math.round(Number(e.target.value)),
                         }))
                       }}
-                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
                 </div>

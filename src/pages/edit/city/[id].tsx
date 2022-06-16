@@ -132,12 +132,12 @@ const City = ({ city }: CityProps) => {
         ) : (
           <form onSubmit={handleUpdateCity}>
             <div className="overflow-hidden shadow dark:shadow-zinc-700 sm:rounded-md">
-              <div className="bg-white px-4 py-5 sm:p-6">
+              <div className="bg-white px-4 py-5 dark:bg-zinc-900 sm:p-6">
                 <div className="grid grid-cols-6 gap-6">
                   <div className="col-span-6 sm:col-span-3">
                     <label
                       htmlFor="description"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Descrição*
                     </label>
@@ -152,13 +152,13 @@ const City = ({ city }: CityProps) => {
                           description: e.target.value,
                         }))
                       }
-                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
                   <div className="col-span-4 sm:col-span-2">
                     <label
                       htmlFor="cep"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       CEP*
                     </label>
@@ -175,7 +175,7 @@ const City = ({ city }: CityProps) => {
                           cep: Mask.cep(e.target.value),
                         }))
                       }}
-                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
                 </div>
@@ -213,7 +213,7 @@ const City = ({ city }: CityProps) => {
                       ? 'Os valores dos campos não alteraram'
                       : ''
                   }
-                  className=" inline-flex justify-center rounded-md border border-transparent bg-green-500 py-2 px-4 text-sm font-medium text-white shadow transition-colors duration-300 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-green-500"
+                  className="inline-flex justify-center rounded-md border border-transparent bg-green-500 py-2 px-4 text-sm font-medium text-white shadow transition-colors duration-300 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-green-500"
                 >
                   Salvar
                 </button>

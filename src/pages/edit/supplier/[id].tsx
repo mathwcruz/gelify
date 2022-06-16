@@ -162,12 +162,12 @@ const Supplier = ({ supplier }: SupplierProps) => {
         ) : (
           <form onSubmit={handleUpdateSupplier}>
             <div className="overflow-hidden shadow dark:shadow-zinc-700 sm:rounded-md">
-              <div className="bg-white px-4 py-5 sm:p-6">
+              <div className="bg-white px-4 py-5 dark:bg-zinc-900 sm:p-6">
                 <div className="grid grid-cols-10 gap-6">
                   <div className="col-span-3">
                     <label
                       htmlFor="name"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Nome*
                     </label>
@@ -182,13 +182,13 @@ const Supplier = ({ supplier }: SupplierProps) => {
                           name: e.target.value,
                         }))
                       }
-                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
                   <div className="col-span-2">
                     <label
                       htmlFor="email"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Email*
                     </label>
@@ -204,13 +204,13 @@ const Supplier = ({ supplier }: SupplierProps) => {
                           email: e.target.value,
                         }))
                       }}
-                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
                   <div className="col-span-2">
                     <label
                       htmlFor="cellphone"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Número de celular*
                     </label>
@@ -228,13 +228,13 @@ const Supplier = ({ supplier }: SupplierProps) => {
                           cellphone: Mask.phone(e.target.value),
                         }))
                       }}
-                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
                   <div className="col-span-2">
                     <label
                       htmlFor="cnpj"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       CNPJ*
                     </label>
@@ -252,7 +252,7 @@ const Supplier = ({ supplier }: SupplierProps) => {
                           cnpj: Mask.cnpj(e.target.value),
                         }))
                       }}
-                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
                 </div>

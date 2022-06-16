@@ -190,11 +190,11 @@ const Client = ({ client, cities }: PersonProps) => {
           <form onSubmit={handleUpdateClient}>
             <div className="overflow-hidden shadow dark:shadow-zinc-700 sm:rounded-md">
               <div className="flex flex-col justify-center gap-3 bg-white px-4 py-5 dark:bg-zinc-900 sm:p-6">
-                <div className="grid grid-cols-12 gap-3">
-                  <div className="col-span-3">
+                <div className="grid grid-cols-6 gap-3">
+                  <div className="col-span-1">
                     <label
                       htmlFor="name"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Nome*
                     </label>
@@ -210,13 +210,13 @@ const Client = ({ client, cities }: PersonProps) => {
                           name: e.target.value,
                         }))
                       }
-                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
-                  <div className="col-span-2">
+                  <div className="col-span-1">
                     <label
                       htmlFor="cpf"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       CPF*
                     </label>
@@ -234,13 +234,13 @@ const Client = ({ client, cities }: PersonProps) => {
                           cpf: Mask.cpf(e.target.value),
                         }))
                       }}
-                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
-                  <div className="col-span-2">
+                  <div className="col-span-1">
                     <label
                       htmlFor="birthdate"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Data de nascimento*
                     </label>
@@ -258,13 +258,13 @@ const Client = ({ client, cities }: PersonProps) => {
                           birthdate: Mask.date(e.target.value),
                         }))
                       }}
-                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
-                  <div className="col-span-3">
+                  <div className="col-span-1">
                     <label
                       htmlFor="email"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Email*
                     </label>
@@ -280,13 +280,13 @@ const Client = ({ client, cities }: PersonProps) => {
                           email: e.target.value,
                         }))
                       }}
-                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
-                  <div className="col-span-2">
+                  <div className="col-span-1">
                     <label
                       htmlFor="cellphone"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Número de celular*
                     </label>
@@ -304,13 +304,13 @@ const Client = ({ client, cities }: PersonProps) => {
                           cellphone: Mask.phone(e.target.value),
                         }))
                       }}
-                      className=" mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 sm:text-sm"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow focus:border-green-400 focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     />
                   </div>
-                  <div className="col-span-3">
+                  <div className="col-span-1">
                     <label
                       htmlFor="city"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-medium text-gray-700 dark:text-gray-200"
                     >
                       Cidade*
                     </label>
@@ -330,10 +330,14 @@ const Client = ({ client, cities }: PersonProps) => {
                           city_id: e.target.value,
                         }))
                       }
-                      className="disabled:cursor-pointer-not-allowed  mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow focus:border-green-400 focus:outline-none focus:ring-green-400 sm:text-sm"
+                      className="disabled:cursor-pointer-not-allowed mt-1  block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow focus:border-green-400 focus:outline-none focus:ring-green-400 dark:bg-zinc-900 sm:text-sm"
                     >
                       <>
-                        <option value="" disabled>
+                        <option
+                          className="dark:text-gray-400"
+                          value=""
+                          disabled
+                        >
                           Selecione uma cidade
                         </option>
                         {cities?.map((city) => (
