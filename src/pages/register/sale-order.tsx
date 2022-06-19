@@ -334,7 +334,6 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
                       products={products}
                       saleTransactionItems={saleTransactionItems}
                       setSaleTransactionItems={setSaleTransactionItems}
-                      setSaleTransactionData={setSaleTransactionData}
                     />
                   </div>
                 </div>
@@ -342,13 +341,13 @@ const SaleOrderRegister = ({ clients, products }: SaleOrderRegisterProps) => {
                   <button
                     type="submit"
                     disabled={
-                      !saleTransactionItems.length ||
+                      saleTransactionItems?.length === 0 ||
                       !saleTransactionData?.delivery_address ||
                       !saleTransactionData?.date ||
                       !saleTransactionData?.client_id
                     }
                     title={
-                      !saleTransactionItems.length ||
+                      saleTransactionItems?.length === 0 ||
                       !saleTransactionData?.delivery_address ||
                       !saleTransactionData?.date ||
                       !saleTransactionData?.client_id

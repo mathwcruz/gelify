@@ -61,7 +61,7 @@ const Client = ({ client, cities }: PersonProps) => {
     setIsAllFieldsValuesTheSame(bothDataHasTheSameValue)
 
     setIsAllFieldsFilled(
-      Object.values(data).filter((value) => !!value)?.length === 8
+      Object.values(data).filter((value) => !!value)?.length === 9
     )
   }, [clientData, client])
 

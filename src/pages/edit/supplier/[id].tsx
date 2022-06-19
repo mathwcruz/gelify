@@ -59,7 +59,7 @@ const Supplier = ({ supplier }: SupplierProps) => {
     setIsAllFieldsValuesTheSame(bothDataHasTheSameValue)
 
     setIsAllFieldsFilled(
-      Object.values(data).filter((value) => !!value)?.length === 6
+      Object.values(data).filter((value) => !!value)?.length === 7
     )
   }, [supplier, supplierData])
 

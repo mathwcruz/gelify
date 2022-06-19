@@ -57,7 +57,7 @@ const City = ({ city }: CityProps) => {
     setIsAllFieldsValuesTheSame(bothDataHasTheSameValue)
 
     setIsAllFieldsFilled(
-      Object.values(data)?.filter?.((value) => !!value)?.length === 4
+      Object.values(data)?.filter?.((value) => !!value)?.length === 5
     )
   }, [city, cityData])
 

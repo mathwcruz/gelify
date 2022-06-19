@@ -58,7 +58,7 @@ const Product = ({ product }: ProductProps) => {
     setIsAllFieldsValuesTheSame(bothDataHasTheSameValue)
 
     setIsAllFieldsFilled(
-      Object.values(data).filter((value) => !!value)?.length === 5
+      Object.values(data).filter((value) => !!value)?.length === 6
     )
   }, [product, productData])
 
