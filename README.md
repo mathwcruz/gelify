@@ -15,7 +15,7 @@
 # :computer: Demonstration of the application Web
 
 <p align="center">
-  <img src="./.github/demonstration.gif" width="1400px"/>
+  <img src="./.github/demonstration.gif" width="1000px"/>
 </p>
 
 <h3 align="center"> 
